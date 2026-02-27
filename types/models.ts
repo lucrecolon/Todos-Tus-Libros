@@ -1,22 +1,26 @@
-export interface Libro {
-    id: string;
+export interface Autor {
+    nombre: string;
+    apellido: string;
+}
+
+export interface Editorial {
+    nombre: string;
+}
+
+export interface StockLibreria {
+    libreria: string;
+    stock: number;   
+    precio: string;  
+}
+
+export interface DetalleLibro {
+    ean: string;
     isbn: string;
     titulo: string;
-    autor: string;
-    editorial: string;
-    precio: number;
-    portadaUrl?: string;
-}
-
-export interface Libreria {
-    id: string;
-    nombre: string;
-    direccion: string;
-    codigoPostal: string;
-    stockDisponible?: number; 
-}
-
-export interface ItemCarrito {
-    libro: Libro;
-    cantidad: number;
+    precio: number;       
+    sinopsis: string
+    imagen_tapa: string;  
+    autor: Autor;
+    editorial: Editorial;
+    en_librerias: StockLibreria[];
 }
