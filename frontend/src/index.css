@@ -1,0 +1,369 @@
+:root {
+    --bg-paper: #F9F8F4;      
+    --bg-white: #FFFFFF;      
+  
+    --text-dark: #1A1C19;     
+    --text-light: #F9F8F4;    
+    --text-muted: #6B6D69;    
+    --border-color: #E6E3DB;  
+
+    --primary-green: #134b33;
+    --secondary-green: #235A43;
+    --accent-bordeaux: #8A3324;
+    --accent-hover: #692519;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-paper);
+  color: var(--text-dark);
+  line-height: 1.5;
+}
+
+h1, h2, h3, .logo {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-weight: normal;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+header {
+  background-color: var(--primary-green);
+  color: var(--text-light);
+  padding: 15px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+        
+.logo {
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  color: var(--text-light); 
+  text-transform: uppercase;
+}
+
+.cart-btn {
+  background: rgba(255,255,255,0.1); /* Fondo semitransparente */
+  border: 1px solid rgba(255,255,255,0.2);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  color: var(--text-light);
+  padding: 8px 16px;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+.cart-btn:hover {
+  background: var(--text-light);
+  color: var(--primary-green);
+}
+
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+  background: linear-gradient(to bottom, var(--bg-paper), #f0efe9);
+}
+
+.hero-section h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+  max-width: 700px;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: 40px;
+}
+
+.search-box {
+  display: flex;
+  width: 100%;
+  max-width: 650px;
+  background: var(--bg-white);
+  border: 1px solid #CCC; /* Borde un poco más visible */
+  border-radius: 2px;
+  padding: 5px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05); /* Sombra más elegante */
+}
+
+.search-input {
+  flex-grow: 1;
+  border: none;
+  padding: 15px 20px;
+  font-size: 16px;
+  font-family: inherit;
+  outline: none;
+  background: transparent;
+}
+
+.search-btn {
+  background-color: var(--accent-bordeaux);
+  color: var(--bg-white);
+  border: none;
+  padding: 0 30px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 2px;
+}
+
+.search-btn:hover {
+  background-color: var(--accent-hover);
+}
+
+.location-hint {
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--text-muted);
+  background-color: rgba(255,255,255,0.5);
+  padding: 5px 15px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.location-hint span {
+  color: var(--accent-bordeaux);
+  cursor: pointer;
+  border-bottom: 1px dotted var(--accent-bordeaux);
+  font-weight: bold;
+}
+
+/* Mesas de Novedades */
+.content-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 40px;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--text-dark);
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.view-all {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.view-all:hover {
+  color: var(--accent-bordeaux);
+}
+
+.books-grid {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  padding-bottom: 20px;
+}
+
+.book-card {
+  min-width: 160px;
+  flex: 1;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+}
+
+.book-cover-mock {
+  width: 100%;
+  height: 240px;
+  background-color: #EBE8E0;
+  border: 1px solid var(--border-color);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+}
+
+.book-title-mock {
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+  color: var(--text-dark);
+  margin: 0 0 5px 0;
+  line-height: 1.3;
+}
+
+.book-author-mock {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+footer {
+    padding: 40px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-light);
+    margin-top: 60px;
+    background-color: var(--primary-green);
+    letter-spacing: 0.5px;
+}
+
+/* --- ESTILOS BookDetails --- */
+.main-container {
+    display: flex;
+    padding: 40px;
+    gap: 50px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.book-details {
+    flex: 1;
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+.book-cover {
+    width: 100%;
+    max-width: 240px;
+    height: 350px;
+    background-color: #EBE8E0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    margin-bottom: 25px;
+    border: 1px solid var(--border-color);
+}
+.book-title {
+    font-size: 32px;
+    margin-bottom: 5px;
+    color: var(--text-dark);
+}
+.book-author {
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+.book-synopsis {
+    font-size: 14px;
+    color: #4A4A4A;
+    margin-bottom: 20px;
+}
+.book-meta {
+    font-size: 13px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+}
+.bookstores-list {
+    flex: 1.5;
+}
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--text-dark);
+    padding-bottom: 10px;
+}
+.store-card {
+    background: var(--bg-white);
+    padding: 25px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--accent-bordeaux);
+    border-radius: 2px;
+}
+.store-info h3 { margin: 0 0 8px 0; }
+.store-distance { color: var(--text-muted); font-size: 13px; }
+.store-action { text-align: right; display: flex; flex-direction: column; gap: 10px; }
+.price { font-size: 20px; font-family: 'Georgia', serif; color: var(--text-dark); }
+.btn-add {
+    background-color: var(--bg-white); color: var(--accent-bordeaux);
+    border: 1px solid var(--accent-bordeaux); padding: 8px 16px;
+    font-size: 13px; text-transform: uppercase; cursor: pointer;
+}
+.btn-add:hover { background-color: var(--accent-bordeaux); color: var(--bg-white); }
+
+/* --- CARRITO --- */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -450px; /* Esto lo esconde fuera de la pantalla */
+    width: 400px;
+    height: 100vh;
+    background: var(--bg-paper);
+    border-left: 1px solid var(--border-color);
+    transition: right 0.3s ease; /* Esto hace la animación suave */
+    z-index: 1000;
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.cart-sidebar.open {
+    right: 0; /* Cuando tiene esta clase, se mete en la pantalla */
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--text-dark);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.cart-notice {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+/* --- BARRA DE UBICACION --- */
+.location-bar {
+    padding: 15px 40px;
+    font-size: 13px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: var(--bg-paper);
+}
