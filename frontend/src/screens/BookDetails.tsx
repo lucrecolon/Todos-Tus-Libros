@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { buscarLibroPorEan } from '../services/ultraService';
 import { type DetalleLibro } from '../types/models';
+import { useCart } from '../context/CartContext';
 
 export const BookDetails = () => {
     const { ean } = useParams(); 
@@ -9,8 +10,7 @@ export const BookDetails = () => {
     const [libro, setLibro] = useState<DetalleLibro | null>(null);
     const [cargando, setCargando] = useState(true);
 
-    const [cartOpen, setCartOpen] = useState(false);
-    const [cartCount, setCartCount] = useState(0);
+    const { setCartOpen, cartCount, setCartCount } = useCart();
 
     useEffect(() => {
         const cargarDatos = async () => {
@@ -46,7 +46,7 @@ export const BookDetails = () => {
                         {libro.autor ? `${libro.autor.nombre} ${libro.autor.apellido}` : 'Autor desconocido'}
                     </div>
                     
-                    {/* Si viene sinopsis la mostramos, sino un mensaje por defecto */}
+                    {/*sino hay sinopsis se muestra un mensaje por defecto */}
                     <div className="book-synopsis">
                         {libro.sinopsis ? libro.sinopsis.substring(0, 300) + '...' : 'Sinopsis no disponible para esta edición.'}
                     </div>
@@ -64,7 +64,7 @@ export const BookDetails = () => {
                         <h2>Opciones de compra</h2>
                     </div>
 
-                    {/* Filtramos para no mostrar las que tienen stock 0 (opcional) */}
+                    {/* filtro para no mostrar las que tienen stock 0 (opcional) */}
                     {libro.en_librerias?.filter(l => l.stock > 0).length === 0 ? (
                         <p>No hay librerías con stock disponible en este momento.</p>
                     ) : (
@@ -90,22 +90,6 @@ export const BookDetails = () => {
                                 </div>
                             </div>
                         ))
-                    )}
-                </div>
-            </div>
-
-            {/* CARRITO */}
-            <div className={`cart-sidebar ${cartOpen ? 'open' : ''}`} id="cart-sidebar">
-                <div className="cart-header">
-                    <h2>Mi Selección ({cartCount})</h2>
-                    <button className="close-btn" onClick={() => setCartOpen(false)}>Cerrar</button>
-                </div>
-                <p className="cart-notice">La facturación y el pago se procesan de forma segura en la plataforma individual de cada librería.</p>
-                <div id="cart-content">
-                    {cartCount === 0 ? (
-                        <p style={{ textAlign: 'center', color: '#999', marginTop: '50px', fontSize: '14px' }}>No hay artículos seleccionados.</p>
-                    ) : (
-                        <p style={{ textAlign: 'center', color: '#27ae60', marginTop: '50px' }}>¡Libro añadido al carrito temporal!</p>
                     )}
                 </div>
             </div>
