@@ -5,26 +5,23 @@ import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
     const [busqueda, setBusqueda] = useState('');
-    const [resultados, setResultados] = useState<DetalleLibro[]>([]);
+    const [destacados, setDestacados] = useState<DetalleLibro[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         const cargarDestacados = async () => {
-            const librosPorDefecto = await buscarLibrosPorTitulo('borges'); 
-            setResultados(librosPorDefecto);
+            const librosPorDefecto = await buscarLibrosPorTitulo('Pablo Neruda'); 
+            setDestacados(librosPorDefecto);
         };
         
         cargarDestacados();
     }, []);
 
-    // botón buscar
-    const ejecutarBusqueda = async () => {
-        if (!busqueda) return;
-        
-        const resultadosBusqueda = await buscarLibrosPorTitulo(busqueda);
-        setResultados(resultadosBusqueda); 
-    };
+    const ejecutarBusqueda = () => {
+        if (!busqueda.trim()) return;
 
+        navigate(`/buscar?q=${encodeURIComponent(busqueda)}`); 
+    };
 
     return (
         <main>
@@ -51,6 +48,7 @@ export const Home = () => {
                 </div>
             </section>
 
+            {/* Seccion de destacados */}
             <section className="content-section">
                 <div className="section-title">
                     <h2>Los más buscados esta semana</h2>
@@ -58,11 +56,10 @@ export const Home = () => {
                 </div>
 
                 <div className="books-grid">
-                    {/* tarjetas */}
-                    {resultados.length === 0 ? (
+                    {destacados.length === 0 ? (
                         <p style={{ color: 'var(--text-muted)' }}>Cargando libros destacados...</p>
                     ) : (
-                        resultados.map((libro) => (
+                        destacados.map((libro) => (
                             <div className="book-card" key={libro.ean} onClick={() => navigate(`/libro/${libro.ean}`)} style={{ cursor: 'pointer' }}>
                                 {libro.imagen_tapa ? (
                                     <img 
@@ -74,9 +71,7 @@ export const Home = () => {
                                 ) : (
                                     <div className="book-cover-mock">Sin portada</div>
                                 )}
-                                
                                 <h3 className="book-title-mock">{libro.titulo}</h3>
-                                
                                 <p className="book-author-mock">
                                     {libro.autor ? `${libro.autor.nombre} ${libro.autor.apellido}` : 'Autor no especificado'}
                                 </p>

@@ -10,7 +10,7 @@ export const BookDetails = () => {
     const [libro, setLibro] = useState<DetalleLibro | null>(null);
     const [cargando, setCargando] = useState(true);
 
-    const { setCartOpen, cartCount, setCartCount } = useCart();
+    const { setCartOpen, cartItems, addToCart } = useCart();
 
     useEffect(() => {
         const cargarDatos = async () => {
@@ -78,11 +78,15 @@ export const BookDetails = () => {
                                 </div>
                                 <div className="store-action">
                                     <span className="price">${tienda.precio}</span>
-                                    <button 
-                                        className="btn-add" 
+                                    <button
+                                        className="btn-add"
                                         onClick={() => {
-                                            setCartCount(cartCount + 1);
-                                            setCartOpen(true);
+                                            addToCart({
+                                                ean: libro.ean,
+                                                titulo: libro.titulo,
+                                                precio: Number(tienda.precio), 
+                                                libreria: tienda.libreria
+                                            });
                                         }}
                                     >
                                         Añadir a la compra

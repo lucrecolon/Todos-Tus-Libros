@@ -4,6 +4,7 @@ import { Home } from './screens/Home';
 import { BookDetails } from './screens/BookDetails';
 import { CartProvider } from './context/CartContext';
 import { CartSidebar } from './components/CartSideBar';
+import { BookSearch } from './screens/BookSearch';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/libro/:ean" element={<BookDetails />} />
+          <Route path="/buscar" element={<BookSearch />} />
         </Routes>
         
         <footer>

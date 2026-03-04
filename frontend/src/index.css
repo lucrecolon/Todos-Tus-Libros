@@ -144,6 +144,30 @@ header {
   font-weight: bold;
 }
 
+/* --- ESTILOS resultados --- */
+.search-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 40px;
+}
+
+.search-title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--text-dark);
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.search-grid {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  padding-bottom: 20px;
+}
+
 /* Mesas de Novedades */
 .content-section {
   max-width: 1100px;
