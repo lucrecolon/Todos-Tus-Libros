@@ -5,6 +5,7 @@ import { BookDetails } from './screens/BookDetails';
 import { CartProvider } from './context/CartContext';
 import { CartSidebar } from './components/CartSideBar';
 import { BookSearch } from './screens/BookSearch';
+import { CategoryNav } from './components/CategoryNav';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Header />
 
         <CartSidebar />
+        <CategoryNav />
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -21,7 +23,7 @@ function App() {
         </Routes>
         
         <footer>
-            <p>Impulsado por la red de gestión integral para librerías.</p>
+            <p>Ultra Gestión ® 2026. Impulsado por la red de gestión integral para librerías.</p>
         </footer>
       </BrowserRouter>
     </CartProvider>

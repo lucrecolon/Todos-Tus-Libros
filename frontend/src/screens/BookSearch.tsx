@@ -31,7 +31,8 @@ export const BookSearch = () => {
                 
                 const listadoAplanado = librosConDetalle.flatMap(libro => 
                     (libro.en_librerias || [])
-                        .filter(tienda => tienda.stock > 0) 
+                        //.filter(tienda => tienda.stock > 0)
+                        .filter(tienda =>(tienda.libreria !== 'Rit - test') && (tienda.libreria !== 'ultralibreria') && tienda.stock > 0)
                         .map(tienda => ({
                             ...libro, 
                             precio_tienda: tienda.precio,

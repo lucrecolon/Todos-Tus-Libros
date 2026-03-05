@@ -338,12 +338,12 @@ footer {
 .cart-sidebar {
     position: fixed;
     top: 0;
-    right: -450px; /* Esto lo esconde fuera de la pantalla */
+    right: -450px;
     width: 400px;
     height: 100vh;
     background: var(--bg-paper);
     border-left: 1px solid var(--border-color);
-    transition: right 0.3s ease; /* Esto hace la animación suave */
+    transition: right 0.3s ease;
     z-index: 1000;
     padding: 30px;
     box-sizing: border-box;
@@ -353,7 +353,7 @@ footer {
 }
 
 .cart-sidebar.open {
-    right: 0; /* Cuando tiene esta clase, se mete en la pantalla */
+    right: 0;
 }
 
 .cart-header {
@@ -390,4 +390,66 @@ footer {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     background-color: var(--bg-paper);
+}
+
+/* --- ESTILOS BARRA DE CATEGORIAS --- */
+.category-nav {
+    background-color: var(--secondary-green);
+    color: white;
+    padding: 0 40px;
+}
+
+.category-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 35px;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-item {
+    position: relative;
+    padding: 15px 0;
+    cursor: pointer;
+    font-size: 15px;
+    transition: color 0.2s;
+}
+
+.category-item:hover {
+    color: #e0e0e0;
+}
+
+/* menu desplegable */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--bg-white, #ffffff);
+    color: var(--text-dark, #333);
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+    min-width: 220px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 100;
+    border-radius: 4px;
+}
+
+.category-item.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li {
+    padding: 10px 20px;
+    font-size: 14px;
+    transition: background-color 0.2s, color 0.2s;
+    position: center;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f5f5f5;
+    color: var(--primary-green);
 }
