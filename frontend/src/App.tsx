@@ -5,7 +5,7 @@ import { BookDetails } from './screens/BookDetails';
 import { CartProvider } from './context/CartContext';
 import { CartSidebar } from './components/CartSideBar';
 import { BookSearch } from './screens/BookSearch';
-import { CategoryNav } from './components/CategoryNav';
+// import { CategoryNav } from './components/CategoryNav';
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <Header />
 
         <CartSidebar />
-        <CategoryNav />
+        {/* <CategoryNav /> */}
 
         <Routes>
           <Route path="/" element={<Home />} />
