@@ -1,10 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { buscarLibrosAvanzado } from '../services/ultraService';
+import { type DetalleLibro } from '../types/models';
 
 export const Home = () => {
     const [inputTitulo, setInputTitulo] = useState('');
     const [inputAutor, setInputAutor] = useState('');
+    const [destacados, setDestacados] = useState<DetalleLibro[]>([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const cargarDestacados = async () => {
+            const busquedasAleatorias = ['borges', 'cortazar', 'harry potter', 'king', 'isabel allende', 'orwell'];
+            
+            const busquedaRandom = busquedasAleatorias[Math.floor(Math.random() * busquedasAleatorias.length)];
+            
+            const librosPorDefecto = await buscarLibrosAvanzado({ titulo: busquedaRandom }); 
+            
+            setDestacados(librosPorDefecto.slice(0, 5));
+        };
+        
+        cargarDestacados();
+    }, []);
 
     const ejecutarBusqueda = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -55,6 +72,41 @@ export const Home = () => {
                     </div>
                 </form>
             </section>
+
+            <section className="content-section">
+                <div className="section-title">
+                    <h2>Descubrí estas lecturas</h2>
+                    <a href="#" className="view-all">Ver todos</a>
+                </div>
+
+                <div className="books-grid">
+                    {destacados.length === 0 ? (
+                        <p style={{ color: 'var(--text-muted)' }}>Cargando recomendaciones...</p>
+                    ) : (
+                        destacados.map((libro) => (
+                            <div className="book-card" key={libro.ean} onClick={() => navigate(`/libro/${libro.ean}`)} style={{ cursor: 'pointer' }}>
+                                {libro.imagen_tapa ? (
+                                    <img 
+                                        src={libro.imagen_tapa} 
+                                        alt={`Portada de ${libro.titulo}`} 
+                                        className="book-cover-mock" 
+                                        style={{ objectFit: 'cover' }} 
+                                    />
+                                ) : (
+                                    <div className="book-cover-mock">Sin portada</div>
+                                )}
+                                
+                                <h3 className="book-title-mock">{libro.titulo}</h3>
+                                
+                                <p className="book-author-mock">
+                                    {libro.autor ? `${libro.autor.nombre} ${libro.autor.apellido}` : 'Autor no especificado'}
+                                </p>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </section>
+            
         </main>
     );
 };

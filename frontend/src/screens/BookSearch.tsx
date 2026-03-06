@@ -91,7 +91,7 @@ export const BookSearch = () => {
                         <label style={{ display: 'block', fontSize: '13px', fontWeight: 'bold', marginBottom: '5px' }}>Editorial</label>
                         <input type="text" value={inputEditorial} onChange={(e) => setInputEditorial(e.target.value)} placeholder="Ej: Sudamericana" style={{ width: '100%', padding: '10px', border: '1px solid #CCC', borderRadius: '4px' }} />
                     </div>
-                    <button type="submit" className="search-btn" style={{ padding: '11px 25px', backgroundColor: 'var(--primary-green)' }}>
+                    <button type="submit" className="search-btn" style={{ padding: '11px 25px', backgroundColor: 'var(--accent-bordeaux)' }}>
                         BUSCAR
                     </button>
                 </form>
@@ -138,7 +138,7 @@ export const BookSearch = () => {
                                     <div style={{ fontSize: '26px', fontFamily: 'Georgia, serif', marginBottom: '15px' }}>{formatearPrecio(pub.precio_tienda)}</div>
                                     <button 
                                         className="search-btn"
-                                        style={{ backgroundColor: 'var(--primary-green)', width: '100%', padding: '12px', fontSize: '13px' }}
+                                        style={{ backgroundColor: 'var(--accent-bordeaux)', width: '100%', padding: '12px', fontSize: '13px' }}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             addToCart({ ean: pub.ean, titulo: pub.titulo, precio: Number(pub.precio_tienda), libreria: pub.nombre_libreria });
