@@ -2,25 +2,31 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Home } from './screens/Home';
 import { BookDetails } from './screens/BookDetails';
+import { CartProvider } from './context/CartContext';
+import { CartSidebar } from './components/CartSideBar';
+import { BookSearch } from './screens/BookSearch';
+import { CategoryNav } from './components/CategoryNav';
 
 function App() {
   return (
-    // BrowserRouter envuelve todo para habilitar la navegación
-    <BrowserRouter>
-      <Header />
-      
-      <Routes>
-        {/* Cuando la URL está vacía ("/"), muestra la Home */}
-        <Route path="/" element={<Home />} />
+    <CartProvider>
+      <BrowserRouter>
+        <Header />
+
+        <CartSidebar />
+        <CategoryNav />
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/libro/:ean" element={<BookDetails />} />
+          <Route path="/buscar" element={<BookSearch />} />
+        </Routes>
         
-        {/* Cuando la URL es "/libro", muestra el detalle */}
-        <Route path="/libro/:ean" element={<BookDetails />} />
-      </Routes>
-      
-      <footer>
-          <p>Impulsado por la red de gestión integral para librerías.</p>
-      </footer>
-    </BrowserRouter>
+        <footer>
+            <p>Ultra Gestión ® 2026. Impulsado por la red de gestión integral para librerías.</p>
+        </footer>
+      </BrowserRouter>
+    </CartProvider>
   )
 }
 

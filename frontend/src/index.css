@@ -144,6 +144,30 @@ header {
   font-weight: bold;
 }
 
+/* --- ESTILOS resultados --- */
+.search-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 40px;
+}
+
+.search-title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--text-dark);
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.search-grid {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  padding-bottom: 20px;
+}
+
 /* Mesas de Novedades */
 .content-section {
   max-width: 1100px;
@@ -314,12 +338,12 @@ footer {
 .cart-sidebar {
     position: fixed;
     top: 0;
-    right: -450px; /* Esto lo esconde fuera de la pantalla */
+    right: -450px;
     width: 400px;
     height: 100vh;
     background: var(--bg-paper);
     border-left: 1px solid var(--border-color);
-    transition: right 0.3s ease; /* Esto hace la animación suave */
+    transition: right 0.3s ease;
     z-index: 1000;
     padding: 30px;
     box-sizing: border-box;
@@ -329,7 +353,7 @@ footer {
 }
 
 .cart-sidebar.open {
-    right: 0; /* Cuando tiene esta clase, se mete en la pantalla */
+    right: 0;
 }
 
 .cart-header {
@@ -366,4 +390,265 @@ footer {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     background-color: var(--bg-paper);
+}
+
+/* --- ESTILOS BARRA DE CATEGORIAS --- */
+.category-nav {
+    background-color: var(--secondary-green);
+    color: white;
+    padding: 0 40px;
+}
+
+.category-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 35px;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-item {
+    position: relative;
+    padding: 15px 0;
+    cursor: pointer;
+    font-size: 15px;
+    transition: color 0.2s;
+}
+
+.category-item:hover {
+    color: #e0e0e0;
+}
+
+/* menu desplegable */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--bg-white, #ffffff);
+    color: var(--text-dark, #333);
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+    min-width: 220px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 100;
+    border-radius: 4px;
+}
+
+.category-item.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li {
+    padding: 10px 20px;
+    font-size: 14px;
+    transition: background-color 0.2s, color 0.2s;
+    position: center;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f5f5f5;
+    color: var(--primary-green);
+}
+
+/* --- VISTA DE BÚSQUEDA AVANZADA --- */
+.search-page-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-bar-wrapper {
+    background-color: var(--bg-white);
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+.advanced-search-form {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.form-group {
+    flex: 1;
+}
+
+.form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+}
+
+.results-header {
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+.empty-state-prompt {
+    padding: 40px;
+    text-align: center;
+    background-color: var(--bg-paper);
+    border: 1px dashed #CCC;
+}
+
+.empty-state-error {
+    padding: 40px;
+    text-align: center;
+    background-color: var(--bg-paper);
+    border: 1px solid #fee;
+}
+
+.error-title {
+    color: #c0392b;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.error-subtitle {
+    font-size: 14px;
+    margin: 0;
+}
+
+.results-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.result-item {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-white);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 4px;
+    justify-content: space-between;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.result-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+.result-item-top {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.result-image-wrapper {
+    width: 90px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.result-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border: 1px solid var(--border-color);
+}
+
+.result-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.result-title {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    cursor: pointer;
+    line-height: 1.2;
+    color: var(--text-dark);
+}
+
+.result-author {
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text-muted);
+}
+
+.vendor-badge {
+    background-color: transparent;
+    padding: 5px 0;
+    margin-bottom: 10px;
+}
+
+.vendor-title {
+    margin: 0 0 3px 0;
+    font-size: 12px;
+    color: var(--primary-green);
+    font-weight: bold;
+}
+
+.vendor-stock {
+    margin: 0;
+    font-size: 11px;
+    color: #27ae60;
+}
+
+.result-price {
+    font-size: 22px;
+    font-family: Georgia, serif;
+    text-align: right;
+    margin-top: auto;
+    color: var(--text-dark);
+}
+
+.btn-add-cart {
+    background-color: var(--accent-bordeaux);
+    width: 100%;
+    padding: 12px;
+    font-size: 13px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.btn-add-cart:hover {
+    opacity: 0.9;
+}
+
+/* --- BOTON MOSTRAR MAS --- */
+.load-more-btn {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    background-color: transparent;
+    color: var(--primary-green);
+    border: 2px solid var(--primary-green);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.load-more-btn:hover {
+    background-color: var(--primary-green);
+    color: white;
 }
