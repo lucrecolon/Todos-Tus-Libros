@@ -23,6 +23,11 @@ export const BookDetails = () => {
         cargarDatos();
     }, [ean]);
 
+    const formatearPrecio = (precio: number | string) => {
+        const numero = typeof precio === 'string' ? parseFloat(precio) : precio;
+        return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(numero);
+    };
+
     if (cargando) return <h2 style={{ padding: '40px', textAlign: 'center' }}>Cargando libro...</h2>;
     if (!libro) return <h2 style={{ padding: '40px', textAlign: 'center' }}>No se encontró el libro.</h2>;
 
@@ -54,7 +59,6 @@ export const BookDetails = () => {
                     <div className="book-meta">
                         <p><strong>EAN / ISBN:</strong> {libro.ean}</p>
                         <p><strong>Editorial:</strong> {libro.editorial?.nombre || 'No especificada'}</p>
-                        <p><strong>Precio Base:</strong> ${libro.precio}</p>
                     </div>
                 </div>
 
@@ -77,7 +81,7 @@ export const BookDetails = () => {
                                     </div>
                                 </div>
                                 <div className="store-action">
-                                    <span className="price">${tienda.precio}</span>
+                                    <span className="price">{formatearPrecio(tienda.precio)}</span>
                                     <button
                                         className="btn-add"
                                         onClick={() => {
