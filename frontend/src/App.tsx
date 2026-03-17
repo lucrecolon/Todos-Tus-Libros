@@ -6,27 +6,32 @@ import { CartProvider } from './context/CartContext';
 import { CartSidebar } from './components/CartSideBar';
 import { BookSearch } from './screens/BookSearch';
 import { CategoryNav } from './components/CategoryNav';
+import { WishlistProvider } from './context/WishlistContext';
+import { Wishlist } from './screens/Wishlist';
 
 function App() {
   return (
-    <CartProvider>
-      <BrowserRouter>
-        <Header />
+    <WishlistProvider>
+      <CartProvider>
+        <BrowserRouter>
+          <Header />
 
-        <CartSidebar />
-        <CategoryNav />
+          <CartSidebar />
+          <CategoryNav />
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/libro/:ean" element={<BookDetails />} />
-          <Route path="/buscar" element={<BookSearch />} />
-        </Routes>
-        
-        <footer>
-            <p>Ultra Gestión ® 2026. Impulsado por la red de gestión integral para librerías.</p>
-        </footer>
-      </BrowserRouter>
-    </CartProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/libro/:ean" element={<BookDetails />} />
+            <Route path="/buscar" element={<BookSearch />} />
+            <Route path="/favoritos" element={<Wishlist />} />
+          </Routes>
+          
+          <footer>
+              <p>Ultra Gestión ® 2026. Impulsado por la red de gestión integral para librerías.</p>
+          </footer>
+        </BrowserRouter>
+      </CartProvider>
+    </WishlistProvider>
   )
 }
 
