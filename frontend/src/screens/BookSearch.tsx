@@ -2,11 +2,28 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { buscarLibrosAvanzado, buscarLibroPorEan } from '../services/ultraService'; 
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+
+const SkeletonCard = () => (
+    <div className="result-item">
+        <div className="result-item-top">
+            <div className="skeleton skeleton-img"></div>
+            <div className="result-info">
+                <div className="skeleton skeleton-title"></div>
+                <div className="skeleton skeleton-author"></div>
+                <div className="skeleton skeleton-badge"></div>
+                <div className="skeleton skeleton-price"></div>
+            </div>
+        </div>
+        <div className="skeleton skeleton-btn"></div>
+    </div>
+);
 
 export const BookSearch = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
+    const { toggleWishlist, isInWishlist } = useWishlist();
     
     const queryTitulo = searchParams.get('titulo') || ''; 
     const queryAutor = searchParams.get('autor') || ''; 
@@ -23,6 +40,16 @@ export const BookSearch = () => {
     const [hayMasResultados, setHayMasResultados] = useState(true);
 
     const busquedaActiva = queryTitulo || queryAutor || queryEditorial;
+
+    const [toast, setToast] = useState({ visible: false, mensaje: '' });
+
+    const mostrarToast = (tituloLibro: string) => {
+        setToast({ visible: true, mensaje: `¡"${tituloLibro}" agregado al carrito!` });
+        
+        setTimeout(() => {
+            setToast({ visible: false, mensaje: '' });
+        }, 3000);
+    };
 
     useEffect(() => {
         setPagina(1);
@@ -131,6 +158,22 @@ export const BookSearch = () => {
                                 <div key={`${pub.ean}-${pub.nombre_libreria}-${index}`} className="result-item">
 
                                     <div className="result-item-top">
+                                        <button className="wishlist-btn"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleWishlist({
+                                                    ean: pub.ean,
+                                                    titulo: pub.titulo,
+                                                    autor: pub.autor ? `${pub.autor.nombre} ${pub.autor.apellido}` : 'Autor desconocido',
+                                                    imagen_tapa: pub.imagen_tapa,
+                                                    libreria: pub.nombre_libreria
+                                                });
+                                            }}
+                                            title={isInWishlist(pub.ean, pub.nombre_libreria) ? "Quitar de favoritos" : "Agregar a favoritos"}
+                                            >
+                                            {isInWishlist(pub.ean, pub.nombre_libreria) ? '❤️' : '🤍'}
+                                        </button>
+
                                         <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
                                             {pub.imagen_tapa ? (
                                                 <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" />
@@ -157,6 +200,7 @@ export const BookSearch = () => {
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             addToCart({ ean: pub.ean, titulo: pub.titulo, precio: Number(pub.precio_tienda), libreria: pub.nombre_libreria });
+                                            mostrarToast(pub.titulo);
                                         }}
                                     >
                                         AGREGAR AL CARRITO
@@ -164,6 +208,11 @@ export const BookSearch = () => {
                                     
                                 </div>
                             ))}
+                            {cargando && (
+                            Array.from({ length: 4 }).map((_, i) => (
+                                <SkeletonCard key={`skeleton-${i}`} />
+                            ))
+                        )}
                         </div>
 
                         <div style={{ marginTop: '30px' }}>
@@ -181,6 +230,9 @@ export const BookSearch = () => {
                         </div>
                     </>
                 )}
+            </div>
+            <div className={`toast-notification ${toast.visible ? 'show' : ''}`}>
+                ✅ {toast.mensaje}
             </div>
         </div>
     );

@@ -1,9 +1,11 @@
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import { useWishlist } from '../context/WishlistContext';
 
 export const Header = () => {
     const { cartItems, setCartOpen } = useCart();
     const navigate = useNavigate();
+    const { wishlist } = useWishlist();
 
     return (
         <header>
@@ -14,10 +16,18 @@ export const Header = () => {
             >
                 TODOS TUS LIBROS ARGENTINA
             </div>
-            
-            <button className="cart-btn" onClick={() => setCartOpen(true)}>
-                MI CARRITO ({cartItems.length})
-            </button>
+
+            <div className="header-actions">
+                <button className="favorites-btn" onClick={() => navigate('/favoritos')}
+                    > FAVORITOS ({wishlist.length})
+                </button>
+
+                <button className="cart-btn" onClick={() => setCartOpen(true)}>
+                    MI CARRITO ({cartItems.length})
+                </button>
+
+            </div>
+
         </header>
     );
 };
