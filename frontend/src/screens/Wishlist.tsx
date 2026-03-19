@@ -33,8 +33,7 @@ export const Wishlist = () => {
                                     toggleWishlist(libro);
                                 }}
                                 title="Quitar de favoritos"
-                            >
-                                ❤️
+                            >❤️
                             </button>
 
                             <div className="result-item-top">

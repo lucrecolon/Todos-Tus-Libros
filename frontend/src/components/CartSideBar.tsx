@@ -1,7 +1,7 @@
 import { useCart } from '../context/CartContext';
 
 export const CartSidebar = () => {
-    const { cartOpen, setCartOpen, cartItems } = useCart();
+    const { cartOpen, setCartOpen, cartItems, removeFromCart } = useCart();
 
     const groupedCart = cartItems.reduce((grupos, item) => {
         if (!grupos[item.libreria]) {
@@ -60,6 +60,11 @@ export const CartSidebar = () => {
                                     }}
                                 >
                                     Ir a pagar a {libreria}
+                                </button>
+
+                                <button className="remove-btn" 
+                                    onClick={() => removeFromCart(items[0])}
+                                    title="Eliminar del carrito">Eliminar
                                 </button>
                             </div>
                         );

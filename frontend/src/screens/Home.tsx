@@ -2,12 +2,18 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { buscarLibrosAvanzado } from '../services/ultraService';
 import { type DetalleLibro } from '../types/models';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+
 
 export const Home = () => {
     const [inputTitulo, setInputTitulo] = useState('');
     const [inputAutor, setInputAutor] = useState('');
     const [destacados, setDestacados] = useState<DetalleLibro[]>([]);
     const navigate = useNavigate();
+    const { addToCart } = useCart();
+    const { toggleWishlist, isInWishlist } = useWishlist();
+
 
     useEffect(() => {
         const cargarDestacados = async () => {
@@ -33,6 +39,12 @@ export const Home = () => {
         
         navigate(`/buscar?${params.toString()}`); 
     };
+
+    const novedadesMock = [
+        { ean: "9789877694383", titulo: "UNA CASA SOLA", autor: { nombre: "Selva", apellido: "Almada" }, precio_tienda:29999, nombre_libreria: "RANDOM HOUSE", imagen_tapa: "http://static.megustaleer.com.ar/images/libros_244_x/9789877694383.jpg" },
+        { ean: "9786313013081", titulo: "CABRON", autor: { nombre: "Reinaldo", apellido: "Sietecase" }, precio_tienda: 29999, nombre_libreria: "ALFAGUARA", imagen_tapa: "http://static.megustaleer.com.ar/images/libros_244_x/9786313013081.jpg" },
+        { ean: "9789870761716", titulo: "CUADERNO INGLES (PREMIO CLARIN 2025)", autor: { nombre: "Daniel", apellido: "Morales" }, precio_tienda: 29999, nombre_libreria: "ALFAGUARA", imagen_tapa: "http://static.megustaleer.com.ar/images/libros_244_x/9789870761716.jpg" }
+    ];
 
     return (
         <main>
@@ -72,6 +84,55 @@ export const Home = () => {
                     </div>
                 </form>
             </section>
+
+            <div className="novedades-section">
+                <h2 className="novedades-title">
+                    Novedades del mes
+                </h2>
+                
+                <div className="results-list">
+                    {novedadesMock.map((pub, index) => (
+                        <div key={`novedad-${pub.ean}-${index}`} className="result-item">
+                            
+                            <button className="wishlist-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleWishlist({
+                                        ean: pub.ean,
+                                        titulo: pub.titulo,
+                                        autor: pub.autor.nombre ? `${pub.autor.nombre} ${pub.autor.apellido}` : pub.autor.apellido,
+                                        imagen_tapa: pub.imagen_tapa,
+                                        libreria: pub.nombre_libreria
+                                    });
+                                }}
+                                title={isInWishlist(pub.ean, pub.nombre_libreria) ? "Quitar de favoritos" : "Agregar a favoritos"}
+                            >
+                                {isInWishlist(pub.ean, pub.nombre_libreria) ? '❤️' : '🤍'}
+                            </button>
+
+                            <div className="result-item-top">
+                                <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
+                                    <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" />
+                                </div>
+                                <div className="result-info">
+                                    <h3 className="result-title" onClick={() => navigate(`/libro/${pub.ean}`)}>{pub.titulo}</h3>
+                                    <p className="result-author">Por {pub.autor.nombre ? `${pub.autor.nombre} ${pub.autor.apellido}` : pub.autor.apellido}</p>
+                                    <div className="vendor-badge">
+                                        <p className="vendor-title">Editorial: {pub.nombre_libreria}</p>
+                                    </div>
+                                    <div className="result-price">${pub.precio_tienda.toLocaleString('es-AR')}</div> 
+                                </div>
+                            </div>
+                            
+                            <button className="btn-add-cart" 
+                                onClick={() => navigate(`/libro/${pub.ean}`)}
+                            >
+                                VER DISPONIBILIDAD
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             <section className="content-section">
                 <div className="section-title">

@@ -29,6 +29,11 @@ h1, h2, h3, .logo {
   color: var(--text-dark);
 }
 
+.logo img {
+    height: 50px;
+    display: flex;
+}
+
 header {
   background-color: var(--primary-green);
   color: var(--text-light);
@@ -377,6 +382,17 @@ footer {
     color: var(--text-muted);
     margin-bottom: 25px;
     font-style: italic;
+}
+
+.remove-btn{
+    background: var(--border-color);
+    border: 1px solid var(--accent-bordeaux);
+    color: var(--accent-bordeaux);
+    cursor: pointer;
+    padding: 5px;
+    position: absolute;
+    right: 50px;
+    top: 190px;
 }
 
 /* --- BARRA DE UBICACION --- */
@@ -791,4 +807,22 @@ footer {
     display: flex;
     gap: 15px;
     align-items: center;
+}
+
+/* --- ESTILOS DE NOVEDADES --- */
+.novedades-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 40px;
+  background-color: var(--bg-white);
+}
+
+.novedades-title {
+  font-size: 28px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--text-dark);
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }

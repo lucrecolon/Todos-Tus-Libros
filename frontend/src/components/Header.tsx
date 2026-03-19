@@ -10,11 +10,11 @@ export const Header = () => {
     return (
         <header>
             <div 
-                className="logo" 
+                className="logo"
                 onClick={() => navigate('/')} 
                 style={{ cursor: 'pointer' }}
             >
-                TODOS TUS LIBROS ARGENTINA
+                <img src="\src\assets\TTL_logotemporal.png" alt="Todos Tus Libros" />
             </div>
 
             <div className="header-actions">
