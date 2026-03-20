@@ -43,4 +43,7 @@ jobs:
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u dfmoscoso23 --password-stdin
             IMAGE="ghcr.io/$REPO:latest"
             docker pull $IMAGE
-            docker run -d -p 3000:80 --env-file .env $IMAGE
+            docker stop todos-frontend || true
+            docker rm todos-frontend || true
+            docker run -d --name todos-frontend -p 3000:80 --env-file .env $IMAGE
+            docker image prune -f
