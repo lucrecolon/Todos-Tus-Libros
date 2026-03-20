@@ -10,7 +10,7 @@ export const BookDetails = () => {
     const [libro, setLibro] = useState<DetalleLibro | null>(null);
     const [cargando, setCargando] = useState(true);
 
-    const { setCartOpen, cartItems, addToCart } = useCart();
+    const {  addToCart } = useCart(); /* setCartOpen, cartItems, */
 
     useEffect(() => {
         const cargarDatos = async () => {
