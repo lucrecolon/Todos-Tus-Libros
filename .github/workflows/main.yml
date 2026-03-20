@@ -1,5 +1,4 @@
-name: Deploy Django Docker
-
+name: Deploy Todos tus libros Docker
 on:
   push:
     tags:
@@ -24,6 +23,7 @@ jobs:
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
 
       - name: Build image
+        working-directory: ./frontend
         run: |
           docker build -t ghcr.io/$REPO:latest .
 
@@ -37,6 +37,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: REPO
           script: |
             cd todos
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u dfmoscoso23 --password-stdin
