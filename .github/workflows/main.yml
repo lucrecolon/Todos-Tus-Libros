@@ -43,4 +43,4 @@ jobs:
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u dfmoscoso23 --password-stdin
             IMAGE="ghcr.io/$REPO:latest"
             docker pull $IMAGE
-            docker run -p 3000:80 --env-file .env frontend-vite
+            docker run -d -p 3000:80 --env-file .env $IMAGE
