@@ -14,7 +14,7 @@ export const Header = () => {
                 onClick={() => navigate('/')} 
                 style={{ cursor: 'pointer' }}
             >
-                <img src="\src\assets\TTL_logotemporal.png" alt="Todos Tus Libros" />
+                <img src="\src\assets\logo_TTL.jpg" alt="Todos Tus Libros" />
             </div>
 
             <div className="header-actions">
