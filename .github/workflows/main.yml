@@ -1,0 +1,49 @@
+name: Deploy Todos tus libros Docker
+on:
+  push:
+    tags:
+          - 'v*'
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Set lowercase repo
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
+      - name: Build image
+        working-directory: ./frontend
+        run: |
+          docker build -t ghcr.io/$REPO:latest .
+
+      - name: Push image
+        run: |
+          docker push ghcr.io/$REPO:latest
+  
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0       
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: REPO
+          script: |
+            cd todos
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u dfmoscoso23 --password-stdin
+            IMAGE="ghcr.io/$REPO:latest"
+            docker pull $IMAGE
+            docker stop todos-frontend || true
+            docker rm todos-frontend || true
+            docker run -d --name todos-frontend -p 3000:80 --env-file .env $IMAGE
+            docker image prune -f

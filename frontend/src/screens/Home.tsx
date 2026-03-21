@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { buscarLibrosAvanzado } from '../services/ultraService';
 import { type DetalleLibro } from '../types/models';
-import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 
 
@@ -11,7 +10,6 @@ export const Home = () => {
     const [inputAutor, setInputAutor] = useState('');
     const [destacados, setDestacados] = useState<DetalleLibro[]>([]);
     const navigate = useNavigate();
-    const { addToCart } = useCart();
     const { toggleWishlist, isInWishlist } = useWishlist();
 
 
