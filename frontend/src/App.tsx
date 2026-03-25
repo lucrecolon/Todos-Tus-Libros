@@ -8,6 +8,7 @@ import { BookSearch } from './screens/BookSearch';
 import { CategoryNav } from './components/CategoryNav';
 import { WishlistProvider } from './context/WishlistContext';
 import { Wishlist } from './screens/Wishlist';
+import { Novedades } from './screens/Novedades';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/libro/:ean" element={<BookDetails />} />
             <Route path="/buscar" element={<BookSearch />} />
             <Route path="/favoritos" element={<Wishlist />} />
+            <Route path="/novedades" element={<Novedades />} />
           </Routes>
           
           <footer>

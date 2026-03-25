@@ -811,7 +811,7 @@ footer {
 
 /* --- ESTILOS DE NOVEDADES --- */
 .novedades-section {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 60px 40px;
   background-color: var(--bg-white);

@@ -8,6 +8,7 @@ export interface FiltrosBusqueda {
     autor?: string;
     editorial?: string;
     page?: number;
+    novedades?: string;
 }
 
 export const buscarLibrosAvanzado = async (filtros: FiltrosBusqueda) => {
@@ -16,6 +17,7 @@ export const buscarLibrosAvanzado = async (filtros: FiltrosBusqueda) => {
     if (filtros.titulo) query.append('titulo', filtros.titulo);
     if (filtros.autor) query.append('autor', filtros.autor);
     if (filtros.editorial) query.append('editorial', filtros.editorial);
+    if (filtros.novedades) query.append('novedades', filtros.novedades);
     
     if (filtros.page) query.append('page', filtros.page.toString());
 
