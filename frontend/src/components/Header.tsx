@@ -1,6 +1,7 @@
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { useWishlist } from '../context/WishlistContext';
+import logo from '../assets/logo_TTL.jpg';
 
 export const Header = () => {
     const { cartItems, setCartOpen } = useCart();
@@ -14,7 +15,7 @@ export const Header = () => {
                 onClick={() => navigate('/')} 
                 style={{ cursor: 'pointer' }}
             >
-                <img src="\src\assets\logo_TTL.jpg" alt="Todos Tus Libros" />
+                <img src={logo} alt="Todos Tus Libros" />
             </div>
 
             <div className="header-actions">
