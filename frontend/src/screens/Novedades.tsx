@@ -18,84 +18,141 @@ export const Novedades = () => {
     const navigate = useNavigate();
     const [libros, setLibros] = useState<any[]>([]);
     const [cargando, setCargando] = useState(true);
+    
+    const [paginaActual, setPaginaActual] = useState(1);
+    const [hayMasPaginas, setHayMasPaginas] = useState(false);
+    const [cargandoMas, setCargandoMas] = useState(false);
+    const [totalLibros, setTotalLibros] = useState(0);
+
+    const traerNovedades = async (pagina: number, esCargaInicial: boolean = false) => {
+        if (esCargaInicial) setCargando(true);
+        else setCargandoMas(true);
+
+        const fecha = new Date();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const anio = fecha.getFullYear();
+        
+        try {
+            const dataBusqueda = await buscarLibrosAvanzado({ 
+                novedades: `${mes}-${anio}`, 
+                page: pagina 
+            });
+            
+            if (!dataBusqueda.results || dataBusqueda.results.length === 0) {
+                if (esCargaInicial) setCargando(false);
+                return;
+            }
+
+            const librosConDetalle = await Promise.all(
+                dataBusqueda.results.map(async (libroBasico: any) => { 
+                    try { 
+                        const detalle = await buscarLibroPorEan(libroBasico.ean); 
+                        return { ...libroBasico, ...detalle }; 
+                    } catch { return libroBasico; }
+                })
+            );
+            
+            if (esCargaInicial) {
+                setLibros(librosConDetalle);
+            } else {
+                setLibros(prevLibros => [...prevLibros, ...librosConDetalle]);
+            }
+
+            setTotalLibros(dataBusqueda.count);
+            setHayMasPaginas(dataBusqueda.next !== null);
+
+        } catch (error) {
+            console.error("Error cargando todas las novedades:", error);
+        } finally {
+            setCargando(false);
+            setCargandoMas(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchTodasLasNovedades = async () => {
-            const fecha = new Date();
-            const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-            const anio = fecha.getFullYear();
-            
-            try {
-                const dataBusqueda = await buscarLibrosAvanzado({ novedades: `${mes}-${anio}` });
-                
-                if (!dataBusqueda || dataBusqueda.length === 0) {
-                    setCargando(false);
-                    return;
-                }
-
-                const librosConDetalle = await Promise.all(
-                    dataBusqueda.map(async (libroBasico: any) => { 
-                        try { 
-                            const detalle = await buscarLibroPorEan(libroBasico.ean); 
-                            return { ...libroBasico, ...detalle }; 
-                        } catch { return libroBasico; }
-                    })
-                );
-                
-                setLibros(librosConDetalle);
-            } catch (error) {
-                console.error("Error cargando todas las novedades:", error);
-            } finally {
-                setCargando(false);
-            }
-        };
-
-        fetchTodasLasNovedades();
+        traerNovedades(1, true);
     }, []);
+
+    const cargarMasLibros = () => {
+        const nuevaPagina = paginaActual + 1;
+        setPaginaActual(nuevaPagina);
+        traerNovedades(nuevaPagina, false);
+    };
 
     return (
         <div className="search-page-container main-container">
-            <h2 className="results-header" style={{ marginBottom: '30px', color: 'var(--text-dark)' }}>
-                Todas las novedades del mes
-            </h2>
+            <div style={{ marginBottom: '30px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: '2px solid var(--border-color)', paddingBottom: '10px' }}>
+                <h2 className="results-header" style={{ color: 'var(--text-dark)', margin: 0 }}>
+                    Todas las novedades del mes
+                </h2>
+                {totalLibros > 0 && (
+                    <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
+                        Mostrando {libros.length} de {totalLibros} lanzamientos
+                    </span>
+                )}
+            </div>
 
             {cargando ? (
                 <p style={{ textAlign: 'center', padding: '40px' }}>Buscando el catálogo completo de lanzamientos...</p>
             ) : libros.length === 0 ? (
                 <p style={{ textAlign: 'center', padding: '40px' }}>No se encontraron novedades este mes.</p>
             ) : (
-                <div className="results-list">
-                    {libros.map((pub, index) => {
-                        const precioMostrar = pub.en_librerias?.find((l: any) => Number(l.precio) > 0)?.precio;
-                        
-                        return (
-                            <div key={`todas-${pub.ean}-${index}`} className="result-item">
-                                <div className="result-item-top">
-                                    <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
-                                        {pub.imagen_tapa ? (
-                                            <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" style={{ objectFit: 'cover' }} />
-                                        ) : (
-                                            <div className="book-cover-mock" style={{ height: '135px' }}>Sin portada</div>
-                                        )}
-                                    </div>
-                                    <div className="result-info">
-                                        <h3 className="result-title" onClick={() => navigate(`/libro/${pub.ean}`)}>{pub.titulo}</h3>
-                                        <p className="result-author">Por {formatearAutor(pub.autor)}</p>
-                                        <div className="vendor-badge">
-                                            <p className="vendor-title">Editorial: {formatearEditorial(pub.editorial)}</p>
+                <>
+                    <div className="results-list">
+                        {libros.map((pub, index) => {
+                            const precioMostrar = pub.en_librerias?.find((l: any) => Number(l.precio) > 0)?.precio;
+                            
+                            return (
+                                <div key={`todas-${pub.ean}-${index}`} className="result-item" >
+                                    <div className="result-item-top">
+                                        <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
+                                            {pub.imagen_tapa ? (
+                                                <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" style={{ objectFit: 'cover' }} />
+                                            ) : (
+                                                <div className="book-cover-mock" style={{ height: '135px' }}>Sin portada</div>
+                                            )}
                                         </div>
-                                        {precioMostrar && (
-                                            <div className="result-price">${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
-                                        )}
+                                        <div className="result-info">
+                                            <h3 className="result-title" onClick={() => navigate(`/libro/${pub.ean}`)}>{pub.titulo}</h3>
+                                            <p className="result-author">Por {formatearAutor(pub.autor)}</p>
+                                            <div className="vendor-badge">
+                                                <p className="vendor-title">Editorial: {formatearEditorial(pub.editorial)}</p>
+                                            </div>
+                                            {precioMostrar && (
+                                                <div className="result-price">${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
+                                            )}
+                                        </div>
                                     </div>
+                                    <button className="btn-add-cart" onClick={() => navigate(`/libro/${pub.ean}`)}>
+                                        VER DISPONIBILIDAD
+                                    </button>
                                 </div>
-                                <button className="btn-add-cart" onClick={() => navigate(`/libro/${pub.ean}`)}>
-                                    VER DISPONIBILIDAD
-                                </button>
-                            </div>
-                        );
-                    })}
-                </div>
+                            );
+                        })}
+                    </div>
+
+                    {hayMasPaginas && (
+                        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+                            <button 
+                                onClick={cargarMasLibros}
+                                disabled={cargandoMas}
+                                style={{
+                                    padding: '12px 30px',
+                                    backgroundColor: 'var(--bg-white)',
+                                    color: 'var(--text-dark)',
+                                    border: '1px solid var(--text-dark)',
+                                    borderRadius: '4px',
+                                    cursor: cargandoMas ? 'wait' : 'pointer',
+                                    fontWeight: 'bold',
+                                    transition: 'all 0.2s',
+                                    opacity: cargandoMas ? 0.6 : 1
+                                }}
+                            >
+                                {cargandoMas ? 'CARGANDO...' : 'CARGAR MÁS LIBROS'}
+                            </button>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );

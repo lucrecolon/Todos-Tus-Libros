@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { buscarLibrosAvanzado, buscarLibroPorEan } from '../services/ultraService';
-import { type DetalleLibro } from '../types/models';
 
 const formatearAutor = (autor: any): string => {
     if (!autor) return 'Autor desconocido';
@@ -22,28 +21,11 @@ const formatearEditorial = (editorial: any): string => {
 export const Home = () => {
     const [inputTitulo, setInputTitulo] = useState('');
     const [inputAutor, setInputAutor] = useState('');
-    const [destacados, setDestacados] = useState<DetalleLibro[]>([]);
     const navigate = useNavigate();
     
     const [novedades, setNovedades] = useState<any[]>([]);
     const [cargandoNovedades, setCargandoNovedades] = useState(true);
     const [indiceCarousel, setIndiceCarousel] = useState(0);
-
-    useEffect(() => {
-        const cargarDestacados = async () => {
-            try {
-                const busquedasAleatorias = ['borges', 'cortazar', 'king', 'isabel allende', 'orwell'];
-                const busquedaRandom = busquedasAleatorias[Math.floor(Math.random() * busquedasAleatorias.length)];
-                const librosPorDefecto = await buscarLibrosAvanzado({ titulo: busquedaRandom }); 
-                if (librosPorDefecto && librosPorDefecto.length > 0) {
-                    setDestacados(librosPorDefecto.slice(0, 5));
-                }
-            } catch (error) {
-                console.error("Error en destacados", error);
-            }
-        };
-        cargarDestacados();
-    }, []);
 
     const ejecutarBusqueda = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -62,18 +44,26 @@ export const Home = () => {
             const anio = fecha.getFullYear();
             
             try {
-                const dataBusqueda = await buscarLibrosAvanzado({ novedades: `${mes}-${anio}` });
-                if (!dataBusqueda || dataBusqueda.length === 0) return;
+                const [pagina1, pagina2] = await Promise.all([
+                    buscarLibrosAvanzado({ novedades: `${mes}-${anio}`, page: 1 }),
+                    buscarLibrosAvanzado({ novedades: `${mes}-${anio}`, page: 2 })
+                ]);
+                
+                const todosLosResultados = [...(pagina1.results || []), ...(pagina2.results || [])];
+                
+                if (todosLosResultados.length === 0) return;
 
-                const primerosDoce = dataBusqueda.slice(0, 12);
+                const primerosQuince = todosLosResultados.slice(0, 15);
+                
                 const librosConDetalle = await Promise.all(
-                    primerosDoce.map(async (libroBasico: any) => { 
+                    primerosQuince.map(async (libroBasico: any) => { 
                         try { 
                             const detalle = await buscarLibroPorEan(libroBasico.ean); 
                             return { ...libroBasico, ...detalle }; 
                         } catch { return libroBasico; }
                     })
                 );
+                
                 setNovedades(librosConDetalle);
             } catch (error) {
                 console.error("Error cargando novedades:", error);
@@ -88,14 +78,13 @@ export const Home = () => {
         if (novedades.length <= 3) return;
         const intervalo = setInterval(() => {
             setIndiceCarousel(prev => (prev + 3 >= novedades.length ? 0 : prev + 3));
-        }, 2000);
+        }, 4000);
         return () => clearInterval(intervalo);
     }, [novedades.length]);
 
     const avanzar = () => setIndiceCarousel(prev => (prev + 3 >= novedades.length ? 0 : prev + 3));
     const retroceder = () => setIndiceCarousel(prev => (prev - 3 < 0 ? Math.max(0, novedades.length - 3) : prev - 3));
 
-    const novedadesVisibles = novedades.slice(indiceCarousel, indiceCarousel + 3);
 
     return (
         <main>
@@ -118,26 +107,18 @@ export const Home = () => {
                 </form>
             </section>
 
+
             <section className="novedades-section" style={{ marginTop: '40px', marginBottom: '40px', width: '100%' }}>
-                
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--border-color)', paddingBottom: '10px', marginBottom: '20px' }}>
-                    <h2 className="novedades-title" style={{ fontSize: '24px', color: 'var(--text-dark)', margin: 0 }}>
-                        Novedades del mes
-                    </h2>
+                <div className="novedades-title">
+                    <h2 style={{ margin: 0 }}>Novedades del mes</h2>
                     
                     {!cargandoNovedades && novedades.length > 0 && (
-                        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                            <div style={{ display: 'flex', gap: '8px' }}>
-                                <button className="carousel-btn" onClick={retroceder}>◀</button>
-                                <button className="carousel-btn" onClick={avanzar}>▶</button>
-                            </div>
-                            <button 
-                                onClick={() => navigate('/novedades')} 
-                                style={{ background: 'none', border: 'none', color: 'var(--text-dark)', fontWeight: 'bold', cursor: 'pointer', fontSize: '12px', letterSpacing: '1px' }}
-                            >
-                                VER TODOS
-                            </button>
-                        </div>
+                        <button 
+                            onClick={() => navigate('/novedades')} 
+                            style={{ background: 'none', border: 'none', color: 'var(--text-dark)', fontWeight: 'bold', cursor: 'pointer', fontSize: '12px', letterSpacing: '1px' }}
+                        >
+                            VER TODOS
+                        </button>
                     )}
                 </div>
                 
@@ -146,68 +127,54 @@ export const Home = () => {
                 ) : novedades.length === 0 ? (
                     <p style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>Aún no hay novedades cargadas para este mes.</p>
                 ) : (
-                    <div className="results-list">
-                        {novedadesVisibles.map((pub, index) => {
-                            const precioMostrar = pub.en_librerias?.find((l: any) => Number(l.precio) > 0)?.precio;
-                            return (
-                                <div key={`novedad-${pub.ean}-${index}`} className="result-item">
-                                    <div className="result-item-top">
-                                        <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
-                                            {pub.imagen_tapa ? (
-                                                <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" style={{ objectFit: 'cover' }} />
-                                            ) : (
-                                                <div className="book-cover-mock" style={{ height: '135px' }}>Sin portada</div>
-                                            )}
-                                        </div>
-                                        <div className="result-info">
-                                            <h3 className="result-title" onClick={() => navigate(`/libro/${pub.ean}`)}>{pub.titulo}</h3>
-                                            <p className="result-author">Por {formatearAutor(pub.autor)}</p>
-                                            <div className="vendor-badge">
-                                                <p className="vendor-title">Editorial: {formatearEditorial(pub.editorial)}</p>
+                    <div style={{ position: 'relative', width: '100%', padding: '0 50px', boxSizing: 'border-box' }}>
+                        
+                        <button onClick={retroceder} className="carousel-arrow left">◀</button>
+
+                        <div style={{ overflow: 'hidden', width: '100%', padding: '10px 0 20px 0' }}>
+                            <div style={{
+                                display: 'flex',
+                                transition: 'transform 0.6s ease-in-out',
+                                transform: `translateX(-${(indiceCarousel / novedades.length) * 100}%)`,
+                                width: `${(novedades.length / 3) * 100}%` 
+                            }}>
+                                
+                                {novedades.map((pub, index) => {
+                                    const precioMostrar = pub.en_librerias?.find((l: any) => Number(l.precio) > 0)?.precio;
+                                    return (
+                                        <div key={`novedad-${pub.ean}-${index}`} style={{ width: `${100 / novedades.length}%`, padding: '0 10px', boxSizing: 'border-box' }}>
+                                            
+                                            <div className="result-item" style={{ height: '100%', margin: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                <div className="result-item-top">
+                                                    <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
+                                                        {pub.imagen_tapa ? (
+                                                            <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" />
+                                                        ) : (
+                                                            <div className="book-cover-mock" style={{ height: '135px' }}>Sin portada</div>
+                                                        )}
+                                                    </div>
+                                                    <div className="result-info">
+                                                        <h3 className="result-title" onClick={() => navigate(`/libro/${pub.ean}`)}>{pub.titulo}</h3>
+                                                        <p className="result-author">Por {formatearAutor(pub.autor)}</p>
+                                                        <div className="vendor-badge">
+                                                            <p className="vendor-title">Editorial: {formatearEditorial(pub.editorial)}</p>
+                                                        </div>
+                                                        {precioMostrar && (
+                                                            <div className="result-price">${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <button className="btn-add-cart" onClick={() => navigate(`/libro/${pub.ean}`)}>VER DISPONIBILIDAD</button>
                                             </div>
-                                            {precioMostrar && (
-                                                <div className="result-price">${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
-                                            )}
                                         </div>
-                                    </div>
-                                    <button className="btn-add-cart" onClick={() => navigate(`/libro/${pub.ean}`)}>VER DISPONIBILIDAD</button>
-                                </div>
-                            );
-                        })}
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        <button onClick={avanzar} className="carousel-arrow right">▶</button>
                     </div>
                 )}
-            </section>
-
-            <section className="content-section">
-                <div className="section-title">
-                    <h2>Descubrí estas lecturas</h2>
-                    <a href="#" className="view-all">Ver todos</a>
-                </div>
-
-                <div className="books-grid">
-                    {destacados.length === 0 ? (
-                        <p style={{ color: 'var(--text-muted)' }}>Cargando recomendaciones...</p>
-                    ) : (
-                        destacados.map((libro) => (
-                            <div className="book-card" key={`destacado-${libro.ean}`} onClick={() => navigate(`/libro/${libro.ean}`)} style={{ cursor: 'pointer' }}>
-                                {libro.imagen_tapa ? (
-                                    <img 
-                                        src={libro.imagen_tapa} 
-                                        alt={`Portada de ${libro.titulo}`} 
-                                        className="book-cover-mock" 
-                                        style={{ objectFit: 'cover' }} 
-                                    />
-                                ) : (
-                                    <div className="book-cover-mock">Sin portada</div>
-                                )}
-                                
-                                <h3 className="book-title-mock">{libro.titulo}</h3>
-                                
-                                <p className="book-author-mock">{formatearAutor(libro.autor)}</p>
-                            </div>
-                        ))
-                    )}
-                </div>
             </section>
         </main>
     );
