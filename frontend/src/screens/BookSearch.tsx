@@ -69,14 +69,14 @@ export const BookSearch = () => {
                 page: pagina
             });
             
-            if (dataBusqueda.length === 0) {
+            if (dataBusqueda.results.length === 0) {
                 setHayMasResultados(false);
                 setCargando(false);
                 return;
             }
             
             const librosConDetalle = await Promise.all(
-                dataBusqueda.map(async (libroBasico: any) => {
+                dataBusqueda.results.map(async (libroBasico: any) => {
                     try { return await buscarLibroPorEan(libroBasico.ean); } 
                     catch { return libroBasico; }
                 })

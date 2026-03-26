@@ -11,29 +11,42 @@ export interface FiltrosBusqueda {
     novedades?: string;
 }
 
-export const buscarLibrosAvanzado = async (filtros: FiltrosBusqueda) => {
+export interface ResultadoBusquedaPaginada {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: any[];
+}
+
+export const buscarLibrosAvanzado = async (filtros: FiltrosBusqueda): Promise<ResultadoBusquedaPaginada> => {
     const query = new URLSearchParams();
     
     if (filtros.titulo) query.append('titulo', filtros.titulo);
     if (filtros.autor) query.append('autor', filtros.autor);
     if (filtros.editorial) query.append('editorial', filtros.editorial);
-    if (filtros.novedades) query.append('novedades', filtros.novedades);
-    
     if (filtros.page) query.append('page', filtros.page.toString());
+    if (filtros.novedades) query.append('novedades', filtros.novedades);
 
     const url = `${API_BASE_URL}/?${query.toString()}`;
     
     try {
         const response = await fetch(url, {
             method: 'GET',
-            headers: { 'Authorization': import.meta.env.VITE_ULTRA_TOKEN, 'Content-Type': 'application/json' }
+            headers: { 'Authorization': TOKEN, 'Content-Type': 'application/json' }
         });
         if (!response.ok) throw new Error('Error en la API');
+        
         const data = await response.json();
-        return data.results || []; 
+        
+        return {
+            count: data.count || 0,
+            next: data.next || null,
+            previous: data.previous || null,
+            results: data.results || []
+        };
     } catch (error) {
         console.error("Error buscando libros:", error);
-        return [];
+        return { count: 0, next: null, previous: null, results: [] };
     }
 };
 
