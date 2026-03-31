@@ -24,8 +24,7 @@ jobs:
 
       - name: Build image
         working-directory: ./frontend
-        run: |
-          docker build --build-arg VITE_ULTRA_TOKEN=${{ secrets.VITE_ULTRA_TOKEN }} -t ghcr.io/$REPO:latest .
+        run: docker build --build-arg VITE_ULTRA_TOKEN=${{ secrets.VITE_ULTRA_TOKEN }} -t ghcr.io/$REPO:latest .
 
       - name: Push image
         run: |
