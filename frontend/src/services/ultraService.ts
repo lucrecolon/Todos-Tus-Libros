@@ -27,7 +27,7 @@ export const buscarLibrosAvanzado = async (filtros: FiltrosBusqueda): Promise<Re
     if (filtros.page) query.append('page', filtros.page.toString());
     if (filtros.novedades) query.append('novedades', filtros.novedades);
 
-    const url = `${API_BASE_URL}/?${query.toString()}`;
+    const url = `${API_BASE_URL}?${query.toString()}`;
     
     try {
         const response = await fetch(url, {
