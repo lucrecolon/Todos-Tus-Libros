@@ -22,10 +22,19 @@ jobs:
       - name: Set lowercase repo
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
 
+        - name: Inyectar variables de entorno
+        working-directory: ./frontend
+        run: |
+          echo "VITE_ULTRA_TOKEN=${{ secrets.VITE_ULTRA_TOKEN }}" >> .env
+
       - name: Build image
         working-directory: ./frontend
         run: |
           docker build -t ghcr.io/$REPO:latest .
+
+      - name: Build image
+        working-directory: ./frontend
+        run: docker build --build-arg VITE_ULTRA_TOKEN="${{ secrets.VITE_ULTRA_TOKEN }}" -t ghcr.io/$REPO:latest .
 
       - name: Push image
         run: |

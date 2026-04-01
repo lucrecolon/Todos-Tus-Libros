@@ -3,6 +3,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+ARG VITE_ULTRA_TOKEN
+ENV VITE_ULTRA_TOKEN=$VITE_ULTRA_TOKEN
+
 # Copiar dependencias primero (mejora cache)
 COPY package*.json ./
 RUN npm install
