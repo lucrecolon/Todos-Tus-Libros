@@ -108,7 +108,7 @@ export const Home = () => {
             </section>
 
 
-            <section className="novedades-section" style={{ marginTop: '40px', marginBottom: '40px', width: '100%' }}>
+            <section className="novedades-section" style={{ marginTop: '40px', marginBottom: '40px' }}>
                 <div className="novedades-title">
                     <h2 style={{ margin: 0 }}>Novedades del mes</h2>
                     
