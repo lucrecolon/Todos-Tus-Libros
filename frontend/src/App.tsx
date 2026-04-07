@@ -5,7 +5,6 @@ import { BookDetails } from './screens/BookDetails';
 import { CartProvider } from './context/CartContext';
 import { CartSidebar } from './components/CartSideBar';
 import { BookSearch } from './screens/BookSearch';
-import { CategoryNav } from './components/CategoryNav';
 import { WishlistProvider } from './context/WishlistContext';
 import { Wishlist } from './screens/Wishlist';
 import { Novedades } from './screens/Novedades';
