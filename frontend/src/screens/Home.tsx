@@ -75,16 +75,39 @@ export const Home = () => {
     }, []);
 
     useEffect(() => {
-        if (novedades.length <= 3) return;
-        const intervalo = setInterval(() => {
-            setIndiceCarousel(prev => (prev + 3 >= novedades.length ? 0 : prev + 3));
+        if (novedades.length === 0) return;
+
+        const temporizador = setInterval(() => {
+            const itemsVisibles = window.innerWidth <= 768 ? 1 : 3;
+            const maximoAvance = Math.max(0, novedades.length - itemsVisibles);
+            
+            setIndiceCarousel((prev) => (prev >= maximoAvance ? 0 : prev + 1));
         }, 4000);
-        return () => clearInterval(intervalo);
+
+        return () => clearInterval(temporizador);
     }, [novedades.length]);
 
-    const avanzar = () => setIndiceCarousel(prev => (prev + 3 >= novedades.length ? 0 : prev + 3));
-    const retroceder = () => setIndiceCarousel(prev => (prev - 3 < 0 ? Math.max(0, novedades.length - 3) : prev - 3));
+    /*useEffect(() => {
+        if (novedades.length <= 3) return;
+        const intervalo = setInterval(() => {
+            setIndiceCarousel(prev => (prev + 1 >= novedades.length ? 0 : prev + 1));
+        }, 4000);
+        return () => clearInterval(intervalo);
+    }, [novedades.length]);*/
 
+    const avanzar = () => {
+        const itemsVisibles = window.innerWidth <= 768 ? 1 : 3;
+        const maximoAvance = Math.max(0, novedades.length - itemsVisibles);
+        
+        setIndiceCarousel((prev) => (prev >= maximoAvance ? 0 : prev + 1));
+    };
+
+    const retroceder = () => {
+        const itemsVisibles = window.innerWidth <= 768 ? 1 : 3;
+        const maximoAvance = Math.max(0, novedades.length - itemsVisibles);
+
+        setIndiceCarousel((prev) => (prev <= 0 ? maximoAvance : prev - 1));
+    };
 
     return (
         <main>
@@ -92,17 +115,29 @@ export const Home = () => {
                 <h1>Encontrá tu próxima lectura en<br />la librería más cercana</h1>
                 <p className="hero-subtitle">Buscá entre miles de títulos combinando datos.</p>
                 
-                <form onSubmit={ejecutarBusqueda} style={{ display: 'flex', gap: '15px', backgroundColor: 'rgba(255,255,255,0.95)', padding: '20px', borderRadius: '8px', maxWidth: '800px', margin: '0 auto', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
-                    <div style={{ flex: 1, textAlign: 'left' }}>
-                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 'bold', color: 'var(--text-dark)', marginBottom: '5px' }}>Título / ISBN</label>
-                        <input type="text" value={inputTitulo} onChange={(e) => setInputTitulo(e.target.value)} placeholder="Ej: Rayuela" style={{ width: '100%', padding: '12px', border: '1px solid #CCC', borderRadius: '4px' }} />
+                <form onSubmit={ejecutarBusqueda} className="search-box">
+                    <div className="search-input-group">
+                        <label>Título / ISBN</label>
+                        <input 
+                            type="text" 
+                            className="search-input" 
+                            value={inputTitulo} 
+                            onChange={(e) => setInputTitulo(e.target.value)} 
+                            placeholder="Ej: Rayuela"
+                        />
                     </div>
-                    <div style={{ flex: 1, textAlign: 'left' }}>
-                        <label style={{ display: 'block', fontSize: '13px', fontWeight: 'bold', color: 'var(--text-dark)', marginBottom: '5px' }}>Autor (Apellido)</label>
-                        <input type="text" value={inputAutor} onChange={(e) => setInputAutor(e.target.value)} placeholder="Ej: Cortazar" style={{ width: '100%', padding: '12px', border: '1px solid #CCC', borderRadius: '4px' }} />
+                    <div className="search-input-group">
+                        <label>Autor (Apellido)</label>
+                        <input 
+                            type="text" 
+                            className="search-input" 
+                            value={inputAutor} 
+                            onChange={(e) => setInputAutor(e.target.value)} 
+                            placeholder="Ej: Cortazar"
+                        />
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                        <button type="submit" className="search-btn" style={{ height: '43px', padding: '0 30px' }}>Buscar</button>
+                    <div>
+                        <button type="submit" className="search-btn">Buscar</button>
                     </div>
                 </form>
             </section>
@@ -114,8 +149,8 @@ export const Home = () => {
                     
                     {!cargandoNovedades && novedades.length > 0 && (
                         <button 
+                            className="btn-ver-todos"
                             onClick={() => navigate('/novedades')} 
-                            style={{ background: 'none', border: 'none', color: 'var(--text-dark)', fontWeight: 'bold', cursor: 'pointer', fontSize: '12px', letterSpacing: '1px' }}
                         >
                             VER TODOS
                         </button>
@@ -132,18 +167,16 @@ export const Home = () => {
                         <button onClick={retroceder} className="carousel-arrow left">◀</button>
 
                         <div style={{ overflow: 'hidden', width: '100%', padding: '10px 0 20px 0' }}>
-                            <div style={{
-                                display: 'flex',
-                                transition: 'transform 0.6s ease-in-out',
-                                transform: `translateX(-${(indiceCarousel / novedades.length) * 100}%)`,
-                                width: `${(novedades.length / 3) * 100}%` 
-                            }}>
-                                
+                            <div 
+                                className="carousel-track"
+                                style={{ 
+                                    transform: `translateX(-${indiceCarousel * (100 / (window.innerWidth <= 768 ? 1 : 3))}%)` 
+                                }}
+                            >
                                 {novedades.map((pub, index) => {
                                     const precioMostrar = pub.en_librerias?.find((l: any) => Number(l.precio) > 0)?.precio;
                                     return (
-                                        <div key={`novedad-${pub.ean}-${index}`} style={{ width: `${100 / novedades.length}%`, padding: '0 10px', boxSizing: 'border-box' }}>
-                                            
+                                        <div key={`novedad-${pub.ean}-${index}`} className="carousel-slide">
                                             <div className="result-item" style={{ height: '100%', margin: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                                 <div className="result-item-top">
                                                     <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>

@@ -1,6 +1,8 @@
 import { type DetalleLibro } from '../types/models';
 
-const API_BASE_URL = 'https://apiultragestion.com.ar/api/external/consulta';
+const API_BASE_URL = import.meta.env.DEV 
+    ? '/api/external/consulta' 
+    : 'https://apiultragestion.com.ar/api/external/consulta';
 const TOKEN = import.meta.env.VITE_ULTRA_TOKEN;
 
 export interface FiltrosBusqueda {

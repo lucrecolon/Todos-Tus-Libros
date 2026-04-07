@@ -18,7 +18,7 @@ function App() {
           <Header />
 
           <CartSidebar />
-          <CategoryNav />
+          {/*<CategoryNav />*/}
 
           <Routes>
             <Route path="/" element={<Home />} />
