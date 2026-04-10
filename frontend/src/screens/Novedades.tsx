@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { buscarLibrosAvanzado, buscarLibroPorEan } from '../services/ultraService';
+import { useWishlist } from '../context/WishlistContext';
 
 const formatearAutor = (autor: any): string => {
     if (!autor) return 'Autor desconocido';
@@ -23,6 +24,8 @@ export const Novedades = () => {
     const [hayMasPaginas, setHayMasPaginas] = useState(false);
     const [cargandoMas, setCargandoMas] = useState(false);
     const [totalLibros, setTotalLibros] = useState(0);
+
+    const { toggleWishlist, isInWishlist } = useWishlist();
 
     const traerNovedades = async (pagina: number, esCargaInicial: boolean = false) => {
         if (esCargaInicial) setCargando(true);
@@ -104,7 +107,25 @@ export const Novedades = () => {
                             
                             return (
                                 <div key={`todas-${pub.ean}-${index}`} className="result-item" >
+                                    
                                     <div className="result-item-top">
+                                        
+                                        <button className="wishlist-btn"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleWishlist({
+                                                    ean: pub.ean,
+                                                    titulo: pub.titulo,
+                                                    autor: formatearAutor(pub.autor),
+                                                    imagen_tapa: pub.imagen_tapa,
+                                                    libreria: 'Varias (Ver Disponibilidad)' // Como acá mostramos el genérico, ponemos un placeholder para la librería
+                                                });
+                                            }}
+                                            title={isInWishlist(pub.ean, 'Varias (Ver Disponibilidad)') ? "Quitar de favoritos" : "Agregar a favoritos"}
+                                            >
+                                            {isInWishlist(pub.ean, 'Varias (Ver Disponibilidad)') ? '❤️' : '🤍'}
+                                        </button>
+
                                         <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
                                             {pub.imagen_tapa ? (
                                                 <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" style={{ objectFit: 'cover' }} />

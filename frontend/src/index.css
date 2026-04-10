@@ -1075,3 +1075,71 @@ footer {
   .carousel-arrow.left { left: 10px; }
   .carousel-arrow.right { right: 10px; }
 }
+
+/* PANTALLA DE REGISTRO */
+
+.register-container {
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.register-form {
+    max-width: 600px;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.register-title {
+    text-align: center;
+    font-size: 40px;
+    border-bottom: none;
+}
+
+.register-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: -15px;
+}
+
+.register-group {
+    margin-bottom: 15px;
+}
+
+.register-group.last {
+    margin-bottom: 25px;
+}
+
+.register-label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.success-box {
+    background-color: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    text-align: center;
+    padding: 60px 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.success-title {
+    color: var(--primary-green);
+    margin: 0;
+}
+
+.success-message {
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
