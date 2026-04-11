@@ -53,7 +53,7 @@ export const BookDetails = () => {
                     
                     {/*sino hay sinopsis se muestra un mensaje por defecto */}
                     <div className="book-synopsis">
-                        {libro.sinopsis ? libro.sinopsis.substring(0, 300) + '...' : 'Sinopsis no disponible para esta edición.'}
+                        {libro.sinopsis ? libro.sinopsis.substring(0, 3000) + '...' : 'Sinopsis no disponible para esta edición.'}
                     </div>
                     
                     <div className="book-meta">

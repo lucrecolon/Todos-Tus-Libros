@@ -5,10 +5,10 @@ import { BookDetails } from './screens/BookDetails';
 import { CartProvider } from './context/CartContext';
 import { CartSidebar } from './components/CartSideBar';
 import { BookSearch } from './screens/BookSearch';
-import { CategoryNav } from './components/CategoryNav';
 import { WishlistProvider } from './context/WishlistContext';
 import { Wishlist } from './screens/Wishlist';
 import { Novedades } from './screens/Novedades';
+import { Register } from './screens/Register';
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
           <Header />
 
           <CartSidebar />
-          <CategoryNav />
+          {/*<CategoryNav />*/}
 
           <Routes>
             <Route path="/" element={<Home />} />
@@ -26,6 +26,7 @@ function App() {
             <Route path="/buscar" element={<BookSearch />} />
             <Route path="/favoritos" element={<Wishlist />} />
             <Route path="/novedades" element={<Novedades />} />
+            <Route path="/registro" element={<Register />} />
           </Routes>
           
           <footer>
