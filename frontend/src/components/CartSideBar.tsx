@@ -1,7 +1,9 @@
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 export const CartSidebar = () => {
     const { cartOpen, setCartOpen, cartItems, removeFromCart } = useCart();
+    const navigate = useNavigate();
 
     const groupedCart = cartItems.reduce((grupos, item) => {
         if (!grupos[item.libreria]) {
@@ -26,7 +28,20 @@ export const CartSidebar = () => {
             
             <div id="cart-content">
                 {cartItems.length === 0 ? (
-                    <p style={{ textAlign: 'center', color: '#999', marginTop: '50px', fontSize: '14px' }}>No hay artículos seleccionados.</p>
+                    <div style={{ textAlign: 'center', padding: '50px', background: 'var(--bg-white)', borderRadius: '4px' }}>
+                    <h2>Tu carrito está vacío</h2>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '20px' }}>¡Buscá los libros que tenés ganas de leer!</p>
+                    <button 
+                        className="btn-add-cart" 
+                        style={{ width: 'auto', padding: '10px 20px' }}
+                        onClick={() => {
+                            navigate('/');
+                            setCartOpen(false);
+                        }}
+                    >
+                        IR A BUSCAR LIBROS
+                    </button>
+                </div>
                 ) : (
                     Object.entries(groupedCart).map(([libreria, items]) => {
                         const subtotal = items.reduce((sum, item) => sum + item.precio, 0);

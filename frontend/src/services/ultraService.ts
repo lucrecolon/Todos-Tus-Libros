@@ -94,3 +94,29 @@ export const buscarLibroPorEan = async (ean: string): Promise<DetalleLibro | nul
         return null;
     }
 };
+
+
+// API DE USUARIOS (David)
+const API_USUARIOS_URL = 'https://api.todostuslibrosar.com.ar/api';
+
+export const registrarUsuarioBase = async (email: string, password: string) => {
+    try {
+        const response = await fetch(`${API_USUARIOS_URL}/register/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.detail || 'Error al crear la cuenta. Verificá los datos.');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error en registrarUsuarioBase:", error);
+        throw error;
+    }
+};

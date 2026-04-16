@@ -1,19 +1,29 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { registrarUsuarioBase } from '../services/ultraService';
 
 export const Register = () => {
     const navigate = useNavigate();
-    const [nombre, setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [registrado, setRegistrado] = useState(false);
+    const [cargando, setCargando] = useState(false);
 
 
-    const handleRegistro = (e: React.FormEvent) => {
+    const handleRegistro = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Acá va la logica para enviar los datos al back
-        console.log({ nombre, email, password });
-        setRegistrado(true);
+        setCargando(true);
+        
+        try {
+            await registrarUsuarioBase(email, password);
+            
+            console.log("¡Usuario base creado con éxito!");            
+            setRegistrado(true);
+        } catch (error) {
+            alert(error instanceof Error ? error.message : "Hubo un error de conexión.");
+        } finally {
+            setCargando(false);
+        }
     };
 
     if (registrado) {
@@ -43,18 +53,6 @@ export const Register = () => {
                 </p>
 
                 <div className="register-group">
-                    <label className="register-label">Nombre completo</label>
-                    <input 
-                        type="text" 
-                        required
-                        className="search-input" 
-                        value={nombre} 
-                        onChange={(e) => setNombre(e.target.value)} 
-                        placeholder="Ej: Juan Pérez"
-                    />
-                </div>
-
-                <div className="register-group">
                     <label className="register-label">Email</label>
                     <input 
                         type="email" 
@@ -78,8 +76,8 @@ export const Register = () => {
                     />
                 </div>
 
-                <button type="submit" className="search-btn" style={{ width: '100%' }}>
-                    CREAR CUENTA Y OBTENER BENEFICIO
+                <button type="submit" className="search-btn" style={{ width: '100%' }} disabled={cargando}>
+                    {cargando ? 'CREANDO CUENTA...' : 'CREAR CUENTA Y OBTENER BENEFICIO'}
                 </button>
             </form>
         </div>
