@@ -61,7 +61,7 @@ header {
 }
 
 .cart-btn {
-  background: rgba(255,255,255,0.1); /* Fondo semitransparente */
+  background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
   font-size: 13px;
   text-transform: uppercase;
@@ -514,19 +514,18 @@ footer {
 
 .result-item-top {
   padding: 15px;
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
   position: relative;
+  margin-bottom: auto;
 }
 
 .result-info {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  flex-grow: 1;
   text-align: center;
   width: 100%;
 }
@@ -569,9 +568,30 @@ footer {
 
 .result-price {
   font-size: 22px;
-  font-family: Georgia, serif;
+  font-weight: bold;
   color: var(--text-dark);
-  margin-top: 5px;
+  margin-top: -5px;
+  margin-bottom: -25px;
+  text-align: center; 
+  width: 100%;
+}
+
+.result-price-novedades {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--text-dark);
+  margin-top: -5px;
+  margin-bottom: -5px;
+  text-align: center; 
+  width: 100%;
+}
+
+.result-price-details {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-dark);
+  margin-top: -5px;
+  margin-bottom: 5px;
   text-align: center; 
   width: 100%;
 }
@@ -587,7 +607,21 @@ footer {
     border-radius: 4px;
     text-align: center;
     transition: background-color 0.2s;
-    margin-top: auto;
+    margin-top: 0px;
+}
+
+.btn-add-cart-novedades {
+    background-color: var(--accent-bordeaux);
+    width: 100%;
+    padding: 12px;
+    font-size: 13px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.2s;
+    margin-top: 0px;
 }
 
 .btn-add-cart:hover {

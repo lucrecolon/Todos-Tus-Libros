@@ -140,11 +140,11 @@ export const Novedades = () => {
                                                 <p className="vendor-title">Editorial: {formatearEditorial(pub.editorial)}</p>
                                             </div>
                                             {precioMostrar && (
-                                                <div className="result-price">${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
+                                                <div className="result-price-novedades">${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
                                             )}
                                         </div>
                                     </div>
-                                    <button className="btn-add-cart" onClick={() => navigate(`/libro/${pub.ean}`)}>
+                                    <button className="btn-add-cart-novedades" onClick={() => navigate(`/libro/${pub.ean}`)}>
                                         VER DISPONIBILIDAD
                                     </button>
                                 </div>
