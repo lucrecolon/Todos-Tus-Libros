@@ -191,7 +191,7 @@ export const BookSearch = () => {
                                                 <p className="vendor-stock">Stock: {pub.stock_tienda} unidades</p>
                                             </div>
 
-                                            <div className="result-price">{formatearPrecio(pub.precio_tienda)}</div>
+                                            <div className="result-price-details">{formatearPrecio(pub.precio_tienda)}</div>
                                         </div>
                                     </div>
 
