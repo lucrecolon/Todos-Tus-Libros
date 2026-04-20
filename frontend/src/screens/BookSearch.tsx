@@ -36,7 +36,7 @@ export const BookSearch = () => {
     const [publicaciones, setPublicaciones] = useState<any[]>([]);
     const [cargando, setCargando] = useState(false);
     
-    const [pagina, setPagina] = useState(1);
+    const [paginaActual, setPaginaActual] = useState(1);
     const [hayMasResultados, setHayMasResultados] = useState(true);
 
     const busquedaActiva = queryTitulo || queryAutor || queryEditorial;
@@ -51,38 +51,37 @@ export const BookSearch = () => {
         }, 3000);
     };
 
-    useEffect(() => {
-        setPagina(1);
-        setPublicaciones([]);
-        setHayMasResultados(true);
-    }, [queryTitulo, queryAutor, queryEditorial]);
+    const realizarBusqueda = async (paginaInicial: number, esNuevaBusqueda: boolean) => {
+        if (!busquedaActiva) return;
 
-    useEffect(() => {
-        const fetchResultados = async () => {
-            if (!busquedaActiva || !hayMasResultados) return;
-            
-            setCargando(true);
+        setCargando(true);
+        let paginaBuscando = paginaInicial;
+        let listadoValido: any[] = [];
+        let quedanPaginasEnAPI = true;
+
+        while (listadoValido.length === 0 && quedanPaginasEnAPI) {
             const dataBusqueda = await buscarLibrosAvanzado({
                 titulo: queryTitulo,
                 autor: queryAutor,
                 editorial: queryEditorial,
-                page: pagina
+                page: paginaBuscando
             });
-            
+
+            quedanPaginasEnAPI = dataBusqueda.next !== null;
+
             if (dataBusqueda.results.length === 0) {
-                setHayMasResultados(false);
-                setCargando(false);
-                return;
+                quedanPaginasEnAPI = false;
+                break;
             }
-            
+
             const librosConDetalle = await Promise.all(
                 dataBusqueda.results.map(async (libroBasico: any) => {
                     try { return await buscarLibroPorEan(libroBasico.ean); } 
                     catch { return libroBasico; }
                 })
             );
-            
-            const listadoAplanado = librosConDetalle.flatMap(libro => 
+
+            const filtrados = librosConDetalle.flatMap(libro => 
                 (libro.en_librerias || [])
                     .filter((tienda: any) => tienda.libreria !== 'Rit - test' && Number(tienda.precio) > 0)
                     .map((tienda: any) => ({
@@ -92,13 +91,38 @@ export const BookSearch = () => {
                         stock_tienda: tienda.stock
                     }))
             );
-            
-            setPublicaciones(prev => pagina === 1 ? listadoAplanado : [...prev, ...listadoAplanado]);
-            setCargando(false);
-        };
 
-        fetchResultados();
-    }, [queryTitulo, queryAutor, queryEditorial, pagina]);
+            listadoValido = filtrados;
+
+            if (listadoValido.length === 0 && quedanPaginasEnAPI) {
+                paginaBuscando++;
+            }
+        }
+
+        setPaginaActual(paginaBuscando);
+        setHayMasResultados(quedanPaginasEnAPI);
+
+        if (listadoValido.length > 0) {
+            setPublicaciones(prev => esNuevaBusqueda ? listadoValido : [...prev, ...listadoValido]);
+        } else if (esNuevaBusqueda) {
+            setPublicaciones([]);
+        }
+
+        setCargando(false);
+    };
+
+    useEffect(() => {
+        if (busquedaActiva) {
+            realizarBusqueda(1, true);
+        } else {
+            setPublicaciones([]);
+            setHayMasResultados(true);
+        }
+    }, [queryTitulo, queryAutor, queryEditorial]);
+
+    const cargarMasLibros = () => {
+        realizarBusqueda(paginaActual + 1, false);
+    };
 
     const aplicarFiltros = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -219,7 +243,7 @@ export const BookSearch = () => {
                             {cargando && <p className="loading-text" style={{ textAlign: 'center', padding: '20px' }}>Buscando más publicaciones...</p>}
                             
                             {!cargando && hayMasResultados && publicaciones.length > 0 && (
-                                <button onClick={() => setPagina(prev => prev + 1)} className="load-more-btn">
+                                <button onClick={cargarMasLibros} className="load-more-btn">
                                     Mostrar más resultados ↓
                                 </button>
                             )}

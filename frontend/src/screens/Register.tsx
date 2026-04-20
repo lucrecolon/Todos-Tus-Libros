@@ -72,7 +72,7 @@ export const Register = () => {
                         className="search-input" 
                         value={password} 
                         onChange={(e) => setPassword(e.target.value)} 
-                        placeholder="Mínimo 8 caracteres"
+                        placeholder="La contraseña debe ser alfanumérica y debe tener al menos 8 caracteres"
                     />
                 </div>
 
