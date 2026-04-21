@@ -338,12 +338,13 @@ footer {
 .remove-btn{
     background: var(--border-color);
     border: 1px solid var(--accent-bordeaux);
+    border-radius: 4px;
     color: var(--accent-bordeaux);
     cursor: pointer;
-    padding: 5px;
+    padding: 7px 7px 5px 7px;
     position: absolute;
     right: 50px;
-    top: 190px;
+    top: 185px;
 }
 
 /* --- BARRA DE UBICACION --- */
@@ -516,15 +517,16 @@ footer {
   padding: 15px;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   align-items: center;
   gap: 15px;
   position: relative;
-  margin-bottom: auto;
 }
 
 .result-info {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   gap: 5px;
   text-align: center;
   width: 100%;
@@ -570,8 +572,7 @@ footer {
   font-size: 22px;
   font-weight: bold;
   color: var(--text-dark);
-  margin-top: -5px;
-  margin-bottom: -25px;
+  margin-top: auto;
   text-align: center; 
   width: 100%;
 }
@@ -607,7 +608,7 @@ footer {
     border-radius: 4px;
     text-align: center;
     transition: background-color 0.2s;
-    margin-top: 0px;
+    margin-top: 15px;
 }
 
 .btn-add-cart-novedades {
