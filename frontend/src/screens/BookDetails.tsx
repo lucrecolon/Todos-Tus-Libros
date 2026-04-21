@@ -14,7 +14,7 @@ export const BookDetails = () => {
     const [ toast, setToast ] = useState({ visible: false, mensaje: '' });
 
     const mostrarToast = (tituloLibro: string) => {
-        setToast({ visible: true, mensaje: `¡"${tituloLibro}" agregado al carrito!` });
+        setToast({ visible: true, mensaje: `"${tituloLibro}" agregado al carrito` });
         
         setTimeout(() => {
             setToast({ visible: false, mensaje: '' });
