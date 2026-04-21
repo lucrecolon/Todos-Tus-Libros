@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { buscarLibrosAvanzado, buscarLibroPorEan } from '../services/ultraService'; 
-import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 
 const SkeletonCard = () => (
@@ -22,7 +21,6 @@ const SkeletonCard = () => (
 export const BookSearch = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { addToCart } = useCart();
     const { toggleWishlist, isInWishlist } = useWishlist();
     
     const queryTitulo = searchParams.get('titulo') || ''; 
@@ -41,25 +39,58 @@ export const BookSearch = () => {
 
     const busquedaActiva = queryTitulo || queryAutor || queryEditorial;
 
-    const [toast, setToast] = useState({ visible: false, mensaje: '' });
-
-    const mostrarToast = (tituloLibro: string) => {
-        setToast({ visible: true, mensaje: `¡"${tituloLibro}" agregado al carrito!` });
-        
-        setTimeout(() => {
-            setToast({ visible: false, mensaje: '' });
-        }, 3000);
+    const [toast] = useState({ visible: false, mensaje: '' });
+    
+    const formatearAutor = (autor: any): string => {
+        if (!autor) return 'Autor desconocido';
+        if (typeof autor === 'string') return autor;
+        return `${autor.nombre || ''} ${autor.apellido || ''}`.trim() || 'Autor desconocido';
     };
+
+    const formatearEditorial = (editorial: any): string => {
+        if (!editorial) return 'No especificada';
+        if (typeof editorial === 'string') return editorial;
+        return editorial.nombre || 'No especificada';
+    };
+
+    const MIN_LIBROS_POR_CARGA = 6;
 
     const realizarBusqueda = async (paginaInicial: number, esNuevaBusqueda: boolean) => {
         if (!busquedaActiva) return;
 
         setCargando(true);
+
+        const queryLimpia = queryTitulo.replace(/[-\s]/g, '');
+        const esBusquedaPorIsbn = /^\d{10,13}$/.test(queryLimpia) && !queryAutor && !queryEditorial;
+
+        if (esBusquedaPorIsbn && esNuevaBusqueda) {
+            const libroEncontrado = await buscarLibroPorEan(queryLimpia);
+            if (libroEncontrado) {
+                const tiendasValidas = (libroEncontrado.en_librerias || []).filter(
+                    (tienda: any) => tienda.libreria !== 'Rit - test' && Number(tienda.precio) > 0
+                );
+                if (tiendasValidas.length > 0) {
+                    setPublicaciones([{
+                        ...libroEncontrado,
+                        precio_mostrar: tiendasValidas[0].precio
+                    }]);
+                } else {
+                    setPublicaciones([]);
+                }
+            } else {
+                setPublicaciones([]);
+            }
+            
+            setHayMasResultados(false);
+            setCargando(false);
+            return;
+        }
+
         let paginaBuscando = paginaInicial;
         let listadoValido: any[] = [];
         let quedanPaginasEnAPI = true;
 
-        while (listadoValido.length === 0 && quedanPaginasEnAPI) {
+        while (listadoValido.length < MIN_LIBROS_POR_CARGA && quedanPaginasEnAPI) {
             const dataBusqueda = await buscarLibrosAvanzado({
                 titulo: queryTitulo,
                 autor: queryAutor,
@@ -68,7 +99,6 @@ export const BookSearch = () => {
             });
 
             quedanPaginasEnAPI = dataBusqueda.next !== null;
-
             if (dataBusqueda.results.length === 0) {
                 quedanPaginasEnAPI = false;
                 break;
@@ -76,40 +106,42 @@ export const BookSearch = () => {
 
             const librosConDetalle = await Promise.all(
                 dataBusqueda.results.map(async (libroBasico: any) => {
-                    try { return await buscarLibroPorEan(libroBasico.ean); } 
+                    try { return await buscarLibroPorEan(libroBasico.ean); }
                     catch { return libroBasico; }
                 })
             );
 
-            const filtrados = librosConDetalle.flatMap(libro => 
-                (libro.en_librerias || [])
-                    .filter((tienda: any) => tienda.libreria !== 'Rit - test' && Number(tienda.precio) > 0)
-                    .map((tienda: any) => ({
-                        ...libro, 
-                        precio_tienda: tienda.precio,
-                        nombre_libreria: tienda.libreria,
-                        stock_tienda: tienda.stock
-                    }))
-            );
+            const filtrados = librosConDetalle.reduce((acc: any[], libro: any) => {
+                const tiendasValidas = (libro.en_librerias || []).filter(
+                    (tienda: any) => tienda.libreria !== 'Rit - test' && Number(tienda.precio) > 0
+                );
 
-            listadoValido = filtrados;
+                if (tiendasValidas.length > 0) {
+                    acc.push({
+                        ...libro,
+                        precio_mostrar: tiendasValidas[0].precio 
+                    });
+                }
+                return acc;
 
-            if (listadoValido.length === 0 && quedanPaginasEnAPI) {
+            }, []);
+            listadoValido = [...listadoValido, ...filtrados];
+            if (listadoValido.length < MIN_LIBROS_POR_CARGA && quedanPaginasEnAPI) {
                 paginaBuscando++;
             }
         }
 
-        setPaginaActual(paginaBuscando);
-        setHayMasResultados(quedanPaginasEnAPI);
+            setPaginaActual(paginaBuscando);
+            setHayMasResultados(quedanPaginasEnAPI);
 
-        if (listadoValido.length > 0) {
-            setPublicaciones(prev => esNuevaBusqueda ? listadoValido : [...prev, ...listadoValido]);
-        } else if (esNuevaBusqueda) {
-            setPublicaciones([]);
-        }
+            if (listadoValido.length > 0) {
+                setPublicaciones(prev => esNuevaBusqueda ? listadoValido : [...prev, ...listadoValido]);
+            } else if (esNuevaBusqueda) {
+                setPublicaciones([]);
+            }
 
-        setCargando(false);
-    };
+            setCargando(false);
+        };
 
     useEffect(() => {
         if (busquedaActiva) {
@@ -179,7 +211,7 @@ export const BookSearch = () => {
                     <>
                         <div className="results-list">
                             {publicaciones.map((pub, index) => (
-                                <div key={`${pub.ean}-${pub.nombre_libreria}-${index}`} className="result-item">
+                                <div key={`${pub.ean}-${index}`} className="result-item">
 
                                     <div className="result-item-top">
                                         <button className="wishlist-btn"
@@ -188,14 +220,14 @@ export const BookSearch = () => {
                                                 toggleWishlist({
                                                     ean: pub.ean,
                                                     titulo: pub.titulo,
-                                                    autor: pub.autor ? `${pub.autor.nombre} ${pub.autor.apellido}` : 'Autor desconocido',
+                                                    autor: formatearAutor(pub.autor),
                                                     imagen_tapa: pub.imagen_tapa,
-                                                    libreria: pub.nombre_libreria
+                                                    libreria: 'Varias (Ver Disponibilidad)'
                                                 });
                                             }}
-                                            title={isInWishlist(pub.ean, pub.nombre_libreria) ? "Quitar de favoritos" : "Agregar a favoritos"}
+                                            title={isInWishlist(pub.ean, 'Varias (Ver Disponibilidad)') ? "Quitar de favoritos" : "Agregar a favoritos"}
                                             >
-                                            {isInWishlist(pub.ean, pub.nombre_libreria) ? '❤️' : '🤍'}
+                                            {isInWishlist(pub.ean, 'Varias (Ver Disponibilidad)') ? '❤️' : '🤍'}
                                         </button>
 
                                         <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
@@ -208,14 +240,13 @@ export const BookSearch = () => {
 
                                         <div className="result-info">
                                             <h3 className="result-title" onClick={() => navigate(`/libro/${pub.ean}`)}>{pub.titulo}</h3>
-                                            <p className="result-author">Por {pub.autor ? `${pub.autor.nombre} ${pub.autor.apellido}` : 'Autor no especificado'}</p>
+                                            <p className="result-author">Por {formatearAutor(pub.autor)}</p>
                                             
                                             <div className="vendor-badge">
-                                                <p className="vendor-title">Vendido por: {pub.nombre_libreria}</p>
-                                                <p className="vendor-stock">Stock: {pub.stock_tienda} unidades</p>
+                                                <p className="vendor-title">Editorial: {formatearEditorial(pub.editorial)}</p>
                                             </div>
 
-                                            <div className="result-price-details">{formatearPrecio(pub.precio_tienda)}</div>
+                                            <div className="result-price">{formatearPrecio(pub.precio_mostrar)}</div>
                                         </div>
                                     </div>
 
@@ -223,11 +254,10 @@ export const BookSearch = () => {
                                         className="btn-add-cart"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            addToCart({ ean: pub.ean, titulo: pub.titulo, precio: Number(pub.precio_tienda), libreria: pub.nombre_libreria });
-                                            mostrarToast(pub.titulo);
+                                            navigate(`/libro/${pub.ean}`);
                                         }}
                                     >
-                                        AGREGAR AL CARRITO
+                                        VER DISPONIBILIDAD
                                     </button>
                                     
                                 </div>

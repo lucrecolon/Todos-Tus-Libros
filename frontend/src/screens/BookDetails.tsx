@@ -11,6 +11,15 @@ export const BookDetails = () => {
     const [cargando, setCargando] = useState(true);
 
     const { addToCart } = useCart();
+    const [ toast, setToast ] = useState({ visible: false, mensaje: '' });
+
+    const mostrarToast = (tituloLibro: string) => {
+        setToast({ visible: true, mensaje: `¡"${tituloLibro}" agregado al carrito!` });
+        
+        setTimeout(() => {
+            setToast({ visible: false, mensaje: '' });
+        }, 3000);
+    };
 
     useEffect(() => {
         const cargarDatos = async () => {
@@ -91,6 +100,7 @@ export const BookDetails = () => {
                                                 precio: Number(tienda.precio), 
                                                 libreria: tienda.libreria
                                             });
+                                            mostrarToast(libro.titulo);
                                         }}
                                     >
                                         Añadir a la compra
@@ -100,6 +110,9 @@ export const BookDetails = () => {
                         ))
                     )}
                 </div>
+            </div>
+            <div className={`toast-notification ${toast.visible ? 'show' : ''}`}>
+                ✅ {toast.mensaje}
             </div>
         </>
     );
