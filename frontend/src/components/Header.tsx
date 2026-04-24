@@ -2,7 +2,7 @@ import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { useWishlist } from '../context/WishlistContext';
 import logo from '../assets/IMG_4561.png';
-import profile from '../assets/profile2.png';
+{/*import profile from '../assets/profile2.png';*/}
 
 export const Header = () => {
     const { cartItems, setCartOpen } = useCart();
