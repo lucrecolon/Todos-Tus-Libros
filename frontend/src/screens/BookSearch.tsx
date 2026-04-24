@@ -109,7 +109,7 @@ export const BookSearch = () => {
 
                 const filtrados = dataBusqueda.results.reduce((acc: any[], libro: any) => {
                     
-                    if (libro.precio && Number(libro.precio) > 2000) {
+                    if (libro.precio && Number(libro.precio) > 0) {
                         acc.push({
                             ...libro,
                             precio_mostrar: libro.precio 

@@ -95,7 +95,7 @@ header {
 .user-btn img {
   height: 22px;
   width: 22px;
-  object-fit: contain; 
+  object-fit: contain;
   display: block;
 }
 
@@ -259,12 +259,14 @@ footer {
     font-size: 32px;
     margin-bottom: 5px;
     color: var(--text-dark);
+    text-transform: capitalize;
 }
 .book-author {
     color: var(--text-muted);
     font-size: 16px;
     margin-bottom: 20px;
     font-style: italic;
+    text-transform: capitalize;
 }
 .book-synopsis {
     font-size: 14px;
@@ -287,6 +289,7 @@ footer {
     margin-bottom: 25px;
     border-bottom: 2px solid var(--text-dark);
     padding-bottom: 10px;
+    
 }
 .store-card {
     background: var(--bg-white);
@@ -297,6 +300,7 @@ footer {
     align-items: center;
     border: 1px solid var(--accent-bordeaux);
     border-radius: 2px;
+    text-transform: capitalize;
 }
 .store-info h3 { margin: 0 0 8px 0; }
 .store-distance { color: var(--text-muted); font-size: 13px; }
@@ -356,16 +360,22 @@ footer {
     font-style: italic;
 }
 
-.remove-btn{
-    background: var(--border-color);
+.remove-btn {
+    background: transparent;
     border: 1px solid var(--accent-bordeaux);
     border-radius: 4px;
     color: var(--accent-bordeaux);
     cursor: pointer;
-    padding: 7px 7px 5px 7px;
-    position: absolute;
-    right: 50px;
-    top: 185px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.remove-btn:hover {
+    background: var(--accent-bordeaux);
+    color: white;
 }
 
 /* --- BARRA DE UBICACION --- */
@@ -561,6 +571,7 @@ footer {
   color: var(--text-dark);
   padding-right: 0;
   text-align: center;
+  text-transform: capitalize;
 }
 
 .result-author {
@@ -568,12 +579,14 @@ footer {
     font-size: 13px;
     font-style: italic;
     color: var(--text-muted);
+    text-transform: capitalize;
 }
 
 .vendor-badge {
     background-color: transparent;
     padding: 5px 0;
     margin-bottom: 10px;
+    text-transform: capitalize;
 }
 
 .vendor-title {
@@ -581,6 +594,7 @@ footer {
     font-size: 12px;
     color: var(--primary-green);
     font-weight: bold;
+    text-transform: capitalize;
 }
 
 .vendor-stock {
@@ -754,6 +768,7 @@ footer {
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     border-color: var(--accent-bordeaux);
+    text-transform: capitalize;
 }
 
 .toast-notification.show {
