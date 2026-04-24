@@ -184,9 +184,12 @@ export const Home = () => {
                                                         <div className="vendor-badge">
                                                             <p className="vendor-title">Editorial: {formatearEditorial(pub.editorial)}</p>
                                                         </div>
-                                                        {precioMostrar && (
+                                                        {precioMostrar && Number(precioMostrar) > 0 ? (
                                                             <div className="result-price">${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
+                                                        ) : (
+                                                            <div className="result-price">SIN STOCK </div>
                                                         )}
+
                                                     </div>
                                                 </div>
                                                 <button className="btn-add-cart" onClick={() => navigate(`/libro/${pub.ean}`)}>VER DISPONIBILIDAD</button>

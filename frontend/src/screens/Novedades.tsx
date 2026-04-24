@@ -139,12 +139,15 @@ export const Novedades = () => {
                                             <div className="vendor-badge">
                                                 <p className="vendor-title">Editorial: {formatearEditorial(pub.editorial)}</p>
                                             </div>
-                                            {precioMostrar && (
-                                                <div className="result-price-novedades">
-                                                    ${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
-                                                </div>
-                                                
-                                            )}
+                                            
+                                            <div className="result-price-novedades">
+                                                {precioMostrar && Number(precioMostrar) > 0 ? (
+                                                    `$${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}`
+                                                ) : (
+                                                    <div className="result-price">SIN STOCK </div>
+                                                )}
+                                            </div>
+
                                         </div>
                                     </div>
                                     <button className="btn-add-cart-novedades" onClick={() => navigate(`/libro/${pub.ean}`)}>
