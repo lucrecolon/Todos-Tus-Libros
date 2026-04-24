@@ -28,9 +28,9 @@ export const Header = () => {
                     MI CARRITO ({cartItems.length})
                 </button>
 
-                <button className="user-btn" onClick={() => navigate('/user')}>
+                {/*<button className="user-btn" onClick={() => navigate('/user')}>
                     <img src={profile} alt="Perfil" title='Mi perfil'/>
-                </button>
+                </button>*/}
             </div>
 
         </header>
