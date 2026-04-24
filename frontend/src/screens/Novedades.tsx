@@ -118,7 +118,7 @@ export const Novedades = () => {
                                                     titulo: pub.titulo,
                                                     autor: formatearAutor(pub.autor),
                                                     imagen_tapa: pub.imagen_tapa,
-                                                    libreria: 'Varias (Ver Disponibilidad)' // Como acá mostramos el genérico, ponemos un placeholder para la librería
+                                                    libreria: 'Varias (Ver Disponibilidad)'
                                                 });
                                             }}
                                             title={isInWishlist(pub.ean, 'Varias (Ver Disponibilidad)') ? "Quitar de favoritos" : "Agregar a favoritos"}

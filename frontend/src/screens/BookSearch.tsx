@@ -107,16 +107,11 @@ export const BookSearch = () => {
                     break;
                 }
 
-                // ¡CHAU Promise.all y peticiones N+1! 
-                // Filtramos directamente los resultados que ya nos mandó David
                 const filtrados = dataBusqueda.results.reduce((acc: any[], libro: any) => {
                     
-                    // Asumimos que si David manda precio en la raíz, es un libro válido
-                    // Filtramos los que no tienen precio o el precio es 0
-                    if (libro.precio && Number(libro.precio) > 0) {
+                    if (libro.precio && Number(libro.precio) > 2000) {
                         acc.push({
                             ...libro,
-                            // Mapeamos el precio al nombre de variable que usa tu tarjeta HTML
                             precio_mostrar: libro.precio 
                         });
                     }
@@ -158,10 +153,15 @@ export const BookSearch = () => {
     const aplicarFiltros = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const nuevosParametros = new URLSearchParams();
-        if (inputTitulo) nuevosParametros.set('titulo', inputTitulo);
-        if (inputAutor) nuevosParametros.set('autor', inputAutor);
-        if (inputEditorial) nuevosParametros.set('editorial', inputEditorial);
-        setSearchParams(nuevosParametros); 
+
+        const tituloLimpio = inputTitulo.trim();
+        const autorLimpio = inputAutor.trim();
+        const editorialLimpia = inputEditorial.trim();
+        if (tituloLimpio) nuevosParametros.set('titulo', tituloLimpio);
+        if (autorLimpio) nuevosParametros.set('autor', autorLimpio);
+        if (editorialLimpia) nuevosParametros.set('editorial', editorialLimpia);
+        
+        setSearchParams(nuevosParametros);
     };
 
     const formatearPrecio = (precio: number | string) => {
