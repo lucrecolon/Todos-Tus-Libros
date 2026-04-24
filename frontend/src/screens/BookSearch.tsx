@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { buscarLibrosAvanzado, buscarLibroPorEan } from '../services/ultraService'; 
 import { useWishlist } from '../context/WishlistContext';
+import { useCart } from '../context/CartContext';
 
 const SkeletonCard = () => (
     <div className="result-item">
@@ -22,7 +23,8 @@ export const BookSearch = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const { toggleWishlist, isInWishlist } = useWishlist();
-    
+    const { setCartOpen } = useCart();
+
     const queryTitulo = searchParams.get('titulo') || ''; 
     const queryAutor = searchParams.get('autor') || ''; 
     const queryEditorial = searchParams.get('editorial') || ''; 
@@ -91,45 +93,37 @@ export const BookSearch = () => {
         let quedanPaginasEnAPI = true;
 
         while (listadoValido.length < MIN_LIBROS_POR_CARGA && quedanPaginasEnAPI) {
-            const dataBusqueda = await buscarLibrosAvanzado({
-                titulo: queryTitulo,
-                autor: queryAutor,
-                editorial: queryEditorial,
-                page: paginaBuscando
-            });
+                const dataBusqueda = await buscarLibrosAvanzado({
+                    titulo: queryTitulo,
+                    autor: queryAutor,
+                    editorial: queryEditorial,
+                    page: paginaBuscando
+                });
 
-            quedanPaginasEnAPI = dataBusqueda.next !== null;
-            if (dataBusqueda.results.length === 0) {
-                quedanPaginasEnAPI = false;
-                break;
-            }
+                quedanPaginasEnAPI = dataBusqueda.next !== null;
 
-            const librosConDetalle = await Promise.all(
-                dataBusqueda.results.map(async (libroBasico: any) => {
-                    try { return await buscarLibroPorEan(libroBasico.ean); }
-                    catch { return libroBasico; }
-                })
-            );
-
-            const filtrados = librosConDetalle.reduce((acc: any[], libro: any) => {
-                const tiendasValidas = (libro.en_librerias || []).filter(
-                    (tienda: any) => tienda.libreria !== 'Rit - test' && Number(tienda.precio) > 0
-                );
-
-                if (tiendasValidas.length > 0) {
-                    acc.push({
-                        ...libro,
-                        precio_mostrar: tiendasValidas[0].precio 
-                    });
+                if (dataBusqueda.results.length === 0) {
+                    quedanPaginasEnAPI = false;
+                    break;
                 }
-                return acc;
 
-            }, []);
-            listadoValido = [...listadoValido, ...filtrados];
-            if (listadoValido.length < MIN_LIBROS_POR_CARGA && quedanPaginasEnAPI) {
-                paginaBuscando++;
+                const filtrados = dataBusqueda.results.reduce((acc: any[], libro: any) => {
+                    
+                    if (libro.precio && Number(libro.precio) > 8000) {
+                        acc.push({
+                            ...libro,
+                            precio_mostrar: libro.precio 
+                        });
+                    }
+                    return acc;
+                }, []);
+
+                listadoValido = [...listadoValido, ...filtrados];
+
+                if (listadoValido.length < MIN_LIBROS_POR_CARGA && quedanPaginasEnAPI) {
+                    paginaBuscando++;
+                }
             }
-        }
 
             setPaginaActual(paginaBuscando);
             setHayMasResultados(quedanPaginasEnAPI);
@@ -159,10 +153,15 @@ export const BookSearch = () => {
     const aplicarFiltros = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const nuevosParametros = new URLSearchParams();
-        if (inputTitulo) nuevosParametros.set('titulo', inputTitulo);
-        if (inputAutor) nuevosParametros.set('autor', inputAutor);
-        if (inputEditorial) nuevosParametros.set('editorial', inputEditorial);
-        setSearchParams(nuevosParametros); 
+
+        const tituloLimpio = inputTitulo.trim();
+        const autorLimpio = inputAutor.trim();
+        const editorialLimpia = inputEditorial.trim();
+        if (tituloLimpio) nuevosParametros.set('titulo', tituloLimpio);
+        if (autorLimpio) nuevosParametros.set('autor', autorLimpio);
+        if (editorialLimpia) nuevosParametros.set('editorial', editorialLimpia);
+        
+        setSearchParams(nuevosParametros);
     };
 
     const formatearPrecio = (precio: number | string) => {
@@ -188,7 +187,7 @@ export const BookSearch = () => {
                         <label className="form-label">Editorial</label>
                         <input type="text" className="form-input" value={inputEditorial} onChange={(e) => setInputEditorial(e.target.value)} placeholder="Ej: Sudamericana" />
                     </div>
-                    <button type="submit" className="search-btn btn-add-cart" style={{ width: 'auto', padding: '11px 25px' }}>
+                    <button type="submit" onSubmit={() => setCartOpen(false)} className="search-btn btn-add-cart" style={{ width: 'auto', padding: '11px 25px' }}>
                         BUSCAR
                     </button>
                 </form>
@@ -255,6 +254,7 @@ export const BookSearch = () => {
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             navigate(`/libro/${pub.ean}`);
+                                            setCartOpen(false);
                                         }}
                                     >
                                         VER DISPONIBILIDAD

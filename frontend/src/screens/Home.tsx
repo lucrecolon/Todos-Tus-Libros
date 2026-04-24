@@ -87,14 +87,6 @@ export const Home = () => {
         return () => clearInterval(temporizador);
     }, [novedades.length]);
 
-    /*useEffect(() => {
-        if (novedades.length <= 3) return;
-        const intervalo = setInterval(() => {
-            setIndiceCarousel(prev => (prev + 1 >= novedades.length ? 0 : prev + 1));
-        }, 4000);
-        return () => clearInterval(intervalo);
-    }, [novedades.length]);*/
-
     const avanzar = () => {
         const itemsVisibles = window.innerWidth <= 768 ? 1 : 3;
         const maximoAvance = Math.max(0, novedades.length - itemsVisibles);
@@ -192,9 +184,12 @@ export const Home = () => {
                                                         <div className="vendor-badge">
                                                             <p className="vendor-title">Editorial: {formatearEditorial(pub.editorial)}</p>
                                                         </div>
-                                                        {precioMostrar && (
+                                                        {precioMostrar && Number(precioMostrar) > 0 ? (
                                                             <div className="result-price">${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
+                                                        ) : (
+                                                            <div className="result-price">SIN STOCK </div>
                                                         )}
+
                                                     </div>
                                                 </div>
                                                 <button className="btn-add-cart" onClick={() => navigate(`/libro/${pub.ean}`)}>VER DISPONIBILIDAD</button>
