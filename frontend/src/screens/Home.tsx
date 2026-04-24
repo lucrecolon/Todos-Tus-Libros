@@ -87,14 +87,6 @@ export const Home = () => {
         return () => clearInterval(temporizador);
     }, [novedades.length]);
 
-    /*useEffect(() => {
-        if (novedades.length <= 3) return;
-        const intervalo = setInterval(() => {
-            setIndiceCarousel(prev => (prev + 1 >= novedades.length ? 0 : prev + 1));
-        }, 4000);
-        return () => clearInterval(intervalo);
-    }, [novedades.length]);*/
-
     const avanzar = () => {
         const itemsVisibles = window.innerWidth <= 768 ? 1 : 3;
         const maximoAvance = Math.max(0, novedades.length - itemsVisibles);

@@ -78,6 +78,27 @@ header {
   color: var(--primary-green);
 }
 
+.user-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  width: 38px;
+  padding: 0;
+}
+
+.user-btn img {
+  height: 22px;
+  width: 22px;
+  object-fit: contain; 
+  display: block;
+}
+
 .hero-section {
   display: flex;
   flex-direction: column;

@@ -140,7 +140,10 @@ export const Novedades = () => {
                                                 <p className="vendor-title">Editorial: {formatearEditorial(pub.editorial)}</p>
                                             </div>
                                             {precioMostrar && (
-                                                <div className="result-price-novedades">${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</div>
+                                                <div className="result-price-novedades">
+                                                    ${Number(precioMostrar).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+                                                </div>
+                                                
                                             )}
                                         </div>
                                     </div>

@@ -43,7 +43,7 @@ export const BookDetails = () => {
     return (
         <>
             <div className="location-bar">
-                Mostrando disponibilidad cerca de: Florencio Varela
+                Mostrando disponibilidad cerca de:
             </div>
 
             <div className="main-container">
