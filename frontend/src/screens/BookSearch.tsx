@@ -60,6 +60,7 @@ export const BookSearch = () => {
     const realizarBusqueda = async (paginaInicial: number, esNuevaBusqueda: boolean) => {
         if (!busquedaActiva) return;
 
+        setCartOpen(false);
         setCargando(true);
 
         const queryLimpia = queryTitulo.replace(/[-\s]/g, '');

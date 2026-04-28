@@ -9,6 +9,7 @@ import { WishlistProvider } from './context/WishlistContext';
 import { Wishlist } from './screens/Wishlist';
 import { Novedades } from './screens/Novedades';
 import { Register } from './screens/Register';
+import { User } from './screens/User';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/favoritos" element={<Wishlist />} />
             <Route path="/novedades" element={<Novedades />} />
             <Route path="/registro" element={<Register />} />
+            <Route path="/user/me" element={<User />} />
           </Routes>
           
           <footer>

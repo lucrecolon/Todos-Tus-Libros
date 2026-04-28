@@ -7,7 +7,7 @@ export const Wishlist = () => {
 
     return (
         <div className="main-container" style={{ flexDirection: 'column' }}>
-            <h1 style={{ marginBottom: '30px', color: 'var(--text-dark)' }}>Mis Favoritos</h1>
+            <h1 className='title-h1'>Mis Favoritos</h1>
             
             {wishlist.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '50px', background: 'var(--bg-white)', borderRadius: '4px' }}>

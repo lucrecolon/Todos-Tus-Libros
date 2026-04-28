@@ -2,7 +2,6 @@ import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { useWishlist } from '../context/WishlistContext';
 import logo from '../assets/IMG_4561.png';
-{/*import profile from '../assets/profile2.png';*/}
 
 export const Header = () => {
     const { cartItems, setCartOpen } = useCart();
@@ -20,17 +19,20 @@ export const Header = () => {
             </div>
 
             <div className="header-actions">
-                <button className="favorites-btn" onClick={() => navigate('/favoritos')}> 
-                    FAVORITOS ({wishlist.length})
+                <button className="favorites-btn" onClick={() => { navigate('/favoritos'); setCartOpen(false); }}> 
+                    <i className="bi bi-suit-heart"></i> 
+                    <span className="btn-text">FAVORITOS ({wishlist.length})</span>
                 </button>
 
                 <button className="cart-btn" onClick={() => setCartOpen(true)}>
-                    MI CARRITO ({cartItems.length})
+                    <i className="bi bi-cart3"></i>
+                    <span className="btn-text">CARRITO ({cartItems.length})</span>
                 </button>
 
-                {/*<button className="user-btn" onClick={() => navigate('/user')}>
-                    <img src={profile} alt="Perfil" title='Mi perfil'/>
-                </button>*/}
+                <button className="user-btn" onClick={() => { navigate('/user/me'); setCartOpen(false); }}>
+                    <i className="bi bi-person-square"></i>
+                    <span className="btn-text">PERFIL</span>
+                </button>
             </div>
 
         </header>

@@ -120,3 +120,22 @@ export const registrarUsuarioBase = async (email: string, password: string) => {
         throw error;
     }
 };
+
+export const obtenerPerfilUsuario = async () => {
+    const token = localStorage.getItem('token'); 
+
+    const response = await fetch(`${API_USUARIOS_URL}/user/me/`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('No se pudo cargar el perfil');
+    }
+
+    return await response.json();
+};
+

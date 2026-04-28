@@ -63,7 +63,7 @@ header {
 .cart-btn {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
-  font-size: 13px;
+  font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 1px;
   cursor: pointer;
@@ -71,6 +71,10 @@ header {
   padding: 8px 16px;
   border-radius: 2px;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;    
+  justify-content: center;
+  gap: 8px;
 }
 
 .cart-btn:hover {
@@ -79,24 +83,25 @@ header {
 }
 
 .user-btn {
-  background-color: transparent;
-  border: none;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
+  color: var(--text-light);
+  padding: 8px 16px;
   border-radius: 2px;
   transition: all 0.2s;
   display: flex;
-  align-items: center;
+  align-items: center;    
   justify-content: center;
-  height: 38px;
-  width: 38px;
-  padding: 0;
+  gap: 8px;
 }
 
-.user-btn img {
-  height: 22px;
-  width: 22px;
-  object-fit: contain;
-  display: block;
+.user-btn:hover {
+  background: var(--text-light);
+  color: var(--primary-green);
 }
 
 .hero-section {
@@ -554,6 +559,36 @@ footer {
   position: relative;
 }
 
+.wishlist-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.1);
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.title-h1 {
+  color: var(--text-dark);
+  text-align: center;
+}
+
 .result-info {
   display: flex;
   flex-direction: column;
@@ -781,33 +816,10 @@ footer {
     position: relative;
 }
 
-.wishlist-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--border-color);
-    border-radius: 50%;
-    width: 34px;
-    height: 34px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease;
-    z-index: 10;
-}
-
-.wishlist-btn:hover {
-    transform: scale(1.15);
-}
-
 .favorites-btn {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
-  font-size: 13px;
+  font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 1px;
   cursor: pointer;
@@ -815,6 +827,14 @@ footer {
   padding: 8px 16px;
   border-radius: 2px;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.bi-person-fill{
+    font-size: 15px;
 }
 
 .favorites-btn:hover {
@@ -945,13 +965,6 @@ footer {
     display: flex;
     gap: 10px;
     justify-content: space-between;
-  }
-
-  .favorites-btn, .cart-btn {
-    flex: 1;
-    padding: 10px 5px;
-    font-size: 11px;
-    text-align: center;
   }
 
   .category-nav {
@@ -1120,6 +1133,29 @@ footer {
 
   .carousel-arrow.left { left: 10px; }
   .carousel-arrow.right { right: 10px; }
+  
+  .favorites-btn, .user-btn, .cart-btn {
+    flex: 1;
+    padding: 10px 5px;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .btn-text {
+    display: none;
+  }
+
+  .results-header {
+    font-size: 24px;
+    padding-left: 15px; 
+    padding-right: 15px;
+    margin-top: 20px;
+  }
+
+  .main-container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
 /* PANTALLA DE REGISTRO */
