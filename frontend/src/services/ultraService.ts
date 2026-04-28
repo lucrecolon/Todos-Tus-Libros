@@ -139,3 +139,24 @@ export const obtenerPerfilUsuario = async () => {
     return await response.json();
 };
 
+export const loginUsuario = async (email: string, password: string) => {
+    try {
+        const response = await fetch(`${API_USUARIOS_URL}/login/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.detail || 'Error al iniciar sesión. Verificá tu email y contraseña.');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error en loginUsuario:", error);
+        throw error;
+    }
+};

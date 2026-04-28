@@ -946,6 +946,49 @@ footer {
     object-fit: contain; 
 }
 
+/* Fondo oscuro que tapa toda la pantalla */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* Negro al 60% de opacidad */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Asegura que quede por encima del navbar y carruseles */
+}
+
+/* La cajita blanca del centro */
+.modal-content {
+    background-color: var(--bg-white);
+    padding: 30px;
+    border-radius: 4px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+/* El botón con la X para cerrar */
+.close-modal-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+.close-modal-btn:hover {
+    color: var(--accent-bordeaux);
+}
+
 /* --- RESPONSIVE PARA CELULARES ---*/
 
 @media screen and (max-width: 768px) {
