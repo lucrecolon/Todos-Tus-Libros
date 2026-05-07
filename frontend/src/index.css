@@ -989,6 +989,84 @@ footer {
     color: var(--accent-bordeaux);
 }
 
+/* --- ESTILOS ESPECÍFICOS DE PERFIL --- */
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--text-dark);
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.profile-section-title {
+    font-family: 'Georgia', serif;
+    color: var(--primary-green);
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.info-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    padding: 25px;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 16px;
+    color: var(--text-dark);
+}
+
+.addresses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.address-card {
+    position: relative;
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    transition: border-color 0.3s;
+}
+
+.address-card:hover {
+    border-color: var(--accent-bordeaux);
+}
+
+.main-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: var(--secondary-green);
+    color: white;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
 /* --- RESPONSIVE PARA CELULARES ---*/
 
 @media screen and (max-width: 768px) {
