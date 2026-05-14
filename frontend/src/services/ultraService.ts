@@ -96,8 +96,10 @@ export const buscarLibroPorEan = async (ean: string): Promise<DetalleLibro | nul
 };
 
 
-// API DE USUARIOS (David)
-const API_USUARIOS_URL = 'https://api.todostuslibrosar.com.ar/api';
+// API DE USUARIOS
+const API_USUARIOS_URL = import.meta.env.DEV 
+    ? 'http://localhost:8040/api' 
+    : 'https://api.todostuslibrosar.com.ar/api';
 
 export const registrarUsuarioBase = async (email: string, password: string) => {
     try {
@@ -106,6 +108,7 @@ export const registrarUsuarioBase = async (email: string, password: string) => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({ email, password })
         });
 
@@ -121,32 +124,21 @@ export const registrarUsuarioBase = async (email: string, password: string) => {
     }
 };
 
-export const obtenerPerfilUsuario = async () => {
-    const token = localStorage.getItem('token'); 
-
-    const response = await fetch(`${API_USUARIOS_URL}/user/me/`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-    });
-
-    if (!response.ok) {
-        throw new Error('No se pudo cargar el perfil');
-    }
-
-    return await response.json();
-};
-
 export const loginUsuario = async (email: string, password: string) => {
     try {
+        await inicializarCSRF();
+        
+        const csrfToken = obtenerCookie('csrftoken');
+
         const response = await fetch(`${API_USUARIOS_URL}/login/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken || '',
             },
-            body: JSON.stringify({ email, password })
+            credentials: 'include',
+            
+            body: JSON.stringify({ username: email, password }) 
         });
 
         if (!response.ok) {
@@ -159,4 +151,98 @@ export const loginUsuario = async (email: string, password: string) => {
         console.error("Error en loginUsuario:", error);
         throw error;
     }
+};
+
+export const obtenerPerfilUsuario = async () => {
+    const response = await fetch(`${API_USUARIOS_URL}/user/me/`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+    });
+
+    if (!response.ok) {
+        throw new Error('No se pudo cargar el perfil');
+    }
+
+    return await response.json();
+};
+
+export const logoutUsuario = async () => {
+    try {
+        await fetch(`${API_USUARIOS_URL}/logout/`, {
+            method: 'POST', 
+            credentials: 'include' 
+        });
+    } catch (error) {
+        console.error("Error al cerrar sesión", error);
+    }
+};
+
+export const obtenerCookie = (name: string) => {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+};
+
+export const inicializarCSRF = async () => {
+    try {
+        await fetch(`${API_USUARIOS_URL}/csrf/`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+    } catch (error) {
+        console.error("Error obteniendo CSRF token", error);
+    }
+};
+
+export const agregarDireccion = async (direccionData: any) => {
+    const csrfToken = obtenerCookie('csrftoken');
+
+    try {
+        const response = await fetch(`${API_USUARIOS_URL}/user/address/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken || '',
+            },
+            credentials: 'include',
+            body: JSON.stringify(direccionData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.detail || 'Error al guardar la dirección');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error en agregarDireccion:", error);
+        throw error;
+    }
+};
+
+export const obtenerPaises = async () => {
+    const res = await fetch(`${API_USUARIOS_URL}/countries/`, { credentials: 'include' });
+    return res.json();
+};
+
+export const obtenerProvincias = async (paisId: number) => {
+    const res = await fetch(`${API_USUARIOS_URL}/states/?country=${paisId}`, { credentials: 'include' });
+    return res.json();
+};
+
+export const obtenerCiudades = async (provinciaId: number) => {
+    const res = await fetch(`${API_USUARIOS_URL}/cities/?state=${provinciaId}`, { credentials: 'include' });
+    return res.json();
 };

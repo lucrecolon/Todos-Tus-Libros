@@ -20,7 +20,7 @@ export const Header = () => {
     const handleClickPerfil = () => {
         const token = localStorage.getItem('token');
         if (token) {
-            navigate('/user');
+            navigate('/user/me');
         } else {
             setVistaModal('opciones');
             setMostrarModalAuth(true);
@@ -36,7 +36,7 @@ export const Header = () => {
             localStorage.setItem('token', data.token); 
             
             setMostrarModalAuth(false);
-            navigate('/user');
+            navigate('/user/me');
         } catch (error) {
             alert('Error al iniciar sesión. Revisá tus datos.');
         } finally {
