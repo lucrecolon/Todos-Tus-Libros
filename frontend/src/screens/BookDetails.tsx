@@ -61,7 +61,7 @@ export const BookDetails = () => {
     if (!libro) return <h2 style={{ padding: '40px', textAlign: 'center' }}>No se encontró el libro.</h2>;
 
     const libreriasConDistancia = (libro.en_librerias || []).map((tiendaAPI) => {
-        const datosLocales = libreriasLocal.find(lib => lib.nombre.toUpperCase() === tiendaAPI.libreria.toUpperCase());
+        const datosLocales = libreriasLocal.find((lib: any) => lib.nombre.toUpperCase() === tiendaAPI.libreria.toUpperCase());
         
         let distancia = null;
         if (ubicacionUsuario && datosLocales && datosLocales.lat && datosLocales.lng) {
