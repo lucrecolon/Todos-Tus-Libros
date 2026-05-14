@@ -1,0 +1,380 @@
+[
+  {
+    "nombre": "ÁGORA",
+    "lat": -29.16425,
+    "lng": -67.494254,
+    "direccion": "Castro y Bazán 15, CHILECITO, LA RIOJA"
+  },
+  {
+    "nombre": "AL REVES LIBROS",
+    "lat": -34.903917,
+    "lng": -60.025139,
+    "direccion": "Av. 22 de Octubre 55, CHIVILCOY, BUENOS AIRES"
+  },
+  {
+    "nombre": "ALAMUT",
+    "lat": -34.586344,
+    "lng": -58.427651,
+    "direccion": "Nicaragua 4836 1º E, CABA, CABA"
+  },
+  {
+    "nombre": "ALBERGUE LIBROS",
+    "lat": -31.64016,
+    "lng": -60.715389,
+    "direccion": "Hipólito Yrigoyen 3380, SANTA FE, SANTA FE"
+  },
+  {
+    "nombre": "AMUYEN",
+    "lat": -31.536711,
+    "lng": -68.527459,
+    "direccion": "Rivadavia 112 Oeste, SAN JUAN, SAN JUAN"
+  },
+  {
+    "nombre": "ARKHE LIBROS",
+    "lat": -34.574833,
+    "lng": -58.538195,
+    "direccion": "Matheu 3610, SAN MARTIN, BUENOS AIRES"
+  },
+  {
+    "nombre": "ATENEO PARANÁ",
+    "lat": -31.731044,
+    "lng": -60.531190,
+    "direccion": "Buenos Aires 32, PARANÁ, ENTRE RÍOS"
+  },
+  {
+    "nombre": "BADARACO",
+    "lat": -34.61926,
+    "lng": -58.39183,
+    "direccion": "Av Entre Ríos 921, CABA, CABA"
+  },
+  {
+    "nombre": "BYBLOS",
+    "lat": -34.16594,
+    "lng": -58.95960,
+    "direccion": "Av. Int. Varela 499 Esq. Estrada, CAMPANA, BUENOS AIRES"
+  },
+  {
+    "nombre": "CATALOGOS",
+    "lat": -28.46800,
+    "lng": -65.77948,
+    "direccion": "República 516, CATAMARCA, CATAMARCA"
+  },
+  {
+    "nombre": "COLABO",
+    "lat": -34.55083,
+    "lng": -58.55406,
+    "direccion": "Independencia 4647, SAN MARTIN, BUENOS AIRES"
+  },
+  {
+    "nombre": "DELIBOOKS",
+    "lat": -34.76187,
+    "lng": -58.39876,
+    "direccion": "Gorriti 119, Paseo el aljibe, Local 64. LOMAS DE ZAMORA, BUENOS AIRES"
+  },
+  {
+    "nombre": "DOCE LETRAS",
+    "lat": -24.78935,
+    "lng": -65.41413,
+    "direccion": "Caseros 876, SALTA, SALTA"
+  },
+  {
+    "nombre": "EN UN LUGAR DE LA MANCHA",
+    "lat": -31.41186,
+    "lng": -64.16883,
+    "direccion": "Catamarca 1131, CÓRDOBA, CÓRDOBA"
+  },
+  {
+    "nombre": "EL CUCO NO EXISTE",
+    "lat": -32.94479,
+    "lng": -60.64935,
+    "direccion": "Dorrego 842, ROSARIO, SANTA FE"
+  },
+  {
+    "nombre": "EL HACEDOR LIBROS",
+    "lat": -34.5969902,
+    "lng": -58.439675,
+    "direccion": "JUAN RAMIREZ DE VELASCO 606, CABA, CABA"
+  },
+  {
+    "nombre": "EXODO",
+    "lat": -34.906877,
+    "lng": -57.946987,
+    "direccion": "Avenida 1 y Esq. 46 N°701, LA PLATA, BUENOS AIRES"
+  },
+  {
+    "nombre": "FANTASIA",
+    "lat": -32.951432,
+    "lng": -60.639867,
+    "direccion": "Mendoza 1127, ROSARIO, SANTA FE"
+  },
+  {
+    "nombre": "FRENESÍ!",
+    "lat": -34.85975,
+    "lng": -57.90526,
+    "direccion": "Perú 343, ENSENADA, BUENOS AIRES"
+  },
+  {
+    "nombre": "GARABOMBO",
+    "lat": -34.57333,
+    "lng": -58.53454,
+    "direccion": "Ayacucho 2154, SAN MARTIN, BUENOS AIRES"
+  },
+  {
+    "nombre": "GIORDANO",
+    "lat": -34.70942,
+    "lng": -58.38798,
+    "direccion": "Gral. Bernardo O'Higgins 2016, LANUS, BUENOS AIRES"
+  },
+  {
+    "nombre": "GOULD",
+    "lat": -34.59813,
+    "lng": -58.44063,
+    "direccion": "Acevedo 388, CABA, CABA"
+  },
+  {
+    "nombre": "HOTEL DE LAS IDEAS",
+    "lat": -34.58280,
+    "lng": -58.42568,
+    "direccion": "Paraguay 4697, CABA, CABA"
+  },
+  {
+    "nombre": "JB LIBROS",
+    "lat": -34.57102,
+    "lng": -58.49338,
+    "direccion": "Andonaegui 3059, CABA, CABA"
+  },
+  {
+    "nombre": "LA CASA AZUL LIBROS",
+    "lat": -37.326185,
+    "lng": -59.134491,
+    "direccion": "Pasaje Fournier 19, TANDIL, BUENOS AIRES"
+  },
+  {
+    "nombre": "LA COLECCIONISTA",
+    "lat": -34.54623,
+    "lng": -58.46247,
+    "direccion": "Crisólogo Larralde 1826, CABA, CABA"
+  },
+  {
+    "nombre": "LA ZONA",
+    "lat": -29.144681,
+    "lng": -59.64175,
+    "direccion": "Patricio Diez 427, RECONQUISTA, SANTA FE"
+  },
+  {
+    "nombre": "LAS LIRIAS",
+    "lat": -31.41566,
+    "lng": -64.18408,
+    "direccion": "Av. San Martin 17 local 10/11, VILLA GRAL BELGRANO, CORDOBA"
+  },
+  {
+    "nombre": "LEEMOS MAS",
+    "lat": -34.264347,
+    "lng": -62.709011,
+    "direccion": "Carballeira 247, RUFINO, SANTA FE"
+  },
+  {
+    "nombre": "LIBRACOS",
+    "lat": -38.958028,
+    "lng": -68.057443,
+    "direccion": "Corrientes 282, NEUQUEN, NEUQUEN"
+  },
+  {
+    "nombre": "LIBREMOS",
+    "lat": -34.619727,
+    "lng": -58.384444,
+    "direccion": "Santiago del Estero 995, CABA, CABA"
+  },
+  {
+    "nombre": "LIBRERÍA NACIONAL",
+    "lat": -34.904295,
+    "lng": -57.95305,
+    "direccion": "Calle 42 N°390, LA PLATA, BUENOS AIRES"
+  },
+  {
+    "nombre": "LIBROS CRISOL",
+    "lat": -32.06682,
+    "lng": -64.53814,
+    "direccion": "Libertad 412, SANTA ROSA DE CALAMUCHITA, CORDOBA"
+  },
+  {
+    "nombre": "LOS CONFINES",
+    "lat": -34.552611,
+    "lng": -58.556056,
+    "direccion": "Profesor Aguer 4757, VILLA BALLESTER, BUENOS AIRES"
+  },
+  {
+    "nombre": "LUDDITAS",
+    "lat": -32.89160,
+    "lng": -68.83643,
+    "direccion": "San Juan 1014, MENDOZA, MENDOZA"
+  },
+  {
+    "nombre": "MANUSCRITOS",
+    "lat": -38.93954,
+    "lng": -67.99719,
+    "direccion": "Villegas 120, CIPOLETTI, RIO NEGRO"
+  },
+  {
+    "nombre": "MG",
+    "lat": -28.62435,
+    "lng": -65.13040,
+    "direccion": "Alvear 1248, FRIAS, SANTIAGO DEL ESTERO"
+  },
+  {
+    "nombre": "NUEVA PARADOJA",
+    "lat": -34.298245,
+    "lng": -60.24696,
+    "direccion": "Libertad 787, SALTO, BUENOS AIRES"
+  },
+  {
+    "nombre": "ORYGAMI",
+    "lat": -26.82780,
+    "lng": -65.19838,
+    "direccion": "Pcia. de Córdoba 138, SAN MIGUEL, TUCUMÁN"
+  },
+  {
+    "nombre": "PATRIA GRANDE",
+    "lat": -34.626175,
+    "lng": -58.456369,
+    "direccion": "Av. Rivadavia 6369, CABA, CABA"
+  },
+  {
+    "nombre": "PETITE ROSS",
+    "lat": -32.93637,
+    "lng": -60.65157,
+    "direccion": "Salta 2250, ROSARIO, SANTA FE"
+  },
+  {
+    "nombre": "PIVOT",
+    "lat": -34.57037,
+    "lng": -58.43218,
+    "direccion": "Ortega y Gasset 1871, CABA, CABA"
+  },
+  {
+    "nombre": "PLAZA REGIONAL",
+    "lat": -34.56311,
+    "lng": -58.457515,
+    "direccion": "Ciudad de la Paz 2045, CABA, CABA"
+  },
+  {
+    "nombre": "PONSATTI",
+    "lat": -32.92614,
+    "lng": -60.80465,
+    "direccion": "Catamarca y Deán Funes 132, FUNES, SANTA FE"
+  },
+  {
+    "nombre": "PRAXIS JURÍDICA LIBROS",
+    "lat": -34.60329,
+    "lng": -58.38489,
+    "direccion": "JURÍDICA LIBROS, CABA, CABA"
+  },
+  {
+    "nombre": "PROA",
+    "lat": -32.485202,
+    "lng": -58.233715,
+    "direccion": "España 14, CONCEPCIÓN DEL URUGUAY, ENTRE RÍOS"
+  },
+  {
+    "nombre": "PURALETRA",
+    "lat": -31.2536,
+    "lng": -61.4869,
+    "direccion": "Bv. Hipólito Yrigoyen 404, RAFAELA, SANTA FE"
+  },
+  {
+    "nombre": "QUIMHUE LIBROS",
+    "lat": -39.02547,
+    "lng": -67.57925,
+    "direccion": "SAN MARTIN 1119, GENERAL ROCA, RIO NEGRO"
+  },
+  {
+    "nombre": "REAL LIBROS",
+    "lat": -45.860956,
+    "lng": -67.488441,
+    "direccion": "San Martín 945, COMODORO RIVADAVIA, CHUBUT"
+  },
+  {
+    "nombre": "RITUALITOS",
+    "lat": -34.640443,
+    "lng": -58.516116,
+    "direccion": "Pieres 103, CABA, CABA"
+  },
+  {
+    "nombre": "SAINT-EXUPÉRY",
+    "lat": -34.564761,
+    "lng": -58.686798,
+    "direccion": "Moine 1810, BELLA VISTA, BUENOS AIRES"
+  },
+  {
+    "nombre": "SANTA INES",
+    "lat": -34.55082,
+    "lng": -58.553882,
+    "direccion": "Independencia 4647, VILLA BALLESTER, BUENOS AIRES"
+  },
+  {
+    "nombre": "SR.FOX",
+    "lat": -34.59246,
+    "lng": -58.39953,
+    "direccion": "Larrea 1267, CABA, CABA"
+  },
+  {
+    "nombre": "ULTIMO ROUND",
+    "lat": -34.632928,
+    "lng": -58.854245,
+    "direccion": "Av. Gral. San Martín 7844, FCO ALVAREZ, BUENOS AIRES"
+  },
+  {
+    "nombre": "VAINA",
+    "lat": -30.756367,
+    "lng": -57.979547,
+    "direccion": "Sarmiento 2565, CHAJARI, ENTRE RIOS"
+  },
+  {
+    "nombre": "VOLCÁN AZUL",
+    "lat": -31.43016,
+    "lng": -64.18951,
+    "direccion": "Independencia 1247, CORDOBA, CORDOBA"
+  },
+  {
+    "nombre": "VUELVO AL SUR",
+    "lat": -34.635923,
+    "lng": -58.405983,
+    "direccion": "La Rioja 2127, CABA, CABA"
+  },
+  {
+    "nombre": "YES LIBROS",
+    "lat": -27.368769,
+    "lng": -55.892649,
+    "direccion": "La Rioja 1672, POSADAS, MISIONES"
+  },
+  {
+    "nombre": "YES LIBROS",
+    "lat": -27.463923,
+    "lng": -58.836586,
+    "direccion": "San Juan 580, CORRIENTES, CORRIENTES"
+  },
+  {
+    "nombre": "YES LIBROS",
+    "lat": -27.447138,
+    "lng": -58.986994,
+    "direccion": "Santa Fe 278, RESISTENCIA, CHACO"
+  },
+  {
+    "nombre":"GAMBITO DE ALFIL",
+    "lat": -34.6287359,
+    "lng": -58.4466624,
+    "direccion": "Puan 511, CABA, CABA"
+  },
+  {
+    "nombre":"MAGIA LIBROS",
+    "lat": -34.5879627,
+    "lng": -58.4307617,
+    "direccion": "Thames 1619, CABA, CABA"
+  },
+  {
+    "nombre":"OTRAS ORILLAS",
+    "lat": -34.59452,
+    "lng": -58.40807,
+    "direccion": "Gral. Lucio Norberto Mansilla 2974, CABA, CABA"
+  }
+]
