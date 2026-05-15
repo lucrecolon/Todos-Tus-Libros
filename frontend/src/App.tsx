@@ -10,6 +10,8 @@ import { Wishlist } from './screens/Wishlist';
 import { Novedades } from './screens/Novedades';
 import { Register } from './screens/Register';
 import { User } from './screens/User';
+import { NotFound } from './screens/NotFound';
+import { CategoryNav } from './components/CategoryNav';
 
 function App() {
   return (
@@ -17,9 +19,8 @@ function App() {
       <CartProvider>
         <BrowserRouter>
           <Header />
-
+          <CategoryNav />
           <CartSidebar />
-          {/*<CategoryNav />*/}
 
           <Routes>
             <Route path="/" element={<Home />} />
@@ -29,6 +30,7 @@ function App() {
             <Route path="/novedades" element={<Novedades />} />
             <Route path="/registro" element={<Register />} />
             <Route path="/user/me" element={<User />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           
           <footer>

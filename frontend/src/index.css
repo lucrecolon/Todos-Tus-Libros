@@ -1067,6 +1067,27 @@ footer {
     text-transform: uppercase;
 }
 
+/* --- BOTON DE VOLVER --- */
+.btn-volver {
+    background: transparent;
+    border: none;
+    color: var(--bg-paper);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 15px 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-volver:hover {
+    color: var(--brand-color);
+    transform: translateX(-3px);
+}
+
 /* --- RESPONSIVE PARA CELULARES ---*/
 
 @media screen and (max-width: 768px) {
