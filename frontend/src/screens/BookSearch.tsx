@@ -33,11 +33,21 @@ export const BookSearch = () => {
     const [inputAutor, setInputAutor] = useState(queryAutor);
     const [inputEditorial, setInputEditorial] = useState(queryEditorial);
 
-    const [publicaciones, setPublicaciones] = useState<any[]>([]);
     const [cargando, setCargando] = useState(false);
+    const [publicaciones, setPublicaciones] = useState<any[]>(() => {
+        const guardados = sessionStorage.getItem('search_libros');
+        return guardados ? JSON.parse(guardados) : [];
+    });
     
-    const [paginaActual, setPaginaActual] = useState(1);
-    const [hayMasResultados, setHayMasResultados] = useState(true);
+    const [paginaActual, setPaginaActual] = useState(() => {
+        const guardada = sessionStorage.getItem('search_pagina');
+        return guardada ? parseInt(guardada) : 1;
+    });
+    
+    const [hayMasResultados, setHayMasResultados] = useState(() => {
+        const guardado = sessionStorage.getItem('search_hayMas');
+        return guardado ? JSON.parse(guardado) : true;
+    });
 
     const busquedaActiva = queryTitulo || queryAutor || queryEditorial;
 
@@ -139,13 +149,55 @@ export const BookSearch = () => {
         };
 
     useEffect(() => {
+        const ultimaBusqueda = sessionStorage.getItem('search_query');
+        const busquedaActualStr = `${queryTitulo}|${queryAutor}|${queryEditorial}`;
+
         if (busquedaActiva) {
-            realizarBusqueda(1, true);
+            if (ultimaBusqueda !== busquedaActualStr) {
+                sessionStorage.removeItem('search_scroll');
+                sessionStorage.setItem('search_query', busquedaActualStr);
+                realizarBusqueda(1, true);
+            } else {
+                const scrollGuardado = sessionStorage.getItem('search_scroll');
+                if (scrollGuardado && publicaciones.length > 0) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: parseInt(scrollGuardado),
+                            behavior: 'instant'
+                        });
+                    }, 200);
+                }
+            }
         } else {
             setPublicaciones([]);
             setHayMasResultados(true);
+            sessionStorage.removeItem('search_query');
         }
     }, [queryTitulo, queryAutor, queryEditorial]);
+
+    useEffect(() => {
+        if (publicaciones.length > 0) {
+            sessionStorage.setItem('search_libros', JSON.stringify(publicaciones));
+            sessionStorage.setItem('search_pagina', paginaActual.toString());
+            sessionStorage.setItem('search_hayMas', JSON.stringify(hayMasResultados));
+        }
+    }, [publicaciones, paginaActual, hayMasResultados]);
+
+    useEffect(() => {
+        let timeoutId: ReturnType<typeof setTimeout>;
+        const handleScroll = () => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                sessionStorage.setItem('search_scroll', window.scrollY.toString());
+            }, 50);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearTimeout(timeoutId);
+        };
+    }, []);
 
     const cargarMasLibros = () => {
         realizarBusqueda(paginaActual + 1, false);
@@ -275,7 +327,7 @@ export const BookSearch = () => {
                             
                             {!cargando && hayMasResultados && publicaciones.length > 0 && (
                                 <button onClick={cargarMasLibros} className="load-more-btn">
-                                    Mostrar más resultados ↓
+                                    Mostrar más resultados
                                 </button>
                             )}
                             
