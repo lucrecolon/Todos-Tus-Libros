@@ -17,13 +17,31 @@ const formatearEditorial = (editorial: any): string => {
 
 export const Novedades = () => {
     const navigate = useNavigate();
-    const [libros, setLibros] = useState<any[]>([]);
-    const [cargando, setCargando] = useState(true);
+    const [libros, setLibros] = useState<any[]>(() => {
+        const guardados = sessionStorage.getItem('nov_libros');
+        return guardados ? JSON.parse(guardados) : [];
+    });
     
-    const [paginaActual, setPaginaActual] = useState(1);
-    const [hayMasPaginas, setHayMasPaginas] = useState(false);
+    const [cargando, setCargando] = useState(() => {
+        return sessionStorage.getItem('nov_libros') ? false : true;
+    });
+    
+    const [paginaActual, setPaginaActual] = useState(() => {
+        const guardado = sessionStorage.getItem('nov_pagina');
+        return guardado ? parseInt(guardado) : 1;
+    });
+    
+    const [hayMasPaginas, setHayMasPaginas] = useState(() => {
+        const guardado = sessionStorage.getItem('nov_hayMas');
+        return guardado ? JSON.parse(guardado) : false;
+    });
+    
+    const [totalLibros, setTotalLibros] = useState(() => {
+        const guardado = sessionStorage.getItem('nov_total');
+        return guardado ? parseInt(guardado) : 0;
+    });
+
     const [cargandoMas, setCargandoMas] = useState(false);
-    const [totalLibros, setTotalLibros] = useState(0);
 
     const { toggleWishlist, isInWishlist } = useWishlist();
 
@@ -58,7 +76,7 @@ export const Novedades = () => {
             if (esCargaInicial) {
                 setLibros(librosConDetalle);
             } else {
-                setLibros(prevLibros => [...prevLibros, ...librosConDetalle]);
+                setLibros([...libros, ...librosConDetalle]);
             }
 
             setTotalLibros(dataBusqueda.count);
@@ -73,7 +91,46 @@ export const Novedades = () => {
     };
 
     useEffect(() => {
-        traerNovedades(1, true);
+        if (libros.length > 0) {
+            sessionStorage.setItem('nov_libros', JSON.stringify(libros));
+            sessionStorage.setItem('nov_pagina', paginaActual.toString());
+            sessionStorage.setItem('nov_hayMas', JSON.stringify(hayMasPaginas));
+            sessionStorage.setItem('nov_total', totalLibros.toString());
+        }
+    }, [libros, paginaActual, hayMasPaginas, totalLibros]);
+
+    useEffect(() => {
+        if (libros.length === 0) {
+            traerNovedades(1, true);
+        } else {
+            const scrollGuardado = sessionStorage.getItem('nov_scroll');
+            if (scrollGuardado) {
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: parseInt(scrollGuardado),
+                        behavior: 'instant'
+                    });
+                }, 200);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        let timeoutId: ReturnType<typeof setTimeout>;
+        
+        const handleScroll = () => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                sessionStorage.setItem('nov_scroll', window.scrollY.toString());
+            }, 50);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearTimeout(timeoutId);
+        };
     }, []);
 
     const cargarMasLibros = () => {
