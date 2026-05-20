@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registrarUsuarioBase } from '../services/ultraService';
+import { actualizarPerfilUsuario, loginUsuario, registrarUsuarioBase } from '../services/ultraService';
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -11,47 +11,33 @@ export const Register = () => {
     
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [registrado, setRegistrado] = useState(false);
-    const [cargando, setCargando] = useState(false);
+    const [cargando] = useState(false);
 
-    const handleRegistro = async (e: React.FormEvent) => {
+    const handleRegistro = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setCargando(true);
         
         try {
             await registrarUsuarioBase(email, password);
+            console.log('¡Usuario base creado con éxito!');
+
+            await loginUsuario(email, password);
+            console.log('¡Sesión iniciada automáticamente!');
+
+            const datosPendientes = {
+                first_name: firstName,
+                last_name: lastName,
+                birth_date: birthDate
+            };
             
-            console.log("¡Usuario base creado con éxito!");            
-            
-            console.log("Datos pendientes para actualizar el perfil:", { 
-                first_name: firstName, 
-                last_name: lastName, 
-                birth_date: birthDate 
-            });
-            
-            setRegistrado(true);
+            await actualizarPerfilUsuario(datosPendientes);
+            console.log('¡Perfil completo actualizado!');
+
+            navigate('/user/me'); 
+
         } catch (error) {
-            alert(error instanceof Error ? error.message : "Hubo un error de conexión.");
-        } finally {
-            setCargando(false);
+            console.error("Hubo un error en el proceso:", error);
         }
     };
-
-    if (registrado) {
-        return (
-            <div className="main-container register-container">
-                <div className="success-box">
-                    <h2 className="success-title">¡Ya estás en la lista! 🎉</h2>
-                    <p className="success-message">
-                        Gracias por registrarte. Te enviamos un mail con tu beneficio exclusivo para usar en tu primera compra.
-                    </p>
-                    <button className="search-btn" onClick={() => navigate('/')}>
-                        VOLVER AL INICIO
-                    </button>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="main-container register-container">

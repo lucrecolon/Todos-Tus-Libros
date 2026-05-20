@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { obtenerPerfilUsuario, logoutUsuario, inicializarCSRF, agregarDireccion, obtenerPaises, obtenerProvincias, obtenerCiudades } from '../services/ultraService';
+import { useCart } from '../context/CartContext';
 
 export const User = () => {
     const navigate = useNavigate();
@@ -10,6 +11,8 @@ export const User = () => {
     const [paises, setPaises] = useState<any[]>([]);
     const [provincias, setProvincias] = useState<any[]>([]);
     const [ciudades, setCiudades] = useState<any[]>([]);
+
+    const { clearCart } = useCart();
     
     const [mostrandoFormulario, setMostrandoFormulario] = useState(false);
     const [nuevaDireccion, setNuevaDireccion] = useState({
@@ -89,7 +92,10 @@ export const User = () => {
                     style={{ backgroundColor: 'var(--accent-bordeaux)', color: 'white', borderColor: 'var(--accent-bordeaux)' }}
                     onClick={async () => {
                         await logoutUsuario(); 
-                        localStorage.removeItem('token'); 
+                        localStorage.removeItem('token');
+                        //remove csrftoken cookie by setting it expired
+                        document.cookie = 'csrftoken=; Max-Age=0; path=/;';
+                        clearCart();
                         navigate('/');
                     }}
                 >

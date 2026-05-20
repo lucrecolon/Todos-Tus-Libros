@@ -1,9 +1,9 @@
-import { useCart } from '../context/CartContext';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import logo from '../assets/IMG_4561.png';
-import { loginUsuario } from '../services/ultraService';
-import { useState } from 'react';
+import { AuthModal } from './AuthModal'; 
 
 export const Header = () => {
     const { cartItems, setCartOpen } = useCart();
@@ -11,36 +11,22 @@ export const Header = () => {
     const { wishlist } = useWishlist();
 
     const [mostrarModalAuth, setMostrarModalAuth] = useState(false);
-    const [vistaModal, setVistaModal] = useState<'opciones' | 'login'>('opciones');
-
-    const [loginEmail, setLoginEmail] = useState('');
-    const [loginPassword, setLoginPassword] = useState('');
-    const [loginCargando, setLoginCargando] = useState(false);
 
     const handleClickPerfil = () => {
-        const token = localStorage.getItem('token');
+        const token = document.cookie.includes('csrftoken') 
         if (token) {
             navigate('/user/me');
         } else {
-            setVistaModal('opciones');
             setMostrarModalAuth(true);
         }
     };
 
-    const handleLoginSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoginCargando(true);
-        try {
-            const data = await loginUsuario(loginEmail, loginPassword);
-            //ajustar "data.token" segun el JSON real
-            localStorage.setItem('token', data.token); 
-            
-            setMostrarModalAuth(false);
-            navigate('/user/me');
-        } catch (error) {
-            alert('Error al iniciar sesión. Revisá tus datos.');
-        } finally {
-            setLoginCargando(false);
+    const handleClickCarrito = () => {
+        const token = document.cookie.includes('csrftoken')
+        if (token) {
+            setCartOpen(true);
+        } else {
+            setMostrarModalAuth(true);
         }
     };
 
@@ -60,7 +46,7 @@ export const Header = () => {
                     <span className="btn-text">FAVORITOS ({wishlist.length})</span>
                 </button>
 
-                <button className="cart-btn" onClick={() => setCartOpen(true)}>
+                <button className="cart-btn" onClick={handleClickCarrito}>
                     <i className="bi bi-cart3"></i>
                     <span className="btn-text">CARRITO ({cartItems.length})</span>
                 </button>
@@ -71,82 +57,13 @@ export const Header = () => {
                 </button>
 
                 {mostrarModalAuth && (
-                <div className="modal-overlay" onClick={() => setMostrarModalAuth(false)}>
-                    
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        
-                        <button className="close-modal-btn" onClick={() => setMostrarModalAuth(false)}>
-                            <i className="bi bi-x-lg"></i>
-                        </button>
-
-                        {vistaModal === 'opciones' ? (
-                            <div className="auth-prompt">
-                                <h3 style={{ marginTop: 0, color: 'var(--text-dark)', fontFamily: 'Georgia, serif' }}>¡Hola!</h3>
-                                <p style={{ color: 'var(--text-muted)', marginBottom: '25px' }}>
-                                    Para acceder a tu perfil y ver tus datos, necesitás ingresar a tu cuenta.
-                                </p>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                    <button 
-                                        className="search-btn" 
-                                        style={{ width: '100%', padding: '12px' }}
-                                        onClick={() => setVistaModal('login')}
-                                    >
-                                        INICIAR SESIÓN
-                                    </button>
-                                    <button 
-                                        className="user-btn" 
-                                        style={{ width: '100%', padding: '12px', color: 'var(--primary-green)', borderColor: 'var(--primary-green)' }}
-                                        onClick={() => {
-                                            setMostrarModalAuth(false);
-                                            navigate('/registro');
-                                        }}
-                                    >
-                                        REGISTRARME
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <form className="auth-login-form" onSubmit={handleLoginSubmit}>
-                                <h3 style={{ marginTop: 0, color: 'var(--text-dark)', fontFamily: 'Georgia, serif' }}>Iniciar Sesión</h3>
-                                
-                                <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <label className="form-label" style={{ color: 'var(--text-dark)' }}>Email</label>
-                                    <input 
-                                        type="email" 
-                                        className="form-input" 
-                                        required
-                                        value={loginEmail} 
-                                        onChange={(e) => setLoginEmail(e.target.value)} 
-                                    />
-                                </div>
-
-                                <div className="form-group" style={{ marginBottom: '25px' }}>
-                                    <label className="form-label" style={{ color: 'var(--text-dark)' }}>Contraseña</label>
-                                    <input 
-                                        type="password" 
-                                        className="form-input" 
-                                        required
-                                        value={loginPassword} 
-                                        onChange={(e) => setLoginPassword(e.target.value)} 
-                                    />
-                                </div>
-
-                                <button type="submit" className="search-btn" style={{ width: '100%', padding: '12px' }} disabled={loginCargando}>
-                                    {loginCargando ? 'INGRESANDO...' : 'INGRESAR'}
-                                </button>
-                                
-                                <button 
-                                    type="button" 
-                                    style={{ background: 'none', border: 'none', color: 'var(--primary-green)', width: '100%', marginTop: '15px', cursor: 'pointer', textDecoration: 'underline' }}
-                                    onClick={() => setVistaModal('opciones')}
-                                >
-                                    Volver atrás
-                                </button>
-                            </form>
-                        )}
-                    </div>
-                </div>
-            )}
+                    <AuthModal 
+                        onClose={() => setMostrarModalAuth(false)} 
+                        onLoginSuccess={() => {
+                            window.location.reload();
+                        }}
+                    />
+                )}
             </div>
         </header>
     );

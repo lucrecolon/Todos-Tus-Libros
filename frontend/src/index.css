@@ -112,7 +112,12 @@ header {
   padding: 80px 20px;
   text-align: center;
   border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(to bottom, var(--bg-paper), #f0efe9);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('./assets/BACKGROUND.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 350px;
+  display: flex;
 }
 
 .hero-section h1 {
@@ -953,11 +958,11 @@ footer {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6); /* Negro al 60% de opacidad */
+    background-color: rgba(0, 0, 0, 0.10);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Asegura que quede por encima del navbar y carruseles */
+    z-index: 9999;
 }
 
 /* La cajita blanca del centro */

@@ -5,6 +5,7 @@ import { type DetalleLibro } from '../types/models';
 import { useCart } from '../context/CartContext';
 import libreriasLocal from '../data/librerias.json';
 import { calcularDistancia } from '../utils/utils';
+import { AuthModal } from '../components/AuthModal';
 
 export const BookDetails = () => {
     const { ean } = useParams(); 
@@ -16,6 +17,8 @@ export const BookDetails = () => {
     const [ toast, setToast ] = useState({ visible: false, mensaje: '' });
 
     const [ubicacionUsuario, setUbicacionUsuario] = useState<{lat: number, lng: number} | null>(null);
+
+    const [mostrarModalAuth, setMostrarModalAuth] = useState(false);
 
     const mostrarToast = (tituloLibro: string) => {
         setToast({ visible: true, mensaje: `"${tituloLibro}" agregado al carrito` });
@@ -165,17 +168,30 @@ export const BookDetails = () => {
                                     <button
                                         className="btn-add"
                                         onClick={() => {
-                                            addToCart({
-                                                ean: libro.ean,
-                                                titulo: libro.titulo,
-                                                precio: Number(tienda.precio), 
-                                                libreria: tienda.libreria
-                                            });
+                                            const token = document.cookie.includes('csrftoken')
+                                            if(token){
+                                                addToCart({
+                                                    ean: libro.ean,
+                                                    titulo: libro.titulo,
+                                                    precio: Number(tienda.precio), 
+                                                    libreria: tienda.libreria
+                                                });
                                             mostrarToast(libro.titulo);
+                                            } else {
+                                                setMostrarModalAuth(true);
+                                            }
                                         }}
                                     >
                                         Añadir a la compra
                                     </button>
+                                    {mostrarModalAuth && (
+                                        <AuthModal 
+                                            onClose={() => setMostrarModalAuth(false)} 
+                                            onLoginSuccess={() => {
+                                                window.location.reload(); 
+                                            }}
+                                        />
+                                    )}
                                 </div>
                             </div>
                         ))
