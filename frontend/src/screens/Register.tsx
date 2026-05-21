@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { actualizarPerfilUsuario, loginUsuario, registrarUsuarioBase } from '../services/ultraService';
 
 export const Register = () => {
@@ -12,6 +12,8 @@ export const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [cargando] = useState(false);
+
+    const [aceptaPoliticas, setAceptaPoliticas] = useState(false);
 
     const handleRegistro = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -106,8 +108,20 @@ export const Register = () => {
                         placeholder="La contraseña debe ser alfanumérica y debe tener al menos 8 caracteres"
                     />
                 </div>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '25px' }}>
+                    <input 
+                        type="checkbox" 
+                        id="politicas" 
+                        checked={aceptaPoliticas}
+                        onChange={(e) => setAceptaPoliticas(e.target.checked)}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                    />
+                    <label htmlFor="politicas" style={{ fontSize: '0.95rem', color: 'var(--text-dark)', cursor: 'pointer', margin: 0 }}>
+                        Acepto las <Link to="/privacidad" target="_blank" style={{ color: 'var(--primary-green)', textDecoration: 'underline' }}>Políticas de Privacidad</Link>
+                    </label>
+                </div>
 
-                <button type="submit" className="search-btn" style={{ width: '100%' }} disabled={cargando}>
+                <button type="submit" disabled={!aceptaPoliticas || cargando} className="search-btn" style={{ opacity: aceptaPoliticas ? 1 : 0.5, cursor: aceptaPoliticas ? 'pointer' : 'not-allowed',width: '100%'}}>
                     {cargando ? 'CREANDO CUENTA...' : 'CREAR CUENTA Y OBTENER BENEFICIO'}
                 </button>
             </form>

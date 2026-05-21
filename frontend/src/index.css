@@ -29,6 +29,11 @@ body {
   background-color: var(--bg-paper);
   color: var(--text-dark);
   line-height: 1.5;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('./assets/BACKGROUND.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 350px;
 }
 
 h1, h2, h3, .logo {
@@ -396,7 +401,7 @@ footer {
     border-bottom: 1px solid var(--border-color);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    background-color: var(--bg-paper);
+    background-color: transparent;
 }
 
 /* --- ESTILOS BARRA DE CATEGORIAS --- */
