@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { registrarUsuarioBase } from '../services/ultraService';
+import { useNavigate, Link } from 'react-router-dom';
+import { actualizarPerfilUsuario, loginUsuario, registrarUsuarioBase } from '../services/ultraService';
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -11,47 +11,35 @@ export const Register = () => {
     
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [registrado, setRegistrado] = useState(false);
-    const [cargando, setCargando] = useState(false);
+    const [cargando] = useState(false);
 
-    const handleRegistro = async (e: React.FormEvent) => {
+    const [aceptaPoliticas, setAceptaPoliticas] = useState(false);
+
+    const handleRegistro = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setCargando(true);
         
         try {
             await registrarUsuarioBase(email, password);
+            console.log('¡Usuario base creado con éxito!');
+
+            await loginUsuario(email, password);
+            console.log('¡Sesión iniciada automáticamente!');
+
+            const datosPendientes = {
+                first_name: firstName,
+                last_name: lastName,
+                birth_date: birthDate
+            };
             
-            console.log("¡Usuario base creado con éxito!");            
-            
-            console.log("Datos pendientes para actualizar el perfil:", { 
-                first_name: firstName, 
-                last_name: lastName, 
-                birth_date: birthDate 
-            });
-            
-            setRegistrado(true);
+            await actualizarPerfilUsuario(datosPendientes);
+            console.log('¡Perfil completo actualizado!');
+
+            navigate('/user/me'); 
+
         } catch (error) {
-            alert(error instanceof Error ? error.message : "Hubo un error de conexión.");
-        } finally {
-            setCargando(false);
+            console.error("Hubo un error en el proceso:", error);
         }
     };
-
-    if (registrado) {
-        return (
-            <div className="main-container register-container">
-                <div className="success-box">
-                    <h2 className="success-title">¡Ya estás en la lista! 🎉</h2>
-                    <p className="success-message">
-                        Gracias por registrarte. Te enviamos un mail con tu beneficio exclusivo para usar en tu primera compra.
-                    </p>
-                    <button className="search-btn" onClick={() => navigate('/')}>
-                        VOLVER AL INICIO
-                    </button>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="main-container register-container">
@@ -120,8 +108,20 @@ export const Register = () => {
                         placeholder="La contraseña debe ser alfanumérica y debe tener al menos 8 caracteres"
                     />
                 </div>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '25px' }}>
+                    <input 
+                        type="checkbox" 
+                        id="politicas" 
+                        checked={aceptaPoliticas}
+                        onChange={(e) => setAceptaPoliticas(e.target.checked)}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                    />
+                    <label htmlFor="politicas" style={{ fontSize: '0.95rem', color: 'var(--text-dark)', cursor: 'pointer', margin: 0 }}>
+                        Acepto las <Link to="/privacidad" target="_blank" style={{ color: 'var(--primary-green)', textDecoration: 'underline' }}>Políticas de Privacidad</Link>
+                    </label>
+                </div>
 
-                <button type="submit" className="search-btn" style={{ width: '100%' }} disabled={cargando}>
+                <button type="submit" disabled={!aceptaPoliticas || cargando} className="search-btn" style={{ opacity: aceptaPoliticas ? 1 : 0.5, cursor: aceptaPoliticas ? 'pointer' : 'not-allowed',width: '100%'}}>
                     {cargando ? 'CREANDO CUENTA...' : 'CREAR CUENTA Y OBTENER BENEFICIO'}
                 </button>
             </form>

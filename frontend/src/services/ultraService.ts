@@ -103,10 +103,15 @@ const API_USUARIOS_URL = import.meta.env.DEV
 
 export const registrarUsuarioBase = async (email: string, password: string) => {
     try {
+        await inicializarCSRF();
+        
+        const csrfToken = obtenerCookie('csrftoken');
+
         const response = await fetch(`${API_USUARIOS_URL}/register/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken || '',
             },
             credentials: 'include',
             body: JSON.stringify({ email, password })
@@ -171,10 +176,20 @@ export const obtenerPerfilUsuario = async () => {
 
 export const logoutUsuario = async () => {
     try {
-        await fetch(`${API_USUARIOS_URL}/logout/`, {
+        const csrfToken = obtenerCookie('csrftoken');
+
+        const response = await fetch(`${API_USUARIOS_URL}/logout/`, {
             method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken || '', 
+            },
             credentials: 'include' 
         });
+
+        if (!response.ok) {
+            throw new Error('El servidor rechazó el cierre de sesión');
+        }
     } catch (error) {
         console.error("Error al cerrar sesión", error);
     }
@@ -228,6 +243,31 @@ export const agregarDireccion = async (direccionData: any) => {
         return await response.json();
     } catch (error) {
         console.error("Error en agregarDireccion:", error);
+        throw error;
+    }
+};
+
+export const actualizarPerfilUsuario = async (datosPerfil: any) => {
+    const csrfToken = obtenerCookie('csrftoken');
+
+    try {
+        const response = await fetch(`${API_USUARIOS_URL}/user/me/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken || '',
+            },
+            credentials: 'include',
+            body: JSON.stringify(datosPerfil)
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al actualizar los datos del perfil');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error en actualizarPerfilUsuario:", error);
         throw error;
     }
 };
