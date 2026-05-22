@@ -88,8 +88,8 @@ export const User = () => {
             <div className="profile-header">
                 <h1 className="book-title">Mi Cuenta</h1>
                 <button 
-                    className="user-btn" 
-                    style={{ backgroundColor: 'var(--accent-bordeaux)', color: 'white', borderColor: 'var(--accent-bordeaux)' }}
+                    className="logout-btn"
+                    style={{ cursor: 'pointer' }}
                     onClick={async () => {
                         await logoutUsuario(); 
                         localStorage.removeItem('token');

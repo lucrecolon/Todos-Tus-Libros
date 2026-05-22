@@ -125,17 +125,14 @@ export const BookDetails = () => {
                         <h2>Opciones de compra</h2>
                     </div>
                     {!ubicacionUsuario && (
-                        <div style={{ backgroundColor: '#e8f5e9', padding: '15px', borderRadius: '4px', marginBottom: '20px', border: '1px solid #c8e6c9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div>
-                                <h4 style={{ margin: '0 0 5px 0', color: 'var(--primary-green)' }}>📍 Encontrá este libro más rápido</h4>
-                                <p style={{ margin: 0, fontSize: '14px', color: '#555' }}>
+                        <div className="location-prompt-card">
+                            <div className="location-prompt-text">
+                                <h4>📍 Encontrá este libro más rápido</h4>
+                                <p>
                                     Permitinos ver tu ubicación para ordenar la lista con las librerías más cercanas
                                 </p>
                             </div>
-                            <button 
-                                onClick={pedirUbicacion}
-                                style={{ backgroundColor: 'var(--accent-bordeaux)', color: 'white', border: 'none', padding: '6px 14px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                            >
+                            <button className="location-prompt-btn" onClick={pedirUbicacion}>
                                 Ver librerías cercanas
                             </button>
                         </div>

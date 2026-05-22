@@ -1,0 +1,425 @@
+@media screen and (max-width: 768px) {
+  
+    :root {
+      --slide-width: 100%;
+    }
+  
+    /* --- HEADER Y NAVEGACIÓN --- */
+    header {
+      flex-direction: column;
+      padding: 15px 20px;
+      gap: 15px;
+    }
+  
+    .header-actions {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+    }
+  
+    .favorites-btn, .user-btn, .cart-btn {
+      flex: 1;
+      padding: 10px 5px;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .login-btn {
+        background-color: var(--accent-bordeaux);
+        padding: 5px 5px;
+        font-size: 15px;
+        text-align: center;
+        color: var(--bg-white);
+        width: 40%;
+        border-radius: 5px;
+        border-style: solid;
+        border-color: var(--bordeaux);
+        width: 100%;
+        padding: 12px;
+    }
+
+    .logout-btn{
+        background-color: var(--accent-bordeaux);
+        color: white;
+        border-color: transparent;
+        padding: 5px 5px;
+        font-size: 15px;
+        text-align: center;
+        width: 40%;
+        border-radius: 0px;
+        border-style: solid;
+    }
+  
+    .btn-text {
+      display: none;
+    }
+  
+    .category-nav {
+      padding: 10px 15px 20px;
+      overflow-x: auto;
+      padding-bottom: 0px;
+      padding-top: 0px;
+    }
+  
+    .category-list {
+      justify-content: flex-start;
+      gap: 20px;
+      white-space: nowrap;
+    }
+  
+    /* --- HERO Y BÚSQUEDA --- */
+    .hero-section {
+      padding: 40px 15px;
+    }
+  
+    .hero-section h1 {
+      font-size: 28px;
+    }
+  
+    .hero-subtitle {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+  
+    .form-group {
+      width: 100% !important;
+      margin-bottom: 15px !important;
+      text-align: left;
+    }
+    
+    .search-box {
+      flex-direction: column !important;
+      align-items: stretch !important;
+      background: var(--bg-white) !important;
+      border: 1px solid #CCC !important;
+      padding: 20px !important;
+      gap: 15px !important;
+    }
+  
+    .search-input-group {
+      width: 100% !important;
+    }
+  
+    .advanced-search-form {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      padding: 20px !important;
+      background-color: var(--bg-white) !important;
+      border-radius: 4px !important;
+      gap: 15px !important;
+    }
+  
+    .search-box > *,
+    .advanced-search-form > * {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      margin: 0 !important;
+      text-align: left !important;
+      align-items: stretch !important;
+    }
+  
+    .search-input, 
+    .form-input {
+      width: 100% !important;
+      box-sizing: border-box !important;
+      margin-top: 5px !important;
+      padding: 12px 15px !important;
+    }
+    
+    .search-btn {
+      width: 100% !important;
+      margin-top: 5px !important;
+    }
+  
+    /* --- LAYOUTS GENERALES Y RESULTADOS --- */
+    .search-page-container,
+    .novedades-section,
+    .search-section,
+    .main-container {
+      padding: 30px 15px;
+    }
+  
+    .search-title {
+      font-size: 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  
+    .novedades-title {
+      flex-direction: row;
+      align-items: flex-end;
+    }
+    
+    .btn-ver-todos {
+      font-size: 12px;
+      padding: 10px;
+      background-color: var(--bg-white);
+      border-radius: 2px;
+      border: 1px solid var(--bg-white);
+      color: var(--secondary-green);
+    }
+  
+    .results-header {
+      font-size: 25px;
+      padding-left: 10px; 
+      padding-right: 40px;
+      margin-top: 20px;
+    }
+  
+    .results-list {
+      grid-template-columns: 1fr;
+
+    }
+  
+    /* --- DETALLES DEL LIBRO --- */
+    .main-container {
+      flex-direction: column;
+      gap: 30px;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  
+    .book-cover {
+      max-width: 100%;
+      height: auto;
+      min-height: 300px;
+    }
+  
+    .list-header {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .store-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+  
+    .store-action {
+      width: 100%;
+      text-align: left;
+    }
+  
+    .btn-add {
+      width: 50%;
+      padding: 8px 15px;
+      font-size: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+  
+    /* --- CARRITO Y EXTRAS --- */
+    .cart-sidebar {
+      width: 100%;
+      right: -100%;
+      padding: 20px;
+    }
+  
+    .location-bar {
+      padding: 10px 15px;
+      text-align: center;
+      font-size: 11px;
+    }
+  
+    /* --- CARRUSEL DE NOVEDADES --- */
+    .novedades-section {
+      padding: 30px 15px !important;
+      overflow-x: hidden;
+    }
+  
+    .carousel-container { 
+      width: 100% !important;
+    }
+  
+    .carousel-slide {
+      flex: 0 0 100% !important; 
+      width: 100% !important;
+      padding: 0 15px !important; 
+      box-sizing: border-box !important;
+    }
+  
+    .carousel-track {
+      gap: 0 !important;
+    }
+  
+    .carousel-arrow.left { left: 10px; }
+    .carousel-arrow.right { right: 10px; }
+  
+    /* --- PANTALLA DE PERFIL Y REGISTRO --- */
+    .profile-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+  
+    .info-card {
+      padding: 15px;
+    }
+  
+    .addresses-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .success-box {
+      padding: 30px 20px;
+      margin: 0 15px;
+    }
+  
+    /* --- MODALES Y NOTIFICACIONES --- */
+    .modal-content {
+      width: 75%;
+      padding: 20px;
+    }
+  
+    .toast-notification {
+      width: 90%;
+      text-align: center;
+      justify-content: center;
+    }
+  
+    /* --- FOOTER --- */
+    footer {
+      padding: 20px 15px;
+    }
+
+    .auth-prompt button {
+        box-sizing: border-box !important;
+        min-height: 45px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .btn-volver {
+        width: auto !important;
+        display: inline-flex !important;
+        padding: 18px 0px 0px !important;
+    }
+
+    .form-input {
+        font-size: 13px !important;
+        padding: 12px 10px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+    }
+
+    .form-input::placeholder {
+        font-size: 12px !important;
+    }
+
+    form div:has(input[type="checkbox"]) {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+    }
+
+    form div:has(input[type="checkbox"]) label {
+        font-size: 13px !important;
+        line-height: 1.2 !important;
+        margin-top: 0 !important;
+    }
+
+    form button[type="submit"] {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
+        padding: 12px 20px !important;
+    }
+
+    .profile-header {
+        flex-direction: row !important; /* Volvemos a ponerlo en fila */
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+    .profile-header .book-title {
+        font-size: 22px !important;
+        margin: 0 !important;
+    }
+
+    .profile-header .user-btn {
+        font-size: 10px !important;
+        padding: 8px 12px !important;
+        width: auto !important;
+        white-space: nowrap !important;
+    }
+
+    .section-header-row {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        margin-bottom: 15px !important;
+    }
+
+    .section-header-row .profile-section-title {
+        font-size: 18px !important;
+        margin-bottom: 0 !important;
+        white-space: nowrap !important;
+    }
+
+    .section-header-row button {
+        font-size: 10px !important;
+        padding: 8px 12px !important;
+        width: auto !important;
+        white-space: nowrap !important;
+    }
+
+    select.form-input {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    /* --- BLOQUE DE UBICACIÓN --- */
+  .location-prompt-card {
+      flex-direction: column !important; 
+      align-items: flex-start !important;
+      gap: 15px !important;
+      padding: 15px !important;
+      text-align: center !important;
+  }
+
+  .location-prompt-btn {
+      width: 100% !important;
+      text-align: center !important;
+      padding: 12px !important;
+  }
+
+  .register-form {
+      padding: 30px 20px !important;
+      margin: 0 !important;
+      text-align: center !important;
+  }
+
+  .register-title {
+      font-size: 35px !important;
+      text-align: center !important;
+  }
+
+  .register-subtitle {
+      font-size: 14px !important;
+      margin-bottom: 0px !important;
+      text-align: center !important;
+  }
+  
+  .register-container {
+      padding: 30px 15px;
+      align-items: center !important;
+  }
+}
