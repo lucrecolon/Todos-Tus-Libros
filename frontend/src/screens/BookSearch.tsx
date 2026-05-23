@@ -223,7 +223,7 @@ export const BookSearch = () => {
     };
 
     return (
-        <div className="search-page-container main-container">
+        <div className="search-page-container">
             
             {/* BARRA DE BUSQUEDA */}
             <div className="search-bar-wrapper">

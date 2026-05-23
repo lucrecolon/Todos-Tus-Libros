@@ -140,7 +140,7 @@ export const Novedades = () => {
     };
 
     return (
-        <div className="search-page-container main-container">
+        <div className="search-page-container">
             <div style={{ marginBottom: '30px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: '2px solid var(--text-muted)', paddingBottom: '10px' }}>
                 <h2 className="results-header" style={{ color: 'var(--text-dark)', margin: 0 }}>
                     Todas las novedades del mes

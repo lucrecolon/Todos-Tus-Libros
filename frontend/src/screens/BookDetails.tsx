@@ -92,7 +92,7 @@ export const BookDetails = () => {
             <div className="location-bar">
                 {ubicacionUsuario 
                     ? 'Mostrando librerías ordenadas por cercanía' 
-                    : 'Mostrando disponibilidad en todas las sucursales:'}
+                    : 'Mostrando disponibilidad en todas las sucursales'}
             </div>
 
             <div className="main-container">

@@ -84,7 +84,7 @@ export const User = () => {
     if (!perfil) return <h2 style={{ padding: '40px', textAlign: 'center' }}>No se pudo cargar la información.</h2>;
 
     return (
-        <div className="main-container" style={{ flexDirection: 'column' }}>
+        <div className="profile-container">
             <div className="profile-header">
                 <h1 className="book-title">Mi Cuenta</h1>
                 <button 
@@ -131,14 +131,14 @@ export const User = () => {
                             className="btn-add" 
                             onClick={() => setMostrandoFormulario(!mostrandoFormulario)}
                         >
-                            {mostrandoFormulario ? 'CANCELAR' : '+ AGREGAR DIRECCIÓN'}
+                            {mostrandoFormulario ? 'CANCELAR' : '+ AGREGAR'}
                         </button>
                     </div>
 
                     {mostrandoFormulario && (
                         <div className="profile-card" style={{ marginBottom: '30px', padding: '30px', background: 'var(--bg-white)', border: '1px solid var(--accent-bordeaux)', borderRadius: '4px' }}>
                             <form onSubmit={handleCrearDireccion} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                                <h4 style={{ fontFamily: 'Georgia', margin: '0 0 10px 0', fontSize: '18px' }}>Nueva dirección de entrega</h4>
+                                <h4 style={{ fontFamily: 'Georgia, serif', margin: '0 0 10px 0', fontSize: '18px' }}>Nueva dirección de entrega</h4>
                                 
                                 <input 
                                     className="search-input"

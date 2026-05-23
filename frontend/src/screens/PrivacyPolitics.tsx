@@ -1,7 +1,7 @@
 export const Privacy = () => {
 
     return (
-        <div className="main-container" style={{ display: 'block', maxWidth: '1000px', margin: '0 auto', padding: '40px 20px' }}>
+        <div className="privacy-container" style={{ display: 'block', maxWidth: '1000px', margin: '0 auto', padding: '40px 20px' }}>
             
             <h1 style={{ color: 'var(--text-dark)', fontFamily: 'Georgia, serif', marginBottom: '40px', fontSize: '2.5rem', textAlign: 'center' }}>
                 Políticas de Privacidad
