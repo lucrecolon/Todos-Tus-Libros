@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import { ConfirmModal } from './ConfirmModal';
 
 export const CartSidebar = () => {
     const { cartOpen, setCartOpen, cartItems, removeFromCart } = useCart();
     const navigate = useNavigate();
+
+    const [itemAEliminar, setItemAEliminar] = useState<any | null>(null);
 
     const groupedCart = cartItems.reduce((grupos, item) => {
         if (!grupos[item.libreria]) {
@@ -71,10 +74,7 @@ export const CartSidebar = () => {
                                             <span>{formatearPrecio(item.precio)}</span>
                                             
                                             <button className="remove-btn" 
-                                                onClick={() => {
-                                                    removeFromCart(item);
-                                                    mostrarToastEliminado(item.titulo);
-                                                }}
+                                                onClick={() => setItemAEliminar(item)}
                                                 title="Eliminar del carrito">
                                                     <svg 
                                                         xmlns="http://www.w3.org/2000/svg" 
@@ -120,6 +120,21 @@ export const CartSidebar = () => {
                     })
                 )}
             </div>
+
+            {itemAEliminar && (
+                <ConfirmModal 
+                    titulo="Quitar del carrito"
+                    mensaje={`¿Estás seguro de que querés eliminar "${itemAEliminar.titulo}" de tu selección?`}
+                    textoConfirmar="Eliminar"
+                    onCancel={() => setItemAEliminar(null)}
+                    onConfirm={() => {
+                        removeFromCart(itemAEliminar); 
+                        mostrarToastEliminado(itemAEliminar.titulo);
+                        setItemAEliminar(null);
+                    }}
+                />
+            )}
+
             <div className={`toast-notification ${toast.visible ? 'show' : ''}`}>
                 {toast.mensaje}
             </div>

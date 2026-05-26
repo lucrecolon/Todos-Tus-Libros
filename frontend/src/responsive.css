@@ -113,7 +113,11 @@
   }
 
   /* --- LAYOUTS GENERALES Y RESULTADOS --- */
-  .search-page-container,
+  .search-page-container{
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
   .novedades-section,
   .search-section,
   .main-container {
@@ -142,9 +146,8 @@
 
   .results-header {
     font-size: 24px;
-    padding-left: 15px;
     padding-right: 15px;
-    margin-top: 20px;
+    margin-top: 0px;
   }
 
   .results-list {
@@ -156,6 +159,7 @@
     max-width: 100%;
     height: auto;
     min-height: 300px;
+    
   }
 
   .list-header {
@@ -392,4 +396,4 @@
     padding: 20px 15px;
   }
 
-} /* ESTA ES LA ÚNICA LLAVE DE CIERRE QUE DEBE HABER AL FINAL */
+}

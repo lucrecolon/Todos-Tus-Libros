@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { obtenerPerfilUsuario, logoutUsuario, inicializarCSRF, agregarDireccion, obtenerPaises, obtenerProvincias, obtenerCiudades } from '../services/ultraService';
 import { useCart } from '../context/CartContext';
+import { ConfirmModal } from '../components/ConfirmModal';
 
 export const User = () => {
     const navigate = useNavigate();
@@ -11,6 +12,8 @@ export const User = () => {
     const [paises, setPaises] = useState<any[]>([]);
     const [provincias, setProvincias] = useState<any[]>([]);
     const [ciudades, setCiudades] = useState<any[]>([]);
+
+    const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 
     const { clearCart } = useCart();
     
@@ -91,12 +94,7 @@ export const User = () => {
                     className="logout-btn"
                     style={{ cursor: 'pointer' }}
                     onClick={async () => {
-                        await logoutUsuario(); 
-                        localStorage.removeItem('token');
-                        //remove csrftoken cookie by setting it expired
-                        document.cookie = 'csrftoken=; Max-Age=0; path=/;';
-                        clearCart();
-                        navigate('/');
+                        setMostrarConfirmacion(true);
                     }}
                 >
                     CERRAR SESIÓN
@@ -252,6 +250,22 @@ export const User = () => {
                         <div className="empty-state-prompt" style={{ textAlign: 'center', padding: '40px' }}>
                             <p>Aún no tenés direcciones guardadas en tu cuenta.</p>
                         </div>
+                    )}
+
+                    {mostrarConfirmacion && (
+                        <ConfirmModal 
+                            titulo="Cerrar sesión"
+                            mensaje="¿Estás seguro de que querés cerrar tu sesión?"
+                            textoConfirmar="Salir"
+                            onCancel={() => setMostrarConfirmacion(false)}
+                            onConfirm={async () => {
+                                await logoutUsuario(); 
+                                localStorage.removeItem('token');
+                                document.cookie = 'csrftoken=; Max-Age=0; path=/;';
+                                clearCart(); 
+                                window.location.href = '/';
+                            }}
+                        />
                     )}
                 </section>
             </div>

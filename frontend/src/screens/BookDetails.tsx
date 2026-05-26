@@ -95,7 +95,7 @@ export const BookDetails = () => {
                     : 'Mostrando disponibilidad en todas las sucursales'}
             </div>
 
-            <div className="main-container">
+            <div className="search-page-container">
                 {/* FICHA DEL LIBRO */}
                 <div className="book-details">
                     {libro.imagen_tapa ? (
@@ -124,7 +124,7 @@ export const BookDetails = () => {
                     <div className="list-header">
                         <h2>Opciones de compra</h2>
                     </div>
-                    {!ubicacionUsuario && (
+                    {(!ubicacionUsuario && libreriasConDistancia.length > 0) && (
                         <div className="location-prompt-card">
                             <div className="location-prompt-text">
                                 <h4>📍 Encontrá este libro más rápido</h4>

@@ -15,17 +15,23 @@ export const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
     const [loginPassword, setLoginPassword] = useState('');
     const [loginCargando, setLoginCargando] = useState(false);
 
+    const [errorMensaje, setErrorMensaje] = useState('');
 
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoginCargando(true);
+        setErrorMensaje('');
         try {
-            await loginUsuario(loginEmail, loginPassword);
+            const data = await loginUsuario(loginEmail, loginPassword);
+            localStorage.setItem('token', data.token);
+
             if (onLoginSuccess) onLoginSuccess();
             onClose();
+            
+            window.location.href = '/user/me';
         } catch (error) {
             console.error("Error iniciando sesión:", error);
-            alert("Error al iniciar sesión. Verificá tus datos.");
+            setErrorMensaje("Email o contraseña incorrectos. Revisá tus datos e intentá de nuevo.");
         } finally {
             setLoginCargando(false);
         }
@@ -71,6 +77,22 @@ export const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
                     <form className="auth-login-form" onSubmit={handleLoginSubmit}>
                         <h3 style={{ marginTop: 0, color: 'var(--text-dark)', fontFamily: 'Georgia, serif' }}>Iniciar Sesión</h3>
                         
+                        {errorMensaje && (
+                            <div style={{ 
+                                backgroundColor: '#fde8e8', 
+                                color: '#c53030', 
+                                padding: '12px', 
+                                borderRadius: '4px', 
+                                fontSize: '13px', 
+                                marginBottom: '20px', 
+                                border: '1px solid #f8b4b4',
+                                lineHeight: '1.4',
+                                textAlign: 'left'
+                            }}>
+                                ⚠️ {errorMensaje}
+                            </div>
+                        )}
+
                         <div className="form-group" style={{ marginBottom: '15px' }}>
                             <label className="form-label" style={{ color: 'var(--text-dark)' }}>Email</label>
                             <input 
@@ -100,7 +122,10 @@ export const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
                         <button 
                             type="button" 
                             style={{ background: 'none', border: 'none', color: 'var(--primary-green)', width: '100%', marginTop: '15px', cursor: 'pointer', textDecoration: 'underline' }}
-                            onClick={() => setVistaModal('opciones')}
+                            onClick={() => {
+                                setVistaModal('opciones');
+                                setErrorMensaje('');
+                            }}
                         >
                             Volver atrás
                         </button>
