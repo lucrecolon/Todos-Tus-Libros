@@ -6,8 +6,8 @@ export const Wishlist = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="main-container" style={{ flexDirection: 'column' }}>
-            <h1 className='title-h1'>Mis Favoritos</h1>
+        <div className="search-page-container" style={{ flexDirection: 'column' }}>
+            <h1 className='title-h1' style={{ marginBottom: '20px', borderBottom: '2px solid var(--text-muted)', paddingBottom: '10px' }}>Mis Favoritos</h1>
             
             {wishlist.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '50px', background: 'var(--bg-white)', borderRadius: '4px' }}>

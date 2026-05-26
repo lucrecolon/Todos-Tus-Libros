@@ -45,17 +45,19 @@ export const AuthModal = ({ onClose, onLoginSuccess }: AuthModalProps) => {
                         <p style={{ color: 'var(--text-muted)', marginBottom: '25px', textTransform: 'none' }}>
                             Para acceder a tu perfil y ver tu carrito, necesitás ingresar a tu cuenta.
                         </p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div>
                             <button 
-                                className="search-btn" 
-                                style={{ width: '100%', padding: '12px' }}
+                                className="login-btn" 
                                 onClick={() => setVistaModal('login')}
                             >
                                 INICIAR SESIÓN
                             </button>
+
+                            <div style={{ padding: '1px', color: 'var(--primary-green)', borderColor: 'var(--primary-green)' }}> </div>
+
                             <button 
-                                className="user-btn" 
-                                style={{ width: '100%', padding: '12px', color: 'var(--primary-green)', borderColor: 'var(--primary-green)' }}
+                                className="register-btn" 
+                                
                                 onClick={() => {
                                     onClose();
                                     navigate('/registro');

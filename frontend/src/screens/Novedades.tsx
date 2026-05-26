@@ -140,7 +140,7 @@ export const Novedades = () => {
     };
 
     return (
-        <div className="search-page-container main-container">
+        <div className="search-page-container">
             <div style={{ marginBottom: '30px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: '2px solid var(--text-muted)', paddingBottom: '10px' }}>
                 <h2 className="results-header" style={{ color: 'var(--text-dark)', margin: 0 }}>
                     Todas las novedades del mes
@@ -217,20 +217,9 @@ export const Novedades = () => {
 
                     {hayMasPaginas && (
                         <div style={{ textAlign: 'center', marginTop: '40px' }}>
-                            <button 
+                            <button className="load-more-btn"
                                 onClick={cargarMasLibros}
                                 disabled={cargandoMas}
-                                style={{
-                                    padding: '12px 30px',
-                                    backgroundColor: 'var(--bg-white)',
-                                    color: 'var(--text-dark)',
-                                    border: '1px solid var(--text-dark)',
-                                    borderRadius: '4px',
-                                    cursor: cargandoMas ? 'wait' : 'pointer',
-                                    fontWeight: 'bold',
-                                    transition: 'all 0.2s',
-                                    opacity: cargandoMas ? 0.6 : 1
-                                }}
                             >
                                 {cargandoMas ? 'CARGANDO...' : 'CARGAR MÁS LIBROS'}
                             </button>
