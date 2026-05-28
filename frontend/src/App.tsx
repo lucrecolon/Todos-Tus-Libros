@@ -45,8 +45,17 @@ function App() {
           </Routes>
           
           <footer>
-              <p>Ultra Gestión ® 2026. Impulsado por la red de gestión integral para librerías. <Link to="/privacidad" style={{ color: 'var(--text-light)', textDecoration: 'none' }}> Políticas de Privacidad. </Link> </p>
-          </footer>
+            <a 
+                href="https://ultragestion.com.ar" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                style={{ color: 'var(--text-light)', textDecoration: 'underline' }}
+            >
+                Ultra Gestión
+            </a>
+            , {new Date().getFullYear()}. Impulsado por la red de gestión integral para librerías.{' '}
+            {' '}<Link to="/privacidad" style={{ color: 'var(--text-light)', textDecoration: 'underline' }}>Políticas de Privacidad</Link>.
+        </footer>
         </BrowserRouter>
       </CartProvider>
     </WishlistProvider>

@@ -86,6 +86,8 @@ export const User = () => {
     if (cargando) return <h2 style={{ padding: '40px', textAlign: 'center' }}>Cargando tu perfil...</h2>;
     if (!perfil) return <h2 style={{ padding: '40px', textAlign: 'center' }}>No se pudo cargar la información.</h2>;
 
+    const existePrincipal = perfil.user_addresses?.some((dir: any) => dir.main);
+
     return (
         <div className="profile-container">
             <div className="profile-header">
@@ -103,7 +105,25 @@ export const User = () => {
 
             <div className="profile-content" style={{ width: '100%' }}>
                 <section className="profile-section" style={{ marginBottom: '50px' }}>
-                    <h3 className="profile-section-title">Datos Personales</h3>
+                    <div className="section-header-row">
+                        <h2 className="profile-section-title">Datos Personales</h2>
+                        <button 
+                            style={{ 
+                                color: 'var(--accent-bordeaux)', 
+                                background: 'transparent', 
+                                border: 'none', 
+                                cursor: 'pointer', 
+                                fontWeight: 'bold',
+                                fontSize: '12px'
+                            }}
+                            onClick={() => {
+                                // falta la logica para editar
+                                console.log("Editar datos"); 
+                            }}
+                        >
+                            <i className="bi bi-pencil-square" style={{ marginRight: '5px' }}></i> EDITAR
+                        </button>
+                    </div>
                     <div className="info-card">
                         <div className="info-group">
                             <span className="info-label">Nombre completo</span>
@@ -220,6 +240,20 @@ export const User = () => {
                                     />
                                     Definir como dirección principal
                                 </label>
+
+                                {nuevaDireccion.main && existePrincipal && (
+                                    <div style={{ 
+                                        color: '#c53030', 
+                                        backgroundColor: '#fde8e8', 
+                                        padding: '10px', 
+                                        borderRadius: '4px', 
+                                        fontSize: '13px', 
+                                        marginTop: '5px', 
+                                        border: '1px solid #f8b4b4' 
+                                    }}>
+                                        ⚠️ Ya tenés una dirección principal. Si continuás, la anterior pasará a ser secundaria.
+                                    </div>
+                                )}
                                 
                                 <button type="submit" className="search-btn" style={{ marginTop: '10px' }}>
                                     GUARDAR DIRECCIÓN
