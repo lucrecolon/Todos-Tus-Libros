@@ -321,6 +321,31 @@ export const actualizarPerfilUsuario = async (datosPerfil: any) => {
     }
 };
 
+export const modificarPerfil = async (datosPersonales: any) => {
+    const csrfToken = obtenerCookie('csrftoken');
+    try {
+        const response = await fetch(`${API_USUARIOS_URL}/user/me/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken || '',
+            },
+            credentials: 'include',
+            body: JSON.stringify(datosPersonales)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.detail || 'Error al modificar el perfil');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error en modificarPerfil:", error);
+        throw error;
+    }
+};
+
 export const obtenerPaises = async () => {
     const res = await fetch(`${API_USUARIOS_URL}/countries/`, { credentials: 'include' });
     return res.json();

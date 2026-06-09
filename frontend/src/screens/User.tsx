@@ -3,11 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { obtenerPerfilUsuario, logoutUsuario, inicializarCSRF, agregarDireccion, obtenerPaises, obtenerProvincias, obtenerCiudades, modificarDireccion, eliminarDireccion } from '../services/ultraService';
 import { useCart } from '../context/CartContext';
 import { ConfirmModal } from '../components/ConfirmModal';
+import { modificarPerfil } from '../services/ultraService';
 
 export const User = () => {
     const navigate = useNavigate();
     const [perfil, setPerfil] = useState<any>(null);
     const [cargando, setCargando] = useState(true);
+
+    const [editandoPerfil, setEditandoPerfil] = useState(false);
+    const [datosPerfil, setDatosPerfil] = useState({
+        first_name: '',
+        last_name: '',
+        birth_date: ''
+    });
 
     const [paises, setPaises] = useState<any[]>([]);
     const [provincias, setProvincias] = useState<any[]>([]);
@@ -16,6 +24,9 @@ export const User = () => {
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 
     const [direccionAEliminar, setDireccionAEliminar] = useState<any | null>(null);
+
+    const [mostrarToast, setMostrarToast] = useState(false);
+    const [toastMensaje, setToastMensaje] = useState("");
 
     const { clearCart } = useCart();
     
@@ -111,6 +122,30 @@ export const User = () => {
         }
     };
 
+    const handleGuardarPerfil = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!hayCambios) return;
+
+        try {
+            await modificarPerfil(datosPerfil);
+            
+            const datosActualizados = await obtenerPerfilUsuario();
+            setPerfil(datosActualizados);
+            
+            setEditandoPerfil(false);
+            mostrarNotificacion("Datos personales actualizados correctamente.");
+        } catch (error) {
+            alert("Hubo un problema al actualizar tus datos.");
+        }
+    };
+
+    const mostrarNotificacion = (mensaje: string) => {
+        setToastMensaje(mensaje);
+        setMostrarToast(true);
+        setTimeout(() => setMostrarToast(false), 3000);
+    };
+
     const prepararEdicion = async (dir: any) => {
         if (dir.country?.id) {
             const provinciasData = await obtenerProvincias(Number(dir.country.id));
@@ -140,6 +175,11 @@ export const User = () => {
     if (cargando) return <h2 style={{ padding: '40px', textAlign: 'center' }}>Cargando tu perfil...</h2>;
     if (!perfil) return <h2 style={{ padding: '40px', textAlign: 'center' }}>No se pudo cargar la información.</h2>;
 
+    const hayCambios = 
+        datosPerfil.first_name !== (perfil.first_name || '') ||
+        datosPerfil.last_name !== (perfil.last_name || '') ||
+        datosPerfil.birth_date !== (perfil.birth_date || '');
+
     const existePrincipal = perfil.user_addresses?.some((dir: any) => dir.main);
 
     return (
@@ -159,41 +199,109 @@ export const User = () => {
 
             <div className="profile-content" style={{ width: '100%' }}>
                 <section className="profile-section" style={{ marginBottom: '50px' }}>
-                    <div className="section-header-row">
-                        <h2 className="profile-section-title">Datos Personales</h2>
-                        <button 
-                            style={{ 
-                                color: 'var(--accent-bordeaux)', 
-                                background: 'transparent', 
-                                border: 'none', 
-                                cursor: 'pointer', 
-                                fontWeight: 'bold',
-                                fontSize: '12px'
-                            }}
-                            onClick={() => {
-                                // falta la logica para editar
-                                console.log("Editar datos"); 
-                            }}
-                        >
-                            <i className="bi bi-pencil-square" style={{ marginRight: '5px' }}></i> EDITAR
-                        </button>
+                    <div className="section-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h2 className="profile-section-title" style={{ margin: 0 }}>Datos Personales</h2>
+                        
+                        {!editandoPerfil && (
+                            <button 
+                                style={{ 
+                                    color: 'var(--accent-bordeaux)', 
+                                    background: 'transparent', 
+                                    border: 'none', 
+                                    cursor: 'pointer', 
+                                    fontWeight: 'bold',
+                                    fontSize: '12px'
+                                }}
+                                onClick={() => {
+                                    setDatosPerfil({
+                                        first_name: perfil.first_name || '',
+                                        last_name: perfil.last_name || '',
+                                        birth_date: perfil.birth_date || ''
+                                    });
+                                    setEditandoPerfil(true);
+                                }}
+                            >
+                                <i className="bi bi-pencil-square" style={{ marginRight: '5px' }}></i> EDITAR
+                            </button>
+                        )}
                     </div>
-                    <div className="info-card">
-                        <div className="info-group">
-                            <span className="info-label">Nombre completo</span>
-                            <span className="info-value" style={{ textTransform: 'capitalize' }}>
-                                {perfil.first_name} {perfil.last_name}
-                            </span>
+
+                    {editandoPerfil ? (
+                        <form onSubmit={handleGuardarPerfil} className="profile-card" style={{ padding: '20px', marginTop: '15px', background: 'var(--bg-white)', border: '1px solid var(--border-color)', borderRadius: '4px' }}>
+                            <div style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
+                                <div style={{ flex: 1 }}>
+                                    <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '5px' }}>Nombre</label>
+                                    <input 
+                                        type="text" 
+                                        className="search-input" 
+                                        value={datosPerfil.first_name} 
+                                        onChange={(e) => setDatosPerfil({...datosPerfil, first_name: e.target.value})} 
+                                        required 
+                                    />
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '5px' }}>Apellido</label>
+                                    <input 
+                                        type="text" 
+                                        className="search-input" 
+                                        value={datosPerfil.last_name} 
+                                        onChange={(e) => setDatosPerfil({...datosPerfil, last_name: e.target.value})} 
+                                        required 
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div style={{ marginBottom: '20px' }}>
+                                <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '5px' }}>Fecha de Nacimiento</label>
+                                <input 
+                                    type="date" 
+                                    className="search-input" 
+                                    value={datosPerfil.birth_date} 
+                                    onChange={(e) => setDatosPerfil({...datosPerfil, birth_date: e.target.value})} 
+                                />
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                                <button 
+                                    type="button" 
+                                    onClick={() => setEditandoPerfil(false)} 
+                                    style={{ padding: '8px 15px', background: 'transparent', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer' }}
+                                >
+                                    Cancelar
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className="search-btn" 
+                                    disabled={!hayCambios}
+                                    style={{ 
+                                        padding: '8px 15px', 
+                                        width: 'auto',
+                                        opacity: hayCambios ? 1 : 0.5,
+                                        cursor: hayCambios ? 'pointer' : 'not-allowed'
+                                    }}
+                                >
+                                    Guardar Cambios
+                                </button>
+                            </div>
+                        </form>
+                    ) : (
+                        <div className="info-card" style={{ marginTop: '15px' }}>
+                            <div className="info-group">
+                                <span className="info-label">Nombre completo</span>
+                                <span className="info-value" style={{ textTransform: 'capitalize' }}>
+                                    {perfil.first_name} {perfil.last_name}
+                                </span>
+                            </div>
+                            <div className="info-group">
+                                <span className="info-label">Email</span>
+                                <span className="info-value">{perfil.email}</span>
+                            </div>
+                            <div className="info-group">
+                                <span className="info-label">Fecha de nacimiento</span>
+                                <span className="info-value">{perfil.birth_date || 'No especificada'}</span>
+                            </div>
                         </div>
-                        <div className="info-group">
-                            <span className="info-label">Email</span>
-                            <span className="info-value">{perfil.email}</span>
-                        </div>
-                        <div className="info-group">
-                            <span className="info-label">Fecha de nacimiento</span>
-                            <span className="info-value">{perfil.birth_date || 'No especificada'}</span>
-                        </div>
-                    </div>
+                    )}
                 </section>
 
                 <section className="profile-section">
@@ -380,6 +488,11 @@ export const User = () => {
                             }}
                         />
                     )}
+                    <div 
+                        className={`toast-notification ${mostrarToast ? 'show' : ''}`}>
+                        <i className="bi bi-check-circle-fill" style={{ marginRight: '8px' }}></i>
+                        {toastMensaje}
+                    </div>
                 </section>
             </div>
             {direccionAEliminar && (
