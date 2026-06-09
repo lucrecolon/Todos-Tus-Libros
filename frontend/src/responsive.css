@@ -119,9 +119,29 @@
   }
 
   .novedades-section,
-  .search-section,
-  .main-container {
+  .search-section {
     padding: 30px 15px;
+  }
+
+  .main-container {
+    flex-direction: column !important;
+    padding: 30px 15px !important;
+    gap: 30px !important;
+  }
+
+  .book-details {
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .bookstores-list {
+    flex: none !important;
+    width: 100% !important;
+  }
+  
+  .book-cover {
+    margin: 0 auto 20px auto !important;
   }
 
   .search-title {
@@ -151,7 +171,7 @@
   }
 
   .results-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   /* --- DETALLES DEL LIBRO --- */

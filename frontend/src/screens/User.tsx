@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { obtenerPerfilUsuario, logoutUsuario, inicializarCSRF, agregarDireccion, obtenerPaises, obtenerProvincias, obtenerCiudades } from '../services/ultraService';
+import { obtenerPerfilUsuario, logoutUsuario, inicializarCSRF, agregarDireccion, obtenerPaises, obtenerProvincias, obtenerCiudades, modificarDireccion, eliminarDireccion } from '../services/ultraService';
 import { useCart } from '../context/CartContext';
 import { ConfirmModal } from '../components/ConfirmModal';
 
@@ -15,10 +15,22 @@ export const User = () => {
 
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 
+    const [direccionAEliminar, setDireccionAEliminar] = useState<any | null>(null);
+
     const { clearCart } = useCart();
     
     const [mostrandoFormulario, setMostrandoFormulario] = useState(false);
-    const [nuevaDireccion, setNuevaDireccion] = useState({
+    const [nuevaDireccion, setNuevaDireccion] = useState<{
+        id?: number;
+        street: string;
+        number: string;
+        door: string;
+        postal_code: string;
+        main: boolean;
+        country_id: string;
+        state_id: string;
+        city_id: string;
+    }>({
         street: '',
         number: '',
         door: '',
@@ -65,22 +77,64 @@ export const User = () => {
     const handleCrearDireccion = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await agregarDireccion({
+            const payloadDireccion = {
                 ...nuevaDireccion,
                 city: null,
                 state: null,
                 country: null
-            });
+            };
+
+            if (nuevaDireccion.id) {
+                await modificarDireccion(nuevaDireccion.id, payloadDireccion);
+            } else {
+                await agregarDireccion(payloadDireccion);
+            }
             
             const datosActualizados = await obtenerPerfilUsuario();
             setPerfil(datosActualizados);
             
             setMostrandoFormulario(false);
-            setNuevaDireccion({ street: '', number: '', door: '', postal_code: '', main: false, country_id: '', state_id: '', city_id: '' });
+            setNuevaDireccion({ 
+                street: '', 
+                number: '', 
+                door: '', 
+                postal_code: '', 
+                main: false, 
+                country_id: '', 
+                state_id: '', 
+                city_id: '' 
+            });
             
         } catch (error) {
-            alert('Hubo un problema al crear la dirección. Revisá la consola.');
+            console.error("Error al procesar la dirección:", error);
+            alert('Hubo un problema al guardar la dirección. Revisá la consola.');
         }
+    };
+
+    const prepararEdicion = async (dir: any) => {
+        if (dir.country?.id) {
+            const provinciasData = await obtenerProvincias(Number(dir.country.id));
+            setProvincias(provinciasData);
+        }
+
+        if (dir.state?.id) {
+            const ciudadesData = await obtenerCiudades(Number(dir.state.id));
+            setCiudades(ciudadesData);
+        }
+
+        setNuevaDireccion({
+            id: dir.id,
+            street: dir.street,
+            number: dir.number,
+            door: dir.door || '',
+            postal_code: dir.postal_code,
+            main: dir.main,
+            country_id: dir.country?.id || '',
+            state_id: dir.state?.id || '',
+            city_id: dir.city?.id || ''
+        });
+        
+        setMostrandoFormulario(true);
     };
 
     if (cargando) return <h2 style={{ padding: '40px', textAlign: 'center' }}>Cargando tu perfil...</h2>;
@@ -156,13 +210,17 @@ export const User = () => {
                     {mostrandoFormulario && (
                         <div className="profile-card" style={{ marginBottom: '30px', padding: '30px', background: 'var(--bg-white)', border: '1px solid var(--accent-bordeaux)', borderRadius: '4px' }}>
                             <form onSubmit={handleCrearDireccion} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                                <h4 style={{ fontFamily: 'Georgia, serif', margin: '0 0 10px 0', fontSize: '18px' }}>Nueva dirección de entrega</h4>
+                                <h4>{nuevaDireccion.id ? 'Editar dirección' : 'Nueva dirección de entrega'}</h4>
                                 
                                 <input 
                                     className="search-input"
                                     type="text" 
                                     placeholder="Calle" 
                                     required
+                                    minLength={3}
+                                    maxLength={100}
+                                    pattern="[A-Za-zÀ-ÿ0-9\s\.\-]+"
+                                    title="Ingresá un nombre de calle válido (mínimo 3 letras)"
                                     value={nuevaDireccion.street}
                                     onChange={(e) => setNuevaDireccion({...nuevaDireccion, street: e.target.value})}
                                 />
@@ -173,8 +231,11 @@ export const User = () => {
                                         type="text" 
                                         placeholder="Número" 
                                         required
+                                        maxLength={6}
+                                        pattern="[0-9]+"
+                                        title="Ingresá solo números para la altura"
                                         value={nuevaDireccion.number}
-                                        onChange={(e) => setNuevaDireccion({...nuevaDireccion, number: e.target.value})}
+                                        onChange={(e) => setNuevaDireccion({...nuevaDireccion, number: e.target.value.replace(/[^0-9]/g, '')})}
                                         style={{ flex: 1 }}
                                     />
                                     <input 
@@ -228,8 +289,12 @@ export const User = () => {
                                     type="text" 
                                     placeholder="Código Postal" 
                                     required
+                                    minLength={4}
+                                    maxLength={8}
+                                    pattern="[A-Za-z0-9]+"
+                                    title="Ingresá un código postal válido sin espacios"
                                     value={nuevaDireccion.postal_code}
-                                    onChange={(e) => setNuevaDireccion({...nuevaDireccion, postal_code: e.target.value})}
+                                    onChange={(e) => setNuevaDireccion({...nuevaDireccion, postal_code: e.target.value.trim()})}
                                 />
                                 
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#596a7b', marginTop: '5px' }}>
@@ -277,6 +342,20 @@ export const User = () => {
                                     <p className="address-detail" style={{ textTransform: 'capitalize', color: 'var(--primary-green)', fontWeight: '500', margin: 0 }}>
                                         {dir.city?.name || 'Localidad'}, {dir.state?.name || 'Provincia'}, {dir.country?.name || 'País'}
                                     </p>
+                                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', marginTop: '15px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
+                                        <button 
+                                            style={{ background: 'none', border: 'none', color: 'var(--primary-green)', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}
+                                            onClick={() => prepararEdicion(dir)}
+                                        >
+                                            <i className="bi bi-pencil"></i> Editar
+                                        </button>
+                                        <button 
+                                            style={{ background: 'none', border: 'none', color: 'var(--accent-bordeaux)', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}
+                                            onClick={() => setDireccionAEliminar(dir)}
+                                        >
+                                            <i className="bi bi-trash"></i> Eliminar
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -303,5 +382,21 @@ export const User = () => {
                     )}
                 </section>
             </div>
+            {direccionAEliminar && (
+                <ConfirmModal 
+                    titulo="Eliminar dirección"
+                    mensaje={`¿Estás seguro de que querés borrar la dirección "${direccionAEliminar.street} ${direccionAEliminar.number}"? Esta acción no se puede deshacer.`}
+                    textoConfirmar="Eliminar"
+                    onCancel={() => setDireccionAEliminar(null)}
+                    onConfirm={async () => {
+                        try {
+                            await eliminarDireccion(direccionAEliminar.id);
+                            window.location.href = '/user/me';
+                        } catch (error) {
+                            console.error("Error borrando dirección", error);
+                        }
+                    }}
+                />
+            )}
         </div>
     )};

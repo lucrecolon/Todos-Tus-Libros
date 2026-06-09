@@ -95,7 +95,7 @@ export const BookDetails = () => {
                     : 'Mostrando disponibilidad en todas las sucursales'}
             </div>
 
-            <div className="search-page-container">
+            <div className="main-container">
                 {/* FICHA DEL LIBRO */}
                 <div className="book-details">
                     {libro.imagen_tapa ? (
