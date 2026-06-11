@@ -139,7 +139,7 @@ export const User = () => {
             alert("Hubo un problema al eliminar la dirección.");
         }
     };
-ñ
+
     const handleGuardarPerfil = async (e: React.FormEvent) => {
         e.preventDefault();
 

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Home } from './screens/Home';
 import { BookDetails } from './screens/BookDetails';
@@ -55,7 +55,7 @@ function App() {
             </a>
             , {new Date().getFullYear()}. Impulsado por la red de gestión integral para librerías.{' '}
             {' '}
-            <Link to="/privacidad" style={{ color: 'var(--text-light)', textDecoration: 'underline' }}>Políticas de Privacidad</Link>.
+            <a href="/privacidad" style={{ color: 'var(--text-light)', textDecoration: 'underline' }}>Políticas de Privacidad</a>.
         </footer>
         </BrowserRouter>
       </CartProvider>

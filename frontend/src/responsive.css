@@ -171,7 +171,7 @@
   }
 
   .results-list {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 2fr !important;
   }
 
   /* --- DETALLES DEL LIBRO --- */
