@@ -54,7 +54,8 @@ function App() {
                 Ultra Gestión
             </a>
             , {new Date().getFullYear()}. Impulsado por la red de gestión integral para librerías.{' '}
-            {' '}<Link to="/privacidad" style={{ color: 'var(--text-light)', textDecoration: 'underline' }}>Políticas de Privacidad</Link>.
+            {' '}
+            <Link to="/privacidad" style={{ color: 'var(--text-light)', textDecoration: 'underline' }}>Políticas de Privacidad</Link>.
         </footer>
         </BrowserRouter>
       </CartProvider>

@@ -115,13 +115,31 @@ export const User = () => {
                 state_id: '', 
                 city_id: '' 
             });
-            
+
+            mostrarNotificacion(
+                nuevaDireccion.id ? "¡Dirección actualizada correctamente!" : "¡Nueva dirección agregada!"
+            );
         } catch (error) {
             console.error("Error al procesar la dirección:", error);
             alert('Hubo un problema al guardar la dirección. Revisá la consola.');
         }
     };
 
+    const handleEliminarDireccion = async () => {
+        if (!direccionAEliminar) return; 
+        try {
+            await eliminarDireccion(direccionAEliminar.id);
+            const datosActualizados = await obtenerPerfilUsuario();
+            setPerfil(datosActualizados);
+            setDireccionAEliminar(null);
+            mostrarNotificacion("¡Dirección eliminada exitosamente!");
+            navigate('/user/me', { replace: true });
+        } catch (error) {
+            console.error("Error borrando dirección:", error);
+            alert("Hubo un problema al eliminar la dirección.");
+        }
+    };
+ñ
     const handleGuardarPerfil = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -134,7 +152,7 @@ export const User = () => {
             setPerfil(datosActualizados);
             
             setEditandoPerfil(false);
-            mostrarNotificacion("Datos personales actualizados correctamente.");
+            mostrarNotificacion("¡Datos personales actualizados correctamente!");
         } catch (error) {
             alert("Hubo un problema al actualizar tus datos.");
         }
@@ -501,14 +519,7 @@ export const User = () => {
                     mensaje={`¿Estás seguro de que querés borrar la dirección "${direccionAEliminar.street} ${direccionAEliminar.number}"? Esta acción no se puede deshacer.`}
                     textoConfirmar="Eliminar"
                     onCancel={() => setDireccionAEliminar(null)}
-                    onConfirm={async () => {
-                        try {
-                            await eliminarDireccion(direccionAEliminar.id);
-                            window.location.href = '/user/me';
-                        } catch (error) {
-                            console.error("Error borrando dirección", error);
-                        }
-                    }}
+                    onConfirm={handleEliminarDireccion} 
                 />
             )}
         </div>
