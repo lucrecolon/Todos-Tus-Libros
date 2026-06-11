@@ -113,11 +113,35 @@
   }
 
   /* --- LAYOUTS GENERALES Y RESULTADOS --- */
-  .search-page-container,
+  .search-page-container{
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
   .novedades-section,
-  .search-section,
-  .main-container {
+  .search-section {
     padding: 30px 15px;
+  }
+
+  .main-container {
+    flex-direction: column !important;
+    padding: 30px 15px !important;
+    gap: 30px !important;
+  }
+
+  .book-details {
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .bookstores-list {
+    flex: none !important;
+    width: 100% !important;
+  }
+  
+  .book-cover {
+    margin: 0 auto 20px auto !important;
   }
 
   .search-title {
@@ -142,13 +166,12 @@
 
   .results-header {
     font-size: 24px;
-    padding-left: 15px;
     padding-right: 15px;
-    margin-top: 20px;
+    margin-top: 0px;
   }
 
   .results-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: 2fr !important;
   }
 
   /* --- DETALLES DEL LIBRO --- */
@@ -156,6 +179,7 @@
     max-width: 100%;
     height: auto;
     min-height: 300px;
+    
   }
 
   .list-header {
@@ -392,4 +416,4 @@
     padding: 20px 15px;
   }
 
-} /* ESTA ES LA ÚNICA LLAVE DE CIERRE QUE DEBE HABER AL FINAL */
+}

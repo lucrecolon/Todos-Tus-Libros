@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Home } from './screens/Home';
 import { BookDetails } from './screens/BookDetails';
@@ -45,8 +45,18 @@ function App() {
           </Routes>
           
           <footer>
-              <p>Ultra Gestión ® 2026. Impulsado por la red de gestión integral para librerías. <Link to="/privacidad" style={{ color: 'var(--text-light)', textDecoration: 'none' }}> Políticas de Privacidad. </Link> </p>
-          </footer>
+            <a 
+                href="https://ultragestion.com.ar" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                style={{ color: 'var(--text-light)', textDecoration: 'underline' }}
+            >
+                Ultra Gestión
+            </a>
+            , {new Date().getFullYear()}. Impulsado por la red de gestión integral para librerías.{' '}
+            {' '}
+            <a href="/privacidad" style={{ color: 'var(--text-light)', textDecoration: 'underline' }}>Políticas de Privacidad</a>.
+        </footer>
         </BrowserRouter>
       </CartProvider>
     </WishlistProvider>

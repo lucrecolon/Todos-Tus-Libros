@@ -20,7 +20,7 @@ export const Register = () => {
         
         try {
             await registrarUsuarioBase(email, password);
-            console.log('¡Usuario base creado con éxito!');
+            console.log('¡Usuario creado con éxito!');
 
             await loginUsuario(email, password);
             console.log('¡Sesión iniciada automáticamente!');

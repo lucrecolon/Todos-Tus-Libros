@@ -247,6 +247,55 @@ export const agregarDireccion = async (direccionData: any) => {
     }
 };
 
+export const modificarDireccion = async (id: number, direccionData: any) => {
+    const csrfToken = obtenerCookie('csrftoken');
+
+    try {
+        const response = await fetch(`${API_USUARIOS_URL}/user/address/${id}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken || '',
+            },
+            credentials: 'include',
+            body: JSON.stringify(direccionData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.detail || 'Error al modificar la dirección');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error en modificarDireccion:", error);
+        throw error;
+    }
+};
+
+export const eliminarDireccion = async (id: number) => {
+    const csrfToken = obtenerCookie('csrftoken');
+
+    try {
+        const response = await fetch(`${API_USUARIOS_URL}/user/address/${id}/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': csrfToken || '',
+            },
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.detail || 'Error al eliminar la dirección');
+        }
+        return true; 
+    } catch (error) {
+        console.error("Error en eliminarDireccion:", error);
+        throw error;
+    }
+};
+
 export const actualizarPerfilUsuario = async (datosPerfil: any) => {
     const csrfToken = obtenerCookie('csrftoken');
 
@@ -268,6 +317,31 @@ export const actualizarPerfilUsuario = async (datosPerfil: any) => {
         return await response.json();
     } catch (error) {
         console.error("Error en actualizarPerfilUsuario:", error);
+        throw error;
+    }
+};
+
+export const modificarPerfil = async (datosPersonales: any) => {
+    const csrfToken = obtenerCookie('csrftoken');
+    try {
+        const response = await fetch(`${API_USUARIOS_URL}/user/me/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken || '',
+            },
+            credentials: 'include',
+            body: JSON.stringify(datosPersonales)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.detail || 'Error al modificar el perfil');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error en modificarPerfil:", error);
         throw error;
     }
 };

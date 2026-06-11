@@ -124,7 +124,7 @@ export const BookDetails = () => {
                     <div className="list-header">
                         <h2>Opciones de compra</h2>
                     </div>
-                    {!ubicacionUsuario && (
+                    {(!ubicacionUsuario && libreriasConDistancia.length > 0) && (
                         <div className="location-prompt-card">
                             <div className="location-prompt-text">
                                 <h4>📍 Encontrá este libro más rápido</h4>
