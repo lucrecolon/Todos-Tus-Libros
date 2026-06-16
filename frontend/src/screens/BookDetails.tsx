@@ -6,6 +6,9 @@ import { useCart } from '../context/CartContext';
 import libreriasLocal from '../data/librerias.json';
 import { calcularDistancia } from '../utils/utils';
 import { AuthModal } from '../components/AuthModal';
+import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
+import { obtenerPerfilUsuario } from '../services/ultraService';
 
 export const BookDetails = () => {
     const { ean } = useParams(); 
@@ -19,6 +22,11 @@ export const BookDetails = () => {
     const [ubicacionUsuario, setUbicacionUsuario] = useState<{lat: number, lng: number} | null>(null);
 
     const [mostrarModalAuth, setMostrarModalAuth] = useState(false);
+
+    const navigate = useNavigate();
+    const [perfil, setPerfil] = useState<any>(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [opcionSeleccionada, setOpcionSeleccionada] = useState<any>(null);
 
     const mostrarToast = (tituloLibro: string) => {
         setToast({ visible: true, mensaje: `"${tituloLibro}" agregado al carrito` });
@@ -49,6 +57,17 @@ export const BookDetails = () => {
             if (ean) {
                 const datos = await buscarLibroPorEan(ean);
                 setLibro(datos);
+            }
+            
+            const token = document.cookie.includes('csrftoken');
+            if (token) {
+                try {
+                    const userProfile = await obtenerPerfilUsuario();
+                    setPerfil(userProfile);
+                    setIsLoggedIn(true);
+                } catch (e) {
+                    setIsLoggedIn(false);
+                }
             }
             setCargando(false);
         };
@@ -87,6 +106,36 @@ export const BookDetails = () => {
         return a.distancia - b.distancia;
     });
 
+    // Filtramos solo las direcciones que tienen coordenadas y armamos las opciones
+    const opcionesUbicacion = [
+        { value: 'gps', label: '📍 Usar mi ubicación actual' },
+        ...(perfil?.user_addresses || [])
+            .filter((dir: any) => dir.latitude && dir.longitude)
+            .map((dir: any) => ({
+                value: dir.id,
+                label: `🏠 ${dir.street} ${dir.number}${dir.main ? ' (Principal)' : ''}`
+            })),
+        { value: 'add_new', label: '➕ Agregar nueva dirección...' }
+    ];
+
+    const handleUbicacionChange = (option: any) => {
+        setOpcionSeleccionada(option);
+        
+        if (option.value === 'gps') {
+            pedirUbicacion();
+        } else if (option.value === 'add_new') {
+            navigate('/user/me?add=true');
+        } else {
+            const dir = perfil?.user_addresses.find((d: any) => d.id === option.value);
+            if (dir && dir.latitude && dir.longitude) {
+                setUbicacionUsuario({
+                    lat: dir.latitude,
+                    lng: dir.longitude
+                });
+            }
+        }
+    };
+
     return (
         <>
             <div className="location-bar">
@@ -124,19 +173,48 @@ export const BookDetails = () => {
                     <div className="list-header">
                         <h2>Opciones de compra</h2>
                     </div>
-                    {(!ubicacionUsuario && libreriasConDistancia.length > 0) && (
-                        <div className="location-prompt-card">
-                            <div className="location-prompt-text">
-                                <h4>📍 Encontrá este libro más rápido</h4>
-                                <p>
-                                    Permitinos ver tu ubicación para ordenar la lista con las librerías más cercanas
+                    {/* LÓGICA DEL SELECTOR DE UBICACIÓN */}
+                    <div style={{ marginBottom: '25px', padding: '20px', background: '#e8f5e9', borderRadius: '6px', border: '1px solid #c8e6c9;' }}>
+                        <h4 style={{ margin: '0 0 10px 0', color: 'var(--primary-green)' }}>📍 Encontrá este libro más rápido</h4>
+                        
+                        {!isLoggedIn ? (
+                            <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
+                                <p style={{ margin: 0, flex: 1, fontSize: '14px', color: 'var(--text-muted)' }}>
+                                    Ordená las librerías por cercanía usando tu ubicación actual o tus direcciones guardadas.
                                 </p>
+                                <button className="search-btn" onClick={pedirUbicacion} style={{ padding: '8px 15px', width: 'auto' }}>
+                                    USAR MI UBICACIÓN
+                                </button>
+                                <button className="login-btn" onClick={() => setMostrarModalAuth(true)} style={{ padding: '8px 15px', width: 'auto', fontWeight: 'bold' }}>
+                                    INICIAR SESIÓN
+                                </button>
                             </div>
-                            <button className="location-prompt-btn" onClick={pedirUbicacion}>
-                                Ver librerías cercanas
-                            </button>
-                        </div>
-                    )}
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>
+                                    Seleccioná un punto de referencia para calcular la distancia:
+                                </p>
+                                <Select 
+                                    options={opcionesUbicacion}
+                                    value={opcionSeleccionada}
+                                    onChange={handleUbicacionChange}
+                                    placeholder="Elegí tu ubicación o dirección de entrega..."
+                                    isSearchable={false}
+                                    menuPosition="fixed"
+                                    styles={{
+                                        control: (base: any) => ({
+                                            ...base,
+                                            minHeight: '42px',
+                                            borderColor: 'var(--border-color)',
+                                            boxShadow: 'none',
+                                            '&:hover': { borderColor: 'var(--primary-green)' }
+                                        }),
+                                        menu: (base: any) => ({ ...base, zIndex: 9999 })
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </div>
 
                     {libreriasOrdenadas.length === 0 ? (
                         <p>No hay librerías con stock disponible en este momento.</p>

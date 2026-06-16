@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { obtenerPerfilUsuario, logoutUsuario, inicializarCSRF, agregarDireccion, obtenerPaises, obtenerProvincias, obtenerCiudades, modificarDireccion, eliminarDireccion, modificarPerfil } from '../services/ultraService';
 import { useCart } from '../context/CartContext';
 import { ConfirmModal } from '../components/ConfirmModal';
@@ -10,6 +10,8 @@ export const User = () => {
     const navigate = useNavigate();
     const [perfil, setPerfil] = useState<any>(null);
     const [cargando, setCargando] = useState(true);
+
+    const [searchParams] = useSearchParams();
 
     const [editandoPerfil, setEditandoPerfil] = useState(false);
     const [datosPerfil, setDatosPerfil] = useState({
@@ -56,6 +58,12 @@ export const User = () => {
     useEffect(() => {
         obtenerPaises().then(setPaises);
     }, []);
+
+    useEffect(() => {
+        if (searchParams.get('add') === 'true') {
+            setMostrandoFormulario(true);
+        }
+    }, [searchParams]);
 
     const cambiarPais = async (id: string) => {
         setNuevaDireccion({...nuevaDireccion, country_id: id, state_id: '', city_id: ''});
