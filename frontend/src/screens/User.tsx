@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { obtenerPerfilUsuario, logoutUsuario, inicializarCSRF, agregarDireccion, obtenerPaises, obtenerProvincias, obtenerCiudades, modificarDireccion, eliminarDireccion, modificarPerfil } from '../services/ultraService';
+import { obtenerPerfilUsuario, logoutUsuario, inicializarCSRF, agregarDireccion, obtenerPaises, obtenerProvincias, modificarDireccion, eliminarDireccion, modificarPerfil } from '../services/ultraService';
 import { useCart } from '../context/CartContext';
 import { ConfirmModal } from '../components/ConfirmModal';
 import { obtenerCoordenadas } from '../services/geoService';
 import { AddressForm } from '../components/AddressForm';
 
-export const User = () => {
+export const User = () => { 
     const navigate = useNavigate();
     const [perfil, setPerfil] = useState<any>(null);
     const [cargando, setCargando] = useState(true);
@@ -22,7 +22,6 @@ export const User = () => {
 
     const [paises, setPaises] = useState<any[]>([]);
     const [provincias, setProvincias] = useState<any[]>([]);
-    const [ciudades, setCiudades] = useState<any[]>([]);
 
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 
@@ -43,7 +42,7 @@ export const User = () => {
         main: boolean;
         country_id: string;
         state_id: string;
-        city_id: string;
+        city: string;
     }>({
         street: '',
         number: '',
@@ -52,7 +51,7 @@ export const User = () => {
         main: false,
         country_id: '',
         state_id: '',
-        city_id: ''
+        city: ''
     });
 
     useEffect(() => {
@@ -66,16 +65,13 @@ export const User = () => {
     }, [searchParams]);
 
     const cambiarPais = async (id: string) => {
-        setNuevaDireccion({...nuevaDireccion, country_id: id, state_id: '', city_id: ''});
+        setNuevaDireccion({...nuevaDireccion, country_id: id, state_id: '', city: ''});
         const data = await obtenerProvincias(Number(id));
         setProvincias(data);
-        setCiudades([]);
     };
 
     const cambiarProvincia = async (id: string) => {
-        setNuevaDireccion({...nuevaDireccion, state_id: id, city_id: ''});
-        const data = await obtenerCiudades(Number(id));
-        setCiudades(data);
+        setNuevaDireccion({...nuevaDireccion, state_id: id});
     };
 
     useEffect(() => {
@@ -110,7 +106,6 @@ export const User = () => {
 
             const payloadDireccion = {
                 ...nuevaDireccion,
-                city: null,
                 state: null,
                 country: null,
                 latitude: coordenadas?.latitude || null,
@@ -129,7 +124,7 @@ export const User = () => {
             setMostrandoFormulario(false);
             setNuevaDireccion({ 
                 street: '', number: '', door: '', postal_code: '', 
-                main: false, country_id: '', state_id: '', city_id: '' 
+                main: false, country_id: '', state_id: '', city: '' 
             });
 
             mostrarNotificacion(
@@ -186,11 +181,6 @@ export const User = () => {
             setProvincias(provinciasData);
         }
 
-        if (dir.state?.id) {
-            const ciudadesData = await obtenerCiudades(Number(dir.state.id));
-            setCiudades(ciudadesData);
-        }
-
         setNuevaDireccion({
             id: dir.id,
             street: dir.street,
@@ -200,7 +190,7 @@ export const User = () => {
             main: dir.main,
             country_id: dir.country?.id || '',
             state_id: dir.state?.id || '',
-            city_id: dir.city?.id || ''
+            city: dir.city || ''
         });
         
         setMostrandoFormulario(true);
@@ -215,24 +205,6 @@ export const User = () => {
         datosPerfil.birth_date !== (perfil.birth_date || '');
 
     const existePrincipal = perfil.user_addresses?.some((dir: any) => dir.main);
-
-    const opcionesPaises = paises.map(p => ({ value: p.id.toString(), label: p.name }));
-    const opcionesProvincias = provincias.map(p => ({ value: p.id.toString(), label: p.name }));
-
-    const customSelectStyles = {
-        control: (base: any) => ({
-            ...base,
-            minHeight: '40px',
-            borderColor: 'var(--border-color, #ccc)',
-            borderRadius: '4px',
-            boxShadow: 'none',
-            '&:hover': { borderColor: 'var(--primary-green, #198754)' }
-        }),
-        menu: (base: any) => ({
-            ...base,
-            zIndex: 9999
-        })
-    };
 
     return (
         <div className="profile-container">
@@ -373,7 +345,6 @@ export const User = () => {
                             setNuevaDireccion={setNuevaDireccion}
                             paises={paises}
                             provincias={provincias}
-                            ciudades={ciudades}
                             cambiarPais={cambiarPais}
                             cambiarProvincia={cambiarProvincia}
                             onSubmit={handleCrearDireccion}

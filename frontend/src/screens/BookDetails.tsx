@@ -175,19 +175,31 @@ export const BookDetails = () => {
                     </div>
                     {/* LÓGICA DEL SELECTOR DE UBICACIÓN */}
                     <div style={{ marginBottom: '25px', padding: '20px', background: '#e8f5e9', borderRadius: '6px', border: '1px solid #c8e6c9;' }}>
-                        <h4 style={{ margin: '0 0 10px 0', color: 'var(--primary-green)' }}>📍 Encontrá este libro más rápido</h4>
+                        <h4 style={{ margin: '0 0 3px 0', color: 'var(--primary-green)' }}>📍 Encontrá este libro más rápido</h4>
                         
                         {!isLoggedIn ? (
-                            <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <div style={{ display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'space-between' }}>
                                 <p style={{ margin: 0, flex: 1, fontSize: '14px', color: 'var(--text-muted)' }}>
                                     Ordená las librerías por cercanía usando tu ubicación actual o tus direcciones guardadas.
                                 </p>
-                                <button className="search-btn" onClick={pedirUbicacion} style={{ padding: '8px 15px', width: 'auto' }}>
-                                    USAR MI UBICACIÓN
-                                </button>
-                                <button className="login-btn" onClick={() => setMostrarModalAuth(true)} style={{ padding: '8px 15px', width: 'auto', fontWeight: 'bold' }}>
-                                    INICIAR SESIÓN
-                                </button>
+                                
+                                {/* Contenedor de botones apilados */}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minWidth: '180px' }}>
+                                    <button 
+                                        className="login-btn" 
+                                        onClick={() => setMostrarModalAuth(true)} 
+                                        style={{ padding: '7px 15px', width: '100%', fontWeight: 'bold', fontSize: '10px' }}
+                                    >
+                                        INICIAR SESIÓN
+                                    </button>
+                                    <button 
+                                        className="search-btn" 
+                                        onClick={pedirUbicacion} 
+                                        style={{ padding: '7px 15px', width: '100%', fontSize: '10px' }}
+                                    >
+                                        USAR MI UBICACIÓN
+                                    </button>
+                                </div>
                             </div>
                         ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>

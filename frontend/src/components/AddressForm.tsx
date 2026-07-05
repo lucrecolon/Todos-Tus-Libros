@@ -5,7 +5,6 @@ interface AddressFormProps {
     setNuevaDireccion: (dir: any) => void;
     paises: any[];
     provincias: any[];
-    ciudades: any[];
     cambiarPais: (id: string) => void;
     cambiarProvincia: (id: string) => void;
     onSubmit: (e: React.FormEvent) => void;
@@ -18,7 +17,6 @@ export const AddressForm = ({
     setNuevaDireccion,
     paises,
     provincias,
-    ciudades,
     cambiarPais,
     cambiarProvincia,
     onSubmit,
@@ -28,7 +26,6 @@ export const AddressForm = ({
 
     const opcionesPaises = paises.map(p => ({ value: p.id.toString(), label: p.name }));
     const opcionesProvincias = provincias.map(p => ({ value: p.id.toString(), label: p.name }));
-    const opcionesCiudades = ciudades.map(c => ({ value: c.id.toString(), label: c.name }));
 
     const customSelectStyles = {
         control: (base: any) => ({
@@ -118,15 +115,15 @@ export const AddressForm = ({
                     </div>
 
                     <div style={{ flex: 1 }}>
-                        <Select 
-                            options={opcionesCiudades}
-                            isDisabled={!nuevaDireccion.state_id}
-                            value={opcionesCiudades.find(opt => opt.value === nuevaDireccion.city_id) || null}
-                            onChange={(option) => option && setNuevaDireccion({...nuevaDireccion, city_id: option.value})}
-                            placeholder="Ciudad / Localidad..."
-                            isSearchable
-                            menuPosition="fixed"
-                            styles={customSelectStyles}
+                        <input 
+                            className="search-input"
+                            type="text" 
+                            placeholder="Ciudad / Localidad..." 
+                            required
+                            maxLength={100}
+                            value={nuevaDireccion.city}
+                            onChange={(e) => setNuevaDireccion({...nuevaDireccion, city: e.target.value})}
+                            style={{ flex: 1, width: '100%', boxSizing: 'border-box' }}
                         />
                     </div>
                 </div>
