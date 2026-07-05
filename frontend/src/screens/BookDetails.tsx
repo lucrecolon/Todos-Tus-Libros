@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { buscarLibroPorEan } from '../services/ultraService';
 import { type DetalleLibro } from '../types/models';
 import { useCart } from '../context/CartContext';
-import libreriasLocal from '../data/librerias.json';
 import { calcularDistancia } from '../utils/utils';
 import { AuthModal } from '../components/AuthModal';
 import { useNavigate } from 'react-router-dom';
@@ -82,18 +81,25 @@ export const BookDetails = () => {
     if (cargando) return <h2 style={{ padding: '40px', textAlign: 'center' }}>Cargando libro...</h2>;
     if (!libro) return <h2 style={{ padding: '40px', textAlign: 'center' }}>No se encontró el libro.</h2>;
 
-    const libreriasConDistancia = (libro.en_librerias || []).map((tiendaAPI) => {
-        const datosLocales = libreriasLocal.find((lib: any) => lib.nombre.toUpperCase() === tiendaAPI.libreria.toUpperCase());
-        
+    const libreriasConDistancia = (libro.en_librerias || []).map((tiendaAPI: any) => {
         let distancia = null;
-        if (ubicacionUsuario && datosLocales && datosLocales.lat && datosLocales.lng) {
-            distancia = calcularDistancia(ubicacionUsuario.lat, ubicacionUsuario.lng, datosLocales.lat, datosLocales.lng);
+        
+        const latLibreria = tiendaAPI.latitud ? parseFloat(tiendaAPI.latitud) : null;
+        const lngLibreria = tiendaAPI.longitud ? parseFloat(tiendaAPI.longitud) : null;
+
+        if (ubicacionUsuario && latLibreria !== null && lngLibreria !== null) {
+            distancia = calcularDistancia(ubicacionUsuario.lat, ubicacionUsuario.lng, latLibreria, lngLibreria);
         }
+
+        const direccionAmigable = tiendaAPI.direccion 
+            ? `${tiendaAPI.direccion}, ${tiendaAPI.ciudad || ''}`
+            : 'Dirección no disponible';
 
         return {
             ...tiendaAPI,
-            direccionInfo: datosLocales ? datosLocales.direccion : 'Dirección no disponible',
-            distancia: distancia
+            direccionInfo: direccionAmigable,
+            distancia: distancia,
+            precio: tiendaAPI.precio
         };
     });
 
@@ -106,7 +112,6 @@ export const BookDetails = () => {
         return a.distancia - b.distancia;
     });
 
-    // Filtramos solo las direcciones que tienen coordenadas y armamos las opciones
     const opcionesUbicacion = [
         { value: 'gps', label: '📍 Usar mi ubicación actual' },
         ...(perfil?.user_addresses || [])
