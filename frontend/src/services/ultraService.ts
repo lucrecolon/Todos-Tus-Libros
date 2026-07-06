@@ -122,7 +122,10 @@ export const registrarUsuarioBase = async (email: string, password: string) => {
             throw new Error(errorData?.detail || 'Error al crear la cuenta. Verificá los datos.');
         }
 
-        return await response.json();
+        const loginData = await loginUsuario(email, password);
+        
+        return loginData;
+
     } catch (error) {
         console.error("Error en registrarUsuarioBase:", error);
         throw error;
@@ -132,7 +135,6 @@ export const registrarUsuarioBase = async (email: string, password: string) => {
 export const loginUsuario = async (email: string, password: string) => {
     try {
         await inicializarCSRF();
-        
         const csrfToken = obtenerCookie('csrftoken');
 
         const response = await fetch(`${API_USUARIOS_URL}/login/`, {
@@ -142,7 +144,6 @@ export const loginUsuario = async (email: string, password: string) => {
                 'X-CSRFToken': csrfToken || '',
             },
             credentials: 'include',
-            
             body: JSON.stringify({ username: email, password }) 
         });
 
@@ -150,6 +151,8 @@ export const loginUsuario = async (email: string, password: string) => {
             const errorData = await response.json().catch(() => null);
             throw new Error(errorData?.detail || 'Error al iniciar sesión. Verificá tu email y contraseña.');
         }
+
+        await inicializarCSRF();
 
         return await response.json();
     } catch (error) {
