@@ -202,6 +202,7 @@ export const logoutUsuario = async () => {
 
 export const obtenerCookie = (name: string) => {
     let cookieValue = null;
+    console.log(document.cookie);
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
@@ -212,6 +213,7 @@ export const obtenerCookie = (name: string) => {
             }
         }
     }
+    console.log(document.cookie);
     return cookieValue;
 };
 
@@ -222,18 +224,20 @@ export const inicializarCSRF = async () => {
             credentials: 'include'
         });
 
-        const csrfToken = response.headers.get('X-CSRFToken')
-            || response.headers.get('x-csrftoken')
-            || response.headers.get('csrftoken')
-            || '';
+        if (!response.ok) {
+            throw new Error('No se pudo inicializar el CSRF');
+        }
+
+        const csrfToken = obtenerCookie('csrftoken');
+
+        console.log('Cookie CSRF disponible:', csrfToken);
 
         if (csrfToken) {
-            document.cookie = `csrftoken=${encodeURIComponent(csrfToken)}; path=/; SameSite=Lax`;
             localStorage.setItem('token_csrf_seguro', csrfToken);
         }
 
     } catch (error) {
-        console.error("Error obteniendo CSRF token", error);
+        console.error('Error obteniendo CSRF token', error);
     }
 };
 
