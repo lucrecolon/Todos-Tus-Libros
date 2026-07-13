@@ -221,13 +221,17 @@ export const inicializarCSRF = async () => {
             method: 'GET',
             credentials: 'include'
         });
-        
-        const data = await response.json();
-        
-        if (data.csrfToken) {
-            localStorage.setItem('token_csrf_seguro', data.csrfToken);
+
+        const csrfToken = response.headers.get('X-CSRFToken')
+            || response.headers.get('x-csrftoken')
+            || response.headers.get('csrftoken')
+            || '';
+
+        if (csrfToken) {
+            document.cookie = `csrftoken=${encodeURIComponent(csrfToken)}; path=/; SameSite=Lax`;
+            localStorage.setItem('token_csrf_seguro', csrfToken);
         }
-        
+
     } catch (error) {
         console.error("Error obteniendo CSRF token", error);
     }
