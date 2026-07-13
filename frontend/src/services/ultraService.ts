@@ -105,7 +105,7 @@ export const registrarUsuarioBase = async (email: string, password: string) => {
     try {
         await inicializarCSRF();
         
-        const csrfToken = localStorage.getItem('token_csrf_seguro');
+        const csrfToken = obtenerCookie('csrftoken');
 
         const response = await fetch(`${API_USUARIOS_URL}/register/`, {
             method: 'POST',
@@ -135,7 +135,7 @@ export const registrarUsuarioBase = async (email: string, password: string) => {
 export const loginUsuario = async (email: string, password: string) => {
     try {
         await inicializarCSRF();
-        const csrfToken = localStorage.getItem('token_csrf_seguro');
+        const csrfToken = obtenerCookie('csrftoken');
 
         console.log("Token leído:", csrfToken, "| Largo:", csrfToken?.length);
 
@@ -181,7 +181,7 @@ export const obtenerPerfilUsuario = async () => {
 
 export const logoutUsuario = async () => {
     try {
-        const csrfToken = localStorage.getItem('token_csrf_seguro');
+        const csrfToken = obtenerCookie('csrftoken');
 
         const response = await fetch(`${API_USUARIOS_URL}/logout/`, {
             method: 'POST', 
@@ -198,6 +198,21 @@ export const logoutUsuario = async () => {
     } catch (error) {
         console.error("Error al cerrar sesión", error);
     }
+};
+
+export const obtenerCookie = (name: string) => {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 };
 
 export const inicializarCSRF = async () => {
@@ -219,7 +234,7 @@ export const inicializarCSRF = async () => {
 };
 
 export const agregarDireccion = async (direccionData: any) => {
-    const csrfToken = localStorage.getItem('token_csrf_seguro');
+    const csrfToken = obtenerCookie('csrftoken');
 
     try {
         const response = await fetch(`${API_USUARIOS_URL}/user/address/`, {
@@ -245,7 +260,7 @@ export const agregarDireccion = async (direccionData: any) => {
 };
 
 export const modificarDireccion = async (id: number, direccionData: any) => {
-    const csrfToken = localStorage.getItem('token_csrf_seguro');
+    const csrfToken = obtenerCookie('csrftoken');
 
     try {
         const response = await fetch(`${API_USUARIOS_URL}/user/address/${id}/`, {
@@ -271,7 +286,7 @@ export const modificarDireccion = async (id: number, direccionData: any) => {
 };
 
 export const eliminarDireccion = async (id: number) => {
-    const csrfToken = localStorage.getItem('token_csrf_seguro');
+    const csrfToken = obtenerCookie('csrftoken');
 
     try {
         const response = await fetch(`${API_USUARIOS_URL}/user/address/${id}/`, {
@@ -294,7 +309,7 @@ export const eliminarDireccion = async (id: number) => {
 };
 
 export const actualizarPerfilUsuario = async (datosPerfil: any) => {
-    const csrfToken = localStorage.getItem('token_csrf_seguro');
+    const csrfToken = obtenerCookie('csrftoken');
 
     try {
         const response = await fetch(`${API_USUARIOS_URL}/user/me/`, {
@@ -319,7 +334,7 @@ export const actualizarPerfilUsuario = async (datosPerfil: any) => {
 };
 
 export const modificarPerfil = async (datosPersonales: any) => {
-    const csrfToken = localStorage.getItem('token_csrf_seguro');
+    const csrfToken = obtenerCookie('csrftoken');
     try {
         const response = await fetch(`${API_USUARIOS_URL}/user/me/`, {
             method: 'PUT',
