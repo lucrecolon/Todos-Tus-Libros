@@ -230,6 +230,8 @@
     width: 100% !important;
     padding: 0 15px !important;
     box-sizing: border-box !important;
+    height: auto !important;
+    min-height: 480px;
   }
 
   .carousel-track {
@@ -238,6 +240,12 @@
 
   .carousel-arrow.left { left: 10px; }
   .carousel-arrow.right { right: 10px; }
+
+  .carousel-slide .result-item {
+    height: auto !important;
+    min-height: 450px;
+    padding-bottom: 15px;
+  }
 
   /* --- PANTALLA DE PERFIL Y REGISTRO --- */
 

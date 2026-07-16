@@ -178,7 +178,7 @@ export const Novedades = () => {
 
                                         <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
                                             {pub.imagen_tapa ? (
-                                                <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" style={{ objectFit: 'cover' }} loading="lazy" />
+                                                <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" loading="lazy" />
                                             ) : (
                                                 <div className="book-cover-mock" style={{ height: '135px' }}>Sin portada</div>
                                             )}

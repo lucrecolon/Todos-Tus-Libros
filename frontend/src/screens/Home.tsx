@@ -183,6 +183,9 @@ export const Home = () => {
                                                         )}
                                                     </div>
                                                 </div>
+                                                <button className="btn-add-cart-novedades" onClick={() => navigate(`/libro/${pub.ean}`)}>
+                                                    VER DISPONIBILIDAD
+                                                </button>
                                             </div>
                                         </div>
                                     );
