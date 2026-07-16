@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { buscarLibrosAvanzado, buscarLibroPorEan } from '../services/ultraService';
+import { buscarLibrosAvanzado } from '../services/ultraService';
 import { useWishlist } from '../context/WishlistContext';
 
 const formatearAutor = (autor: any): string => {
