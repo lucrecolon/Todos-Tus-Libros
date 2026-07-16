@@ -118,18 +118,12 @@ export const BookSearch = () => {
                     break;
                 }
 
-                const filtrados = dataBusqueda.results.reduce((acc: any[], libro: any) => {
-                    
-                    if (libro.precio && Number(libro.precio) > 8000) {
-                        acc.push({
-                            ...libro,
-                            precio_mostrar: libro.precio 
-                        });
-                    }
-                    return acc;
-                }, []);
+                const librosListos = dataBusqueda.results.map((libro: any) => ({
+                    ...libro,
+                    precio_mostrar: libro.precio 
+                }));
 
-                listadoValido = [...listadoValido, ...filtrados];
+                listadoValido = [...listadoValido, ...librosListos];
 
                 if (listadoValido.length < MIN_LIBROS_POR_CARGA && quedanPaginasEnAPI) {
                     paginaBuscando++;
@@ -284,7 +278,7 @@ export const BookSearch = () => {
 
                                         <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
                                             {pub.imagen_tapa ? (
-                                                <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" />
+                                                <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" loading="lazy"/>
                                             ) : (
                                                 <div className="book-cover-mock" style={{ height: '135px' }}>Sin portada</div>
                                             )}

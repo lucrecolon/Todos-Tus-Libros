@@ -55,16 +55,8 @@ export const Home = () => {
 
                 const primerosQuince = todosLosResultados.slice(0, 15);
                 
-                const librosConDetalle = await Promise.all(
-                    primerosQuince.map(async (libroBasico: any) => { 
-                        try { 
-                            const detalle = await buscarLibroPorEan(libroBasico.ean); 
-                            return { ...libroBasico, ...detalle }; 
-                        } catch { return libroBasico; }
-                    })
-                );
+                setNovedades(primerosQuince);
                 
-                setNovedades(librosConDetalle);
             } catch (error) {
                 console.error("Error cargando novedades:", error);
             } finally {
@@ -166,14 +158,14 @@ export const Home = () => {
                                 }}
                             >
                                 {novedades.map((pub, index) => {
-                                    const precioMostrar = pub.en_librerias?.find((l: any) => Number(l.precio) > 0)?.precio;
+                                    const precioMostrar = pub.precio;
                                     return (
                                         <div key={`novedad-${pub.ean}-${index}`} className="carousel-slide">
                                             <div className="result-item" style={{ height: '100%', margin: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                                 <div className="result-item-top">
                                                     <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
                                                         {pub.imagen_tapa ? (
-                                                            <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" />
+                                                            <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" loading="lazy" />
                                                         ) : (
                                                             <div className="book-cover-mock" style={{ height: '135px' }}>Sin portada</div>
                                                         )}
@@ -189,10 +181,8 @@ export const Home = () => {
                                                         ) : (
                                                             <div className="result-price">SIN STOCK </div>
                                                         )}
-
                                                     </div>
                                                 </div>
-                                                <button className="btn-add-cart" onClick={() => navigate(`/libro/${pub.ean}`)}>VER DISPONIBILIDAD</button>
                                             </div>
                                         </div>
                                     );

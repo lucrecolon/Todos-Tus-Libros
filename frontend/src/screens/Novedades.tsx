@@ -64,19 +64,12 @@ export const Novedades = () => {
                 return;
             }
 
-            const librosConDetalle = await Promise.all(
-                dataBusqueda.results.map(async (libroBasico: any) => { 
-                    try { 
-                        const detalle = await buscarLibroPorEan(libroBasico.ean); 
-                        return { ...libroBasico, ...detalle }; 
-                    } catch { return libroBasico; }
-                })
-            );
+            const librosListos = dataBusqueda.results;
             
             if (esCargaInicial) {
-                setLibros(librosConDetalle);
+                setLibros(librosListos);
             } else {
-                setLibros([...libros, ...librosConDetalle]);
+                setLibros([...libros, ...librosListos]);
             }
 
             setTotalLibros(dataBusqueda.count);
@@ -160,7 +153,7 @@ export const Novedades = () => {
                 <>
                     <div className="results-list">
                         {libros.map((pub, index) => {
-                            const precioMostrar = pub.en_librerias?.find((l: any) => Number(l.precio) > 0)?.precio;
+                            const precioMostrar = pub.precio;
                             
                             return (
                                 <div key={`todas-${pub.ean}-${index}`} className="result-item" >
@@ -185,7 +178,7 @@ export const Novedades = () => {
 
                                         <div className="result-image-wrapper" onClick={() => navigate(`/libro/${pub.ean}`)}>
                                             {pub.imagen_tapa ? (
-                                                <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" style={{ objectFit: 'cover' }} />
+                                                <img src={pub.imagen_tapa} alt={pub.titulo} className="result-image" style={{ objectFit: 'cover' }} loading="lazy" />
                                             ) : (
                                                 <div className="book-cover-mock" style={{ height: '135px' }}>Sin portada</div>
                                             )}
