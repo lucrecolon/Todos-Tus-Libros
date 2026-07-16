@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmModal } from './ConfirmModal';
+import { crearOrdenDeCompra } from '../services/ultraService';
 
 export const CartSidebar = () => {
     const { cartOpen, setCartOpen, cartItems, removeFromCart } = useCart();
     const navigate = useNavigate();
 
     const [itemAEliminar, setItemAEliminar] = useState<any | null>(null);
+
+    const [procesandoPago, setProcesandoPago] = useState(false);
 
     const groupedCart = cartItems.reduce((grupos, item) => {
         if (!grupos[item.libreria]) {
@@ -29,6 +32,38 @@ export const CartSidebar = () => {
         setTimeout(() => {
             setToast({ visible: false, mensaje: '' });
         }, 3000);
+    };
+
+    const handlePagar = async () => {
+        setProcesandoPago(true);
+        try {
+            const nombreLibreria = cartItems.length > 0 ? cartItems[0].libreria.toLowerCase() : "";
+
+            const payload = {
+                book_store: nombreLibreria,
+                descuento: 0,
+                items: cartItems.map((item: any) => ({
+                    ean: String(item.ean),
+                    quantity: Number(item.cantidad || 1),
+                    unit_price: Number(item.precio > 0 ? item.precio : 20000) 
+                }))
+            };
+
+            const respuesta = await crearOrdenDeCompra(payload);
+            console.log("¡Orden exitosa!", respuesta);
+            
+            if (respuesta.order_link) {
+                window.location.href = respuesta.order_link;
+            } else {
+                alert("¡Pedido generado con éxito!");
+            }
+
+        } catch (error: any) {
+            console.error("Falló la compra:", error);
+            alert("Error al procesar: " + JSON.stringify(error));
+        } finally {
+            setProcesandoPago(false);
+        }
     };
 
     return (
@@ -105,15 +140,19 @@ export const CartSidebar = () => {
                                 
                                 <button 
                                     className="search-btn" 
-                                    style={{ width: '100%', marginTop: '20px', padding: '12px', backgroundColor: 'var(--accent-bordeaux)', color: 'white' }}
-                                    onClick={() => {
-                                        const eanBusqueda = items[0].ean; 
-                                        const dominioLibreria = "mitiendanube.com"; 
-                                        const urlDestino = `https://${dominioLibreria}/search/?q=${eanBusqueda}`;
-                                        window.open(urlDestino, '_blank');
+                                    disabled={procesandoPago || cartItems.length === 0}
+                                    style={{ 
+                                        width: '100%', 
+                                        marginTop: '20px', 
+                                        padding: '12px', 
+                                        backgroundColor: 'var(--accent-bordeaux)', 
+                                        color: 'white',
+                                        opacity: procesandoPago ? 0.7 : 1,
+                                        cursor: procesandoPago ? 'not-allowed' : 'pointer'
                                     }}
+                                    onClick={handlePagar}
                                 >
-                                    Ir a pagar a {libreria}
+                                    {procesandoPago ? 'PROCESANDO...' : `Ir a pagar`}
                                 </button>
                             </div>
                         );

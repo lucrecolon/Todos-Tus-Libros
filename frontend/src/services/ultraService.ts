@@ -119,7 +119,7 @@ export const registrarUsuarioBase = async (email: string, password: string) => {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => null);
-            throw new Error(errorData?.detail || 'Error al crear la cuenta. Verificá los datos.');
+            throw errorData || new Error('Error al crear la cuenta. Verificá los datos.');
         }
 
         const loginData = await loginUsuario(email, password);
@@ -371,4 +371,31 @@ export const obtenerProvincias = async (paisId: number) => {
 export const obtenerCiudades = async (provinciaId: number) => {
     const res = await fetch(`${API_USUARIOS_URL}/cities/?state=${provinciaId}`, { credentials: 'include' });
     return res.json();
+};
+
+export const crearOrdenDeCompra = async (datosOrden: any) => {
+    try {
+        const csrfToken = obtenerCookie('csrftoken');
+
+        const response = await fetch(`${API_USUARIOS_URL}/order/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken || '',
+            },
+            credentials: 'include',
+            body: JSON.stringify(datosOrden)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw errorData || new Error('Error al generar la orden de compra');
+        }
+
+        return await response.json();
+
+    } catch (error) {
+        console.error("Error en crearOrdenDeCompra:", error);
+        throw error;
+    }
 };
