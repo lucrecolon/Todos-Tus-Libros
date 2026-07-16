@@ -14,9 +14,12 @@ export const Register = () => {
     const [cargando] = useState(false);
 
     const [aceptaPoliticas, setAceptaPoliticas] = useState(false);
+    
+    const [emailError, setEmailError] = useState('');
 
     const handleRegistro = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setEmailError('');
         
         try {
             await registrarUsuarioBase(email, password);
@@ -36,8 +39,17 @@ export const Register = () => {
 
             navigate('/user/me'); 
 
-        } catch (error) {
+        } catch (error: any) {
             console.error("Hubo un error en el proceso:", error);
+            
+            const errorAString = JSON.stringify(error?.response?.data || error) + " " + String(error?.message) + " " + String(error);
+            const mensajeError = errorAString.toLowerCase();
+            
+            if (mensajeError.includes('email') || mensajeError.includes('already exists') || mensajeError.includes('ya existe') || mensajeError.includes('unique')) {
+                setEmailError("Este email ya está registrado.");
+            } else {
+                setEmailError("Hubo un problema al registrarte. Por favor, intentá de nuevo.");
+            }
         }
     };
 
@@ -92,9 +104,15 @@ export const Register = () => {
                         required
                         className="search-input" 
                         value={email} 
+                        style={{ borderColor: emailError ? 'var(--accent-bordeaux)' : '' }}
                         onChange={(e) => setEmail(e.target.value)} 
                         placeholder="tuemail@dominio.com"
                     />
+                    {emailError && (
+                        <span style={{ color: 'var(--accent-bordeaux)', fontSize: '0.85rem', marginTop: '6px', display: 'block', fontWeight: '500' }}>
+                            {emailError}
+                        </span>
+                    )}
                 </div>
 
                 <div className="register-group last">
@@ -122,7 +140,7 @@ export const Register = () => {
                 </div>
 
                 <button type="submit" disabled={!aceptaPoliticas || cargando} className="search-btn" style={{ opacity: aceptaPoliticas ? 1 : 0.5, cursor: aceptaPoliticas ? 'pointer' : 'not-allowed',width: '100%'}}>
-                    {cargando ? 'CREANDO CUENTA...' : 'CREAR CUENTA Y OBTENER BENEFICIO'}
+                    {cargando ? 'CREANDO CUENTA...' : 'CREAR CUENTA'}
                 </button>
             </form>
         </div>

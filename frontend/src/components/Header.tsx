@@ -30,6 +30,23 @@ export const Header = () => {
         }
     };
 
+    const badgeStyle = {
+        position: 'absolute' as 'absolute',
+        top: '-6px',
+        right: '-10px',
+        backgroundColor: 'var(--accent-bordeaux, #8B0000)',
+        color: 'white',
+        borderRadius: '50%',
+        fontSize: '11px',
+        minWidth: '16px',
+        height: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
+        padding: '0px'
+    };
+
     return (
         <header>
             <div 
@@ -42,18 +59,24 @@ export const Header = () => {
 
             <div className="header-actions">
                 <button className="favorites-btn" onClick={() => { navigate('/favoritos'); setCartOpen(false); }}> 
-                    <i className="bi bi-suit-heart"></i> 
-                    <span className="btn-text">FAVORITOS ({wishlist.length})</span>
+                    <span style={{ position: 'relative', display: 'inline-block' }}>
+                        <i className="bi bi-suit-heart"></i>
+                        <span style={badgeStyle}>{wishlist.length}</span>
+                    </span>
+                    <span className="btn-text" style={{ marginLeft: '6px' }}>FAVORITOS</span>
                 </button>
 
                 <button className="cart-btn" onClick={handleClickCarrito}>
-                    <i className="bi bi-cart3"></i>
-                    <span className="btn-text">CARRITO ({cartItems.length})</span>
+                    <span style={{ position: 'relative', display: 'inline-block' }}>
+                        <i className="bi bi-cart3"></i>
+                        <span style={badgeStyle}>{cartItems.length}</span>
+                    </span>
+                    <span className="btn-text" style={{ marginLeft: '6px' }}>CARRITO</span>
                 </button>
 
                 <button className="user-btn" onClick={() => { handleClickPerfil(); setCartOpen(false); }}>
                     <i className="bi bi-person-square"></i>
-                    <span className="btn-text">PERFIL</span>
+                    <span className="btn-text" style={{ marginLeft: '6px' }}>PERFIL</span>
                 </button>
 
                 {mostrarModalAuth && (
